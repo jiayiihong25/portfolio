@@ -168,10 +168,28 @@ for (let i = 0; i < 150; i++) {
 
 // Animation variables
 let lastTime = performance.now();
+let isTabVisible = true;
+
+// Handle tab visibility changes
+document.addEventListener('visibilitychange', () => {
+    if (document.hidden) {
+        isTabVisible = false;
+    } else {
+        isTabVisible = true;
+        // Reset lastTime when tab becomes visible to prevent huge deltaTime
+        lastTime = performance.now();
+    }
+});
 
 // Animation loop
 function animate(currentTime) {
     const deltaTime = currentTime - lastTime;
+    
+    // Cap deltaTime to prevent huge jumps when tab becomes visible again
+    // This prevents stars from clumping when switching tabs
+    const maxDeltaTime = 100; // Cap at ~100ms (roughly 6 frames at 60fps)
+    const clampedDeltaTime = Math.min(deltaTime, maxDeltaTime);
+    
     lastTime = currentTime;
     
     // Clear canvas with dark background
@@ -180,7 +198,7 @@ function animate(currentTime) {
     
     // Update and draw all stars
     stars.forEach(star => {
-        star.update(deltaTime);
+        star.update(clampedDeltaTime);
         star.draw();
     });
     
@@ -204,4 +222,24 @@ window.addEventListener('resize', () => {
 
 // Start animation
 animate(performance.now());
+
+// Hamburger menu functionality
+const hamburgerButton = document.getElementById('hamburger-button');
+const dropdownMenu = document.getElementById('dropdown-menu');
+
+hamburgerButton.addEventListener('click', () => {
+    hamburgerButton.classList.toggle('active');
+    dropdownMenu.classList.toggle('dropdown-hidden');
+    dropdownMenu.classList.toggle('dropdown-visible');
+});
+
+// Close dropdown when clicking outside
+document.addEventListener('click', (event) => {
+    const isClickInside = hamburgerButton.contains(event.target) || dropdownMenu.contains(event.target);
+    if (!isClickInside && dropdownMenu.classList.contains('dropdown-visible')) {
+        hamburgerButton.classList.remove('active');
+        dropdownMenu.classList.remove('dropdown-visible');
+        dropdownMenu.classList.add('dropdown-hidden');
+    }
+});
 
