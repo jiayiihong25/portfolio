@@ -223,6 +223,15 @@ window.addEventListener('resize', () => {
 // Start animation
 animate(performance.now());
 
+// Fade-in effect for explore page
+if (window.location.pathname.includes('explore.html')) {
+    document.body.style.opacity = '0';
+    document.body.style.transition = 'opacity 0.5s ease-in';
+    setTimeout(() => {
+        document.body.style.opacity = '1';
+    }, 50);
+}
+
 // Hamburger menu functionality
 const hamburgerButton = document.getElementById('hamburger-button');
 const dropdownMenu = document.getElementById('dropdown-menu');
@@ -241,5 +250,37 @@ document.addEventListener('click', (event) => {
         dropdownMenu.classList.remove('dropdown-visible');
         dropdownMenu.classList.add('dropdown-hidden');
     }
+});
+
+// Explore button functionality - transition to explore page
+const exploreButton = document.getElementById('explore-button');
+if (exploreButton) {
+    exploreButton.addEventListener('click', (e) => {
+        e.preventDefault();
+        // Add fade-out transition
+        document.body.style.transition = 'opacity 0.5s ease-out';
+        document.body.style.opacity = '0';
+        
+        // Navigate to explore page after transition
+        setTimeout(() => {
+            window.location.href = 'explore.html';
+        }, 500);
+    });
+}
+
+// Homepage link functionality - transition back to homepage
+const homepageLinks = document.querySelectorAll('a[href="index.html"]');
+homepageLinks.forEach(link => {
+    link.addEventListener('click', (e) => {
+        e.preventDefault();
+        // Add fade-out transition
+        document.body.style.transition = 'opacity 0.5s ease-out';
+        document.body.style.opacity = '0';
+        
+        // Navigate to homepage after transition
+        setTimeout(() => {
+            window.location.href = 'index.html';
+        }, 500);
+    });
 });
 
