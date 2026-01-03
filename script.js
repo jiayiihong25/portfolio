@@ -597,17 +597,8 @@ window.addEventListener('mousemove', (e) => {
     mouseY = e.clientY;
 });
 
-// Function to show the "About Me" transition
-function showAboutMeTransition() {
-    isTransitioning = true;
-
-    // Disable other interactive elements
-    const hamburgerMenu = document.getElementById('hamburger-menu');
-    const exploreButton = document.getElementById('explore-button');
-    if (hamburgerMenu) hamburgerMenu.style.pointerEvents = 'none';
-    if (exploreButton) exploreButton.style.pointerEvents = 'none';
-
-    // Create transition element if it doesn't exist
+// Shared function to ensure transition overlay exists
+function ensureTransitionOverlay() {
     let overlay = document.getElementById('transition-overlay');
     if (!overlay) {
         overlay = document.createElement('div');
@@ -638,19 +629,10 @@ function showAboutMeTransition() {
         contentDiv.id = 'transition-content';
         contentDiv.style.position = 'absolute';
         contentDiv.style.top = '50%';
-        contentDiv.style.left = '38%'; // Moved closer to photos
-        contentDiv.style.transform = 'translateY(-50%)';
-        contentDiv.style.width = '45%';
-        contentDiv.style.textAlign = 'left';
-        contentDiv.style.color = 'rgba(203, 209, 220, 0.6)'; // 60% opacity
-        contentDiv.style.fontFamily = '"Manrope", sans-serif';
-        contentDiv.style.fontWeight = '500'; // Medium weight
-        contentDiv.style.fontSize = '14px';
-        contentDiv.style.lineHeight = '1.6';
-        contentDiv.style.whiteSpace = 'pre-line';
-        contentDiv.style.backdropFilter = 'blur(2px)'; // Layer blur of 2
-        contentDiv.style.textShadow = '0 0 2px #CBD1DC'; // Text blur of 2
-        contentDiv.style.padding = '20px'; // Add some breathable space
+        contentDiv.style.left = '50%';
+        contentDiv.style.transform = 'translate(-50%, -50%)';
+        contentDiv.style.width = '90%';
+        contentDiv.style.textAlign = 'center';
         overlay.appendChild(contentDiv);
 
         // Add photo container
@@ -658,20 +640,20 @@ function showAboutMeTransition() {
         photoContainer.id = 'photo-container';
         photoContainer.style.position = 'absolute';
         photoContainer.style.top = '50%';
-        photoContainer.style.left = '25%'; // Positions it to the left of text
+        photoContainer.style.left = '25%';
         photoContainer.style.transform = 'translate(-50%, -50%)';
         photoContainer.style.width = '300px';
         photoContainer.style.height = '400px';
-        photoContainer.style.pointerEvents = 'none'; // Allow clicking through to buttons if overlaps
+        photoContainer.style.pointerEvents = 'none';
         overlay.appendChild(photoContainer);
 
-        // Add CSS for hover effects and photo styling
+        // Add styles
         const style = document.createElement('style');
         style.textContent = `
             .about-btn {
                 color: rgba(203, 209, 220, 0.6);
                 text-decoration: none;
-                margin-right: 0px; /* Remove margin between buttons */
+                margin-right: 0px;
                 display: inline-block;
                 transition: all 0.3s ease;
                 cursor: pointer;
@@ -683,7 +665,7 @@ function showAboutMeTransition() {
                 text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
             }
             #close-transition:hover {
-                transform: scale(1.1); /* Growth effect only for close button */
+                transform: scale(1.1);
             }
             .about-photo {
                 position: absolute;
@@ -695,49 +677,106 @@ function showAboutMeTransition() {
                 cursor: pointer;
                 pointer-events: auto;
             }
-            #photo-casual {
-                top: 0;
-                right: 0;
-                transform: rotate(5deg);
-                z-index: 1;
-            }
-            #photo-professional {
-                bottom: 0;
-                left: 0;
-                transform: rotate(-5deg);
-                z-index: 2;
-            }
+            #photo-casual { top: 0; right: 0; transform: rotate(5deg); z-index: 1; }
+            #photo-professional { bottom: 0; left: 0; transform: rotate(-5deg); z-index: 2; }
             .about-photo:hover {
                 transform: scale(1.05) rotate(0deg) !important;
                 z-index: 100 !important;
             }
+            
+            /* Graphics Portfolio Styles */
+            .graphics-portfolio {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 20px;
+                width: 100%;
+                overflow: hidden; /* Prevent horizontal scrollbar on body */
+            }
+            .marquee-container {
+                width: 100%;
+                overflow-x: auto; /* Enable horizontal scrolling */
+                overflow-y: hidden;
+                white-space: nowrap;
+                position: relative;
+                -webkit-overflow-scrolling: touch; /* smooth scrolling on iOS */
+                cursor: grab; /* Indicate draggable/scrollable */
+                scrollbar-width: none; /* Firefox */
+                padding: 0 5vw; /* Add some padding on sides */
+                box-sizing: border-box; /* Include padding in width */
+            }
+            .marquee-container::-webkit-scrollbar {
+                display: none; /* Chrome/Safari */
+            }
+            .marquee-container:active {
+                cursor: grabbing;
+            }
+            .marquee-track {
+                display: flex;
+                gap: 40px;
+                width: max-content;
+                /* Animation removed for manual scroll */
+                padding: 20px 0; /* Space for shadows */
+            }
+            /* Animation keyframes removed */
+            .graphics-img {
+                height: 400px; /* Sized up images */
+                width: auto;
+                border-radius: 8px;
+                box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+                transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+                filter: brightness(0.9);
+            }
+            .graphics-img:hover {
+                transform: scale(1.05);
+                z-index: 100;
+                box-shadow: 0 20px 50px rgba(0,0,0,0.6);
+                filter: brightness(1);
+            }
         `;
         document.head.appendChild(style);
-
         document.body.appendChild(overlay);
     }
+    return overlay;
+}
 
+// Function to show the "About Me" transition
+function showAboutMeTransition() {
+    isTransitioning = true;
+
+    const hamburgerMenu = document.getElementById('hamburger-menu');
+    const exploreButton = document.getElementById('explore-button');
+    if (hamburgerMenu) hamburgerMenu.style.pointerEvents = 'none';
+    if (exploreButton) exploreButton.style.pointerEvents = 'none';
+
+    const overlay = ensureTransitionOverlay();
     const contentDiv = document.getElementById('transition-content');
     const photoContainer = document.getElementById('photo-container');
 
-    // Clear previous if exist
-    contentDiv.innerHTML = '';
-    photoContainer.innerHTML = '';
+    // Setup About Me specific layout
+    contentDiv.style.left = '38%';
+    contentDiv.style.transform = 'translateY(-50%)'; // Restore original transform
+    contentDiv.style.textAlign = 'left';
+    contentDiv.style.width = '45%';
+    contentDiv.style.color = 'rgba(203, 209, 220, 0.6)';
+    contentDiv.style.fontFamily = '"Manrope", sans-serif';
+    contentDiv.style.fontWeight = '500';
+    contentDiv.style.fontSize = '14px';
+    contentDiv.style.lineHeight = '1.6';
+    contentDiv.style.whiteSpace = 'pre-line';
+    contentDiv.style.backdropFilter = 'blur(2px)';
+    contentDiv.style.textShadow = '0 0 2px #CBD1DC';
+    contentDiv.style.padding = '20px';
 
+    photoContainer.style.display = 'block';
     photoContainer.innerHTML = `
         <img src="images/jiayi-casual.JPG" id="photo-casual" class="about-photo" alt="Jiayi Casual">
         <img src="images/jiayi-professional.JPG" id="photo-professional" class="about-photo" alt="Jiayi Professional">
     `;
 
-    // Persistent foreground logic
     const casual = document.getElementById('photo-casual');
     const professional = document.getElementById('photo-professional');
-
-    const bringToFront = (el, other) => {
-        el.style.zIndex = '3';
-        other.style.zIndex = '1';
-    };
-
+    const bringToFront = (el, other) => { el.style.zIndex = '3'; other.style.zIndex = '1'; };
     casual.addEventListener('mouseenter', () => bringToFront(casual, professional));
     professional.addEventListener('mouseenter', () => bringToFront(professional, casual));
 
@@ -758,77 +797,182 @@ I'm always looking to meet new people, feel free to reach out :)
     <span id="close-transition" class="about-btn">[close]</span>
 </div>`;
 
-    // Email copy logic
     document.getElementById('copy-email').onclick = (e) => {
         e.stopPropagation();
         navigator.clipboard.writeText('jiayihong52@gmail.com').then(() => {
             const originalText = e.target.innerText;
             e.target.innerText = '[Copied!]';
-            setTimeout(() => {
-                e.target.innerText = originalText;
-            }, 2000);
+            setTimeout(() => { e.target.innerText = originalText; }, 2000);
         });
     };
 
-    // Handle close button
     document.getElementById('close-transition').onclick = (e) => {
         e.stopPropagation();
         overlay.style.opacity = '0';
         overlay.style.pointerEvents = 'none';
         isTransitioning = false;
-
-        // Re-enable other interactive elements
-        const hamburgerMenu = document.getElementById('hamburger-menu');
-        const exploreButton = document.getElementById('explore-button');
         if (hamburgerMenu) hamburgerMenu.style.pointerEvents = 'all';
         if (exploreButton) exploreButton.style.pointerEvents = 'all';
     };
 
-    // Trigger animation
     requestAnimationFrame(() => {
         overlay.style.opacity = '1';
-        overlay.style.pointerEvents = 'all'; // Block interaction with background
+        overlay.style.pointerEvents = 'all';
+    });
+}
+
+// Function to show the "Graphic Design" transition
+function showGraphicDesignTransition() {
+    isTransitioning = true;
+
+    const hamburgerMenu = document.getElementById('hamburger-menu');
+    const exploreButton = document.getElementById('explore-button');
+    if (hamburgerMenu) hamburgerMenu.style.pointerEvents = 'none';
+    if (exploreButton) exploreButton.style.pointerEvents = 'none';
+
+    const overlay = ensureTransitionOverlay();
+    const contentDiv = document.getElementById('transition-content');
+    const photoContainer = document.getElementById('photo-container');
+
+    // Clear About Me specific setup
+    photoContainer.style.display = 'none';
+    contentDiv.style.left = '50%';
+    contentDiv.style.transform = 'translate(-50%, -50%)'; // Ensure centered transform
+    contentDiv.style.textAlign = 'center';
+    contentDiv.style.width = '100%'; // Full width for marquee
+    contentDiv.style.backdropFilter = 'none';
+    contentDiv.style.textShadow = 'none';
+    contentDiv.style.padding = '0';
+    contentDiv.style.color = 'rgba(203, 209, 220, 0.6)';
+    contentDiv.style.fontFamily = '"Manrope", sans-serif';
+    contentDiv.style.fontWeight = '500';
+    contentDiv.style.fontSize = '14px';
+    contentDiv.style.lineHeight = '1.6';
+    contentDiv.style.whiteSpace = 'normal';
+
+    const allImages = [
+        'CSA VLOGS 5 (1).jpg', 'bar night.jpg', 'CSA WV AUDITION.jpg',
+        'wv ap.jpg', 'bobaboardgames.jpg', 'CSA VLOGS- PROD (1).jpg',
+        'IMG_6596.JPG', 'IMG_6616 (1).JPG', 'IMG_6635 (1).JPG',
+        'IMG_6755 (1).JPG', 'IMG_7823 (1).JPG', 'IMG_7935 (1).JPG'
+    ];
+
+    // Duplicate images to creating infinite scroll illusion (3 sets should be safe)
+    const infiniteImages = [...allImages, ...allImages, ...allImages];
+
+    const imagesHtml = infiniteImages.map(img => {
+        return `<img src="images/Graphics Portfolio/${img}" class="graphics-img">`;
+    }).join('');
+
+    contentDiv.innerHTML = `
+        <div class="graphics-portfolio">
+            <div style="margin-bottom: 20px; backdrop-filter: blur(2px); text-shadow: 0 0 2px #CBD1DC; padding: 10px; border-radius: 8px;">
+                <i># Graphic design</i>
+            </div>
+            <div class="marquee-container" id="infinite-scroll-container">
+                <div class="marquee-track" id="infinite-scroll-track">
+                    ${imagesHtml}
+                </div>
+            </div>
+            <div style="margin-top: 30px; backdrop-filter: blur(2px); text-shadow: 0 0 2px #CBD1DC; padding: 10px; border-radius: 8px;">
+                <span id="close-transition" class="about-btn">[close]</span>
+            </div>
+        </div>
+    `;
+
+    // Infinite scroll logic
+    const scrollContainer = document.getElementById('infinite-scroll-container');
+
+    // We need to wait for images to layout to know widths, but for now we can approximate or use requestAnimationFrame loop
+    // A better approach for infinite manual scroll without jank is to check scroll position
+
+    function checkScrollLoop() {
+        if (!isTransitioning) return; // Stop if closed
+
+        const scrollWidth = scrollContainer.scrollWidth;
+        const offsetWidth = scrollContainer.offsetWidth;
+        const maxScroll = scrollWidth / 3; // Approx width of one set
+
+        if (scrollContainer.scrollLeft <= 50) {
+            // If user scrolls too far left, jump to middle set
+            scrollContainer.scrollLeft += maxScroll;
+        } else if (scrollContainer.scrollLeft >= maxScroll * 2) {
+            // If user scrolls too far right, jump back to middle set
+            scrollContainer.scrollLeft -= maxScroll;
+        }
+
+        requestAnimationFrame(checkScrollLoop);
+    }
+
+    // Initial scroll position to the middle set so user can scroll left immediately
+    // Wait slightly for layout
+    setTimeout(() => {
+        if (scrollContainer) {
+            // Calculate one set width roughly or just rely on the loop to catch it eventually, 
+            // but best to start in middle.
+            // Assume images are loaded enough or containers are sized.
+            // As a fallback, we just start them a bit in.
+            scrollContainer.scrollLeft = scrollContainer.scrollWidth / 3;
+            checkScrollLoop();
+        }
+    }, 100);
+
+    document.getElementById('close-transition').onclick = (e) => {
+        e.stopPropagation();
+        overlay.style.opacity = '0';
+        overlay.style.pointerEvents = 'none';
+        isTransitioning = false;
+        if (hamburgerMenu) hamburgerMenu.style.pointerEvents = 'all';
+        if (exploreButton) exploreButton.style.pointerEvents = 'all';
+    };
+
+    requestAnimationFrame(() => {
+        overlay.style.opacity = '1';
+        overlay.style.pointerEvents = 'all';
     });
 }
 
 // Handle ball clicks for page transition
 canvas.addEventListener('click', () => {
-    // Check if any node is currently hovered
     const anyHoveredNode = [orbitalNode, orbitalNode2, orbitalNode3, orbitalNode4].find(node => node.isHovered);
 
     if (anyHoveredNode && !isTransitioning) {
         if (anyHoveredNode.text === 'about me') {
             showAboutMeTransition();
+        } else if (anyHoveredNode.text === 'graphic design') {
+            showGraphicDesignTransition();
         } else {
-            // For other balls, just show the blank overlay for now (standard behavior)
             isTransitioning = true;
-
-            // Disable other interactive elements
             const hamburgerMenu = document.getElementById('hamburger-menu');
             const exploreButton = document.getElementById('explore-button');
             if (hamburgerMenu) hamburgerMenu.style.pointerEvents = 'none';
             if (exploreButton) exploreButton.style.pointerEvents = 'none';
 
-            let transitionOverlay = document.getElementById('transition-overlay');
-            if (!transitionOverlay) {
-                // Initialize standard overlay if it doesnt exist (this will populate the structure)
-                showAboutMeTransition();
-                // We'll just clear the content if it's not "about me"
-                const contentDiv = document.getElementById('transition-content');
-                const photoContainer = document.getElementById('photo-container');
-                contentDiv.innerHTML = '';
-                photoContainer.innerHTML = '';
-            } else {
-                const contentDiv = document.getElementById('transition-content');
-                const photoContainer = document.getElementById('photo-container');
-                contentDiv.innerHTML = '';
-                photoContainer.innerHTML = '';
+            const overlay = ensureTransitionOverlay();
+            const contentDiv = document.getElementById('transition-content');
+            const photoContainer = document.getElementById('photo-container');
+            contentDiv.innerHTML = '';
+            photoContainer.innerHTML = '';
+            photoContainer.style.display = 'none'; // Ensure photo container is hidden for generic transition
 
-                requestAnimationFrame(() => {
-                    transitionOverlay.style.opacity = '1';
-                    transitionOverlay.style.pointerEvents = 'all';
-                });
-            }
+            // Reset contentDiv styles to generic for other transitions
+            contentDiv.style.left = '50%';
+            contentDiv.style.textAlign = 'center';
+            contentDiv.style.width = '90%';
+            contentDiv.style.backdropFilter = 'none';
+            contentDiv.style.textShadow = 'none';
+            contentDiv.style.padding = '0';
+            contentDiv.style.color = 'rgba(203, 209, 220, 0.6)';
+            contentDiv.style.fontFamily = '"Manrope", sans-serif';
+            contentDiv.style.fontWeight = '500';
+            contentDiv.style.fontSize = '14px';
+            contentDiv.style.lineHeight = '1.6';
+            contentDiv.style.whiteSpace = 'normal';
+
+            requestAnimationFrame(() => {
+                overlay.style.opacity = '1';
+                overlay.style.pointerEvents = 'all';
+            });
         }
     }
 });
@@ -867,13 +1011,22 @@ const aboutMeDropdownLink = Array.from(document.querySelectorAll('.dropdown-item
 if (aboutMeDropdownLink) {
     aboutMeDropdownLink.addEventListener('click', (e) => {
         e.preventDefault();
-        // Close menu first
         hamburgerButton.classList.remove('active');
         dropdownMenu.classList.remove('dropdown-visible');
         dropdownMenu.classList.add('dropdown-hidden');
-
-        // Trigger transition
         showAboutMeTransition();
+    });
+}
+
+// Link "graphic design" in dropdown to show the transition
+const graphicDesignDropdownLink = Array.from(document.querySelectorAll('.dropdown-item')).find(el => el.textContent === 'graphic design');
+if (graphicDesignDropdownLink) {
+    graphicDesignDropdownLink.addEventListener('click', (e) => {
+        e.preventDefault();
+        hamburgerButton.classList.remove('active');
+        dropdownMenu.classList.remove('dropdown-visible');
+        dropdownMenu.classList.add('dropdown-hidden');
+        showGraphicDesignTransition();
     });
 }
 
