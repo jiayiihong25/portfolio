@@ -41,22 +41,22 @@ class Star {
             // Large stars further reduced
             this.size = (Math.random() * 2 + 3.5) * 0.3; // Large stars (1.05-1.65px)
         }
-        
+
         // Brightness (0 to 1)
         this.brightness = Math.random() * 0.5 + 0.5; // Start between 0.5 and 1
-        
+
         // Blinking properties - slow and infrequent twinkling
         this.blinkSpeed = Math.random() * 0.003 + 0.001; // Much slower blink speed
         this.blinkDirection = Math.random() > 0.5 ? 1 : -1; // Random initial direction
         this.minBrightness = Math.random() * 0.3 + 0.1; // Minimum brightness (0.1-0.4)
         this.maxBrightness = Math.random() * 0.3 + 0.7; // Maximum brightness (0.7-1.0)
-        
+
         // Random delay before starting to blink (much longer for less frequent twinkling)
         this.blinkDelay = Math.random() * 8000 + 2000; // 2-10 seconds delay
         this.timeElapsed = 0;
         this.pauseBetweenBlinks = 0; // Pause counter between blink cycles
         this.pauseDuration = Math.random() * 5000 + 3000; // 3-8 seconds pause between cycles
-        
+
         // Orbital properties - initialize with evenly distributed orbital properties
         // Use random angle for even distribution around the center
         this.orbitalAngle = Math.random() * Math.PI * 2;
@@ -65,32 +65,32 @@ class Star {
         this.orbitalRadius = Math.sqrt(Math.random()) * maxRadius + 50; // Minimum radius of 50px
         // Orbital speed - all orbit clockwise (right) at a slow pace
         this.orbitalSpeed = Math.random() * 0.00001 + 0.000020; // Slow clockwise orbit
-        
+
         // Calculate initial position based on orbital properties
         this.x = center.x + Math.cos(this.orbitalAngle) * this.orbitalRadius;
         this.y = center.y + Math.sin(this.orbitalAngle) * this.orbitalRadius;
     }
-    
+
     update(deltaTime) {
         this.timeElapsed += deltaTime;
-        
+
         // Wait for delay before starting to blink
         if (this.timeElapsed < this.blinkDelay) {
             // Still update position even if not blinking yet
             this.updatePosition(deltaTime);
             return;
         }
-        
+
         // Check if we're in a pause period between blink cycles
         if (this.pauseBetweenBlinks > 0) {
             this.pauseBetweenBlinks -= deltaTime;
             this.updatePosition(deltaTime);
             return;
         }
-        
+
         // Update brightness - slow twinkling
         this.brightness += this.blinkSpeed * this.blinkDirection;
-        
+
         // Reverse direction at boundaries
         if (this.brightness >= this.maxBrightness) {
             this.brightness = this.maxBrightness;
@@ -105,43 +105,43 @@ class Star {
             // Reset delay for next blink cycle (less frequent)
             this.blinkDelay = this.timeElapsed + Math.random() * 8000 + 2000;
         }
-        
+
         // Occasionally change blink speed for more natural variation (slower)
         if (Math.random() > 0.995) {
             this.blinkSpeed = Math.random() * 0.003 + 0.001;
         }
-        
+
         // Update position for subtle movement
         this.updatePosition(deltaTime);
     }
-    
+
     updatePosition(deltaTime) {
         // Get the current orbital center (in case window was resized)
         const center = getOrbitalCenter();
-        
+
         // Update orbital angle
         this.orbitalAngle += this.orbitalSpeed * deltaTime;
-        
+
         // Calculate new position based on orbital motion
         this.x = center.x + Math.cos(this.orbitalAngle) * this.orbitalRadius;
         this.y = center.y + Math.sin(this.orbitalAngle) * this.orbitalRadius;
-        
+
         // Keep stars within reasonable bounds - just let them continue orbiting naturally
         // If they go off-screen, they'll naturally come back around
     }
-    
+
     draw() {
         // Calculate opacity based on brightness
         const opacity = this.brightness;
-        
+
         // Draw star as a circle
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-        
+
         // Use white with varying opacity for twinkling effect
         ctx.fillStyle = `rgba(255, 255, 255, ${opacity})`;
         ctx.fill();
-        
+
         // Add a subtle glow for larger stars (adjusted threshold for further reduced size)
         if (this.size > 0.9) {
             ctx.shadowBlur = this.size * 2;
@@ -161,21 +161,106 @@ let starsInitialized = false;
 function initializeStars() {
     if (starsInitialized) return; // Prevent double initialization
     starsInitialized = true;
-    
+
     // Get the orbital center - wait a frame to ensure image is positioned
     const center = getOrbitalCenter();
-    
+
     // Initialize stars
     for (let i = 0; i < numStars; i++) {
         stars.push(new Star(center));
     }
-    
+
     // Add 150 more small stars
     for (let i = 0; i < 150; i++) {
         const smallStar = new Star(center);
         // Force small size for these additional stars
         smallStar.size = (Math.random() * 1.5 + 0.5) * 0.6; // Small stars (0.3-1.2px)
         stars.push(smallStar);
+    }
+
+    // Find the star closest to the center of the page to track (orbital-line-1)
+    const screenCenterX = window.innerWidth / 2;
+    const screenCenterY = window.innerHeight / 2;
+    let closestStar = null;
+    let closestDistance = Infinity;
+
+    stars.forEach(star => {
+        // Calculate distance from star to screen center
+        const dx = star.x - screenCenterX;
+        const dy = star.y - screenCenterY;
+        const distance = Math.sqrt(dx * dx + dy * dy);
+
+        if (distance < closestDistance) {
+            closestDistance = distance;
+            closestStar = star;
+        }
+    });
+
+    trackedStar1 = closestStar;
+
+    // Find a second star that's 40px further out for orbital-line-2
+    let secondClosestStar = null;
+    let secondClosestDistance = Infinity;
+    const targetRadius = trackedStar1.orbitalRadius + 40; // 40px further out
+
+    stars.forEach(star => {
+        // Find a star with orbital radius close to targetRadius (within 30px range for 40px offset)
+        const radiusDiff = Math.abs(star.orbitalRadius - targetRadius);
+        if (radiusDiff < 30 && star !== trackedStar1) {
+            if (radiusDiff < secondClosestDistance) {
+                secondClosestDistance = radiusDiff;
+                secondClosestStar = star;
+            }
+        }
+    });
+
+    // If no star found close to target, find the next closest one
+    if (!secondClosestStar) {
+        stars.forEach(star => {
+            if (star !== trackedStar1 && star.orbitalRadius > trackedStar1.orbitalRadius) {
+                const radiusDiff = star.orbitalRadius - trackedStar1.orbitalRadius;
+                if (radiusDiff < secondClosestDistance) {
+                    secondClosestDistance = radiusDiff;
+                    secondClosestStar = star;
+                }
+            }
+        });
+    }
+
+    trackedStar2 = secondClosestStar || trackedStar1; // Fallback to star1 if no second star found
+
+    resetOrbitalNodes();
+}
+
+// Function to reset orbital node positions to their starting points (based on red dots diagram)
+function resetOrbitalNodes() {
+    const mountain = document.getElementById('mountain');
+    if (mountain && trackedStar1) {
+        const rect = mountain.getBoundingClientRect();
+        const center = getOrbitalCenter();
+        const dy = rect.top - center.y;
+
+        // Base angle where line peeks out of left side of mountain
+        // Ensure dy / trackedStar1.orbitalRadius is within [-1, 1] for asin
+        const clampedRatio1 = Math.max(-1, Math.min(1, dy / trackedStar1.orbitalRadius));
+        const startAngle1 = Math.PI - Math.asin(clampedRatio1);
+
+        const line2Radius = trackedStar1.orbitalRadius + 60;
+        // Ensure dy / line2Radius is within [-1, 1] for asin
+        const clampedRatio2 = Math.max(-1, Math.min(1, dy / line2Radius));
+        const startAngle2 = Math.PI - Math.asin(clampedRatio2);
+
+        // Shifted an additional 100px counterclockwise (total 220px offset)
+        const totalShift = 220;
+        // Move "about me" slightly clockwise (180px vs 220px)
+        orbitalNode.angle = (startAngle1 + 0.2) - (180 / trackedStar1.orbitalRadius);
+        orbitalNode2.angle = (startAngle2 + 0.6) - (totalShift / line2Radius);
+
+        // Ball 3 (designathons) starts at 12:00 position
+        orbitalNode3.angle = Math.PI * 1.5;
+
+        // Ball 4 (cases) starts at 10:00 position (PI + PI/6)
+        orbitalNode4.angle = (7 / 6) * Math.PI;
     }
 }
 
@@ -212,6 +297,46 @@ if (mountain && mountain.complete) {
 // Animation variables
 let lastTime = performance.now();
 let isTabVisible = true;
+let showOrbitalPath = false; // Flag to show orbital path line when explore button is clicked
+let trackedStar1 = null; // Star closest to center that we'll track (orbital-line-1)
+let trackedStar2 = null; // Star slightly further out that we'll track (orbital-line-2)
+let orbitalPathOpacity = 0; // Opacity of the orbital path lines (0 to 1)
+
+// Interactive node properties
+const orbitalNode = {
+    angle: Math.PI * 1.5, // Start at top
+    radius: 12.5, // 25px diameter / 2
+    hoverRadius: 15, // Expand to 30px diameter
+    currentRadius: 12.5,
+    isHovered: false,
+    text: 'about me'
+};
+const orbitalNode2 = {
+    angle: Math.PI * 1.5,
+    radius: 15, // 30px diameter / 2
+    hoverRadius: 18, // Expand to 36px diameter
+    currentRadius: 15,
+    isHovered: false,
+    text: 'projects'
+};
+const orbitalNode3 = {
+    angle: Math.PI * 1.5,
+    radius: 22.5, // 45px diameter / 2
+    hoverRadius: 26, // Expand to 52px diameter
+    currentRadius: 22.5,
+    isHovered: false,
+    text: 'designathons'
+};
+const orbitalNode4 = {
+    angle: Math.PI * 1.5,
+    radius: 27.5, // 55px diameter / 2
+    hoverRadius: 32, // Expand to 64px diameter
+    currentRadius: 27.5,
+    isHovered: false,
+    text: 'cases'
+};
+let mouseX = 0;
+let mouseY = 0;
 
 // Handle tab visibility changes
 document.addEventListener('visibilitychange', () => {
@@ -227,28 +352,248 @@ document.addEventListener('visibilitychange', () => {
 // Animation loop
 function animate(currentTime) {
     const deltaTime = currentTime - lastTime;
-    
+
     // Cap deltaTime to prevent huge jumps when tab becomes visible again
     // This prevents stars from clumping when switching tabs
     const maxDeltaTime = 100; // Cap at ~100ms (roughly 6 frames at 60fps)
     const clampedDeltaTime = Math.min(deltaTime, maxDeltaTime);
-    
+
     lastTime = currentTime;
-    
+
     // Clear canvas with dark background
     ctx.fillStyle = '#0a0a0f';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
-    
+
     // Update and draw all stars (only if initialized)
     if (stars.length > 0) {
         stars.forEach(star => {
             star.update(clampedDeltaTime);
             star.draw();
         });
+
+        // Draw orbital-line-1: path for the first tracked star (0.5px white line with opacity animation)
+        if (trackedStar1 && trackedStar1.orbitalRadius && trackedStar1.orbitalRadius > 0 && orbitalPathOpacity > 0) {
+            const center = getOrbitalCenter();
+
+            // Draw the full circular orbit path
+            ctx.save(); // Save current context state
+            ctx.beginPath();
+            ctx.arc(center.x, center.y, trackedStar1.orbitalRadius, 0, Math.PI * 2);
+            ctx.strokeStyle = `rgba(255, 255, 255, ${orbitalPathOpacity})`; // White with opacity
+            ctx.lineWidth = 0.5; // 0.5px width
+            ctx.stroke();
+            ctx.restore(); // Restore context state
+        }
+
     }
-    
+
+    // --- DRAW BALLS ---
+    if (trackedStar1 && trackedStar1.orbitalRadius && trackedStar1.orbitalRadius > 0 && orbitalPathOpacity > 0.05) {
+        const center = getOrbitalCenter();
+        const nodes = [
+            { node: orbitalNode, radius: trackedStar1.clusterRadius || trackedStar1.orbitalRadius },
+            { node: orbitalNode2, radius: (trackedStar1.clusterRadius || trackedStar1.orbitalRadius) + 60 },
+            { node: orbitalNode3, radius: (trackedStar1.clusterRadius || trackedStar1.orbitalRadius) + 140 },
+            { node: orbitalNode4, radius: (trackedStar1.clusterRadius || trackedStar1.orbitalRadius) + 240 }
+        ];
+
+        let anyHovered = false;
+
+        nodes.forEach(({ node, radius }) => {
+            // Update node angle (10x slower orbit)
+            node.angle += 0.00001 * clampedDeltaTime;
+
+            // Calculate position
+            const nodeX = center.x + Math.cos(node.angle) * radius;
+            const nodeY = center.y + Math.sin(node.angle) * radius;
+
+            // Hit testing
+            const dx = mouseX - nodeX;
+            const dy = mouseY - nodeY;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+            node.isHovered = dist < 25; // Hit radius
+            if (node.isHovered) anyHovered = true;
+
+            // Smooth size transition
+            const targetSize = node.isHovered ? node.hoverRadius : node.radius;
+            node.currentRadius += (targetSize - node.currentRadius) * 0.1;
+
+            // Draw blurred copy underneath
+            ctx.save();
+            ctx.beginPath();
+            ctx.arc(nodeX, nodeY, node.currentRadius, 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(255, 255, 255, ${orbitalPathOpacity})`;
+            ctx.filter = 'blur(4px)';
+            ctx.fill();
+            ctx.restore();
+
+            // Draw main circle
+            ctx.beginPath();
+            ctx.arc(nodeX, nodeY, node.currentRadius, 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(255, 255, 255, ${orbitalPathOpacity})`;
+            ctx.fill();
+
+            // Draw "about me" or "projects" text on hover
+            if (node.isHovered) {
+                ctx.save();
+                ctx.font = '500 14px "Manrope", sans-serif';
+                ctx.textAlign = 'left';
+                ctx.textBaseline = 'middle';
+                const textX = nodeX + node.currentRadius + 12; // 12px padding from ball
+
+                // Draw blurred background layer
+                ctx.shadowColor = `rgba(255, 255, 255, ${orbitalPathOpacity})`;
+                ctx.shadowBlur = 4; // Visual glow
+                ctx.filter = 'blur(2px)';
+                ctx.fillStyle = `rgba(255, 255, 255, ${orbitalPathOpacity * 0.8})`;
+                ctx.fillText(node.text, textX, nodeY);
+
+                // Draw main text
+                ctx.filter = 'none';
+                ctx.shadowBlur = 0;
+                ctx.fillStyle = `rgba(255, 255, 255, ${orbitalPathOpacity})`;
+                ctx.fillText(node.text, textX, nodeY);
+                ctx.restore();
+            }
+        });
+
+        // Handle cursor
+        if (anyHovered) {
+            canvas.style.cursor = 'pointer';
+        } else if (canvas.style.cursor === 'pointer') {
+            canvas.style.cursor = 'default';
+        }
+    }
+
+    // Draw orbital-line-2: path 60px further out from orbital-line-1 (0.5px white line with opacity animation)
+    if (trackedStar1 && trackedStar1.orbitalRadius && trackedStar1.orbitalRadius > 0 && orbitalPathOpacity > 0) {
+        const center = getOrbitalCenter();
+        const line2Radius = trackedStar1.orbitalRadius + 60; // Exactly 60px further out
+
+        // Draw the full circular orbit path
+        ctx.save(); // Save current context state
+        ctx.beginPath();
+        ctx.arc(center.x, center.y, line2Radius, 0, Math.PI * 2);
+        ctx.strokeStyle = `rgba(255, 255, 255, ${orbitalPathOpacity})`; // White with opacity
+        ctx.lineWidth = 0.5; // 0.5px width
+        ctx.stroke();
+        ctx.restore(); // Restore context state
+    }
+
+    // Draw orbital-line-3: path 80px further out from orbital-line-2 (0.5px white line with opacity animation)
+    if (trackedStar1 && trackedStar1.orbitalRadius && trackedStar1.orbitalRadius > 0 && orbitalPathOpacity > 0) {
+        const center = getOrbitalCenter();
+        const line3Radius = trackedStar1.orbitalRadius + 140; // 60px + 80px = 140px from orbital-line-1
+
+        // Draw the full circular orbit path
+        ctx.save(); // Save current context state
+        ctx.beginPath();
+        ctx.arc(center.x, center.y, line3Radius, 0, Math.PI * 2);
+        ctx.strokeStyle = `rgba(255, 255, 255, ${orbitalPathOpacity})`; // White with opacity
+        ctx.lineWidth = 0.5; // 0.5px width
+        ctx.stroke();
+        ctx.restore(); // Restore context state
+    }
+
+    // Draw orbital-line-4: path 100px further out from orbital-line-3 (0.5px white line with opacity animation)
+    if (trackedStar1 && trackedStar1.orbitalRadius && trackedStar1.orbitalRadius > 0 && orbitalPathOpacity > 0) {
+        const center = getOrbitalCenter();
+        const line4Radius = trackedStar1.orbitalRadius + 240; // 140px (line 3) + 100px = 240px from orbital-line-1
+
+        // Draw the full circular orbit path
+        ctx.save(); // Save current context state
+        ctx.beginPath();
+        ctx.arc(center.x, center.y, line4Radius, 0, Math.PI * 2);
+        ctx.strokeStyle = `rgba(255, 255, 255, ${orbitalPathOpacity})`; // White with opacity
+        ctx.lineWidth = 0.5; // 0.5px width
+        ctx.stroke();
+        ctx.restore(); // Restore context state
+    }
+
     requestAnimationFrame(animate);
 }
+
+// Track mouse position
+window.addEventListener('mousemove', (e) => {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+});
+
+// Handle ball clicks for page transition
+canvas.addEventListener('click', () => {
+    // Check if any node is currently hovered
+    const anyHoveredNode = [orbitalNode, orbitalNode2, orbitalNode3, orbitalNode4].find(node => node.isHovered);
+
+    if (anyHoveredNode) {
+        // Create transition element if it doesn't exist
+        let transitionOverlay = document.getElementById('transition-overlay');
+        if (!transitionOverlay) {
+            transitionOverlay = document.createElement('img');
+            transitionOverlay.id = 'transition-overlay';
+            transitionOverlay.src = 'images/Rectangle 9.svg';
+            transitionOverlay.style.position = 'fixed';
+            transitionOverlay.style.top = '0';
+            transitionOverlay.style.left = '0';
+            transitionOverlay.style.width = '100vw';
+            transitionOverlay.style.height = '100vh';
+            transitionOverlay.style.objectFit = 'cover';
+            transitionOverlay.style.zIndex = '100000';
+            transitionOverlay.style.opacity = '0';
+            transitionOverlay.style.pointerEvents = 'none';
+            transitionOverlay.style.transition = 'opacity 0.8s ease-in-out';
+            document.body.appendChild(transitionOverlay);
+        }
+
+        // Trigger animation
+        requestAnimationFrame(() => {
+            transitionOverlay.style.opacity = '1';
+            transitionOverlay.style.pointerEvents = 'auto'; // Block all interactions below
+
+            // Create close button
+            let closeBtn = document.getElementById('transition-close-btn');
+            if (!closeBtn) {
+                closeBtn = document.createElement('button');
+                closeBtn.id = 'transition-close-btn';
+                closeBtn.textContent = 'close';
+                closeBtn.style.position = 'fixed';
+                closeBtn.style.top = '20px'; // Same as hamburger
+                closeBtn.style.right = '20px'; // Same as hamburger
+                closeBtn.style.background = 'none';
+                closeBtn.style.border = 'none';
+                closeBtn.style.color = '#CBD1DC';
+                closeBtn.style.fontFamily = '"Consolas", monospace';
+                closeBtn.style.fontSize = '24px';
+                closeBtn.style.fontStyle = 'italic';
+                closeBtn.style.cursor = 'pointer';
+                closeBtn.style.zIndex = '100001'; // Above overlay
+                closeBtn.style.filter = 'drop-shadow(0 0 2px #CBD1DC)'; // Layer blur 2
+                closeBtn.style.opacity = '0';
+                closeBtn.style.transition = 'opacity 0.8s ease-in-out';
+
+                closeBtn.addEventListener('click', () => {
+                    transitionOverlay.style.opacity = '0';
+                    transitionOverlay.style.pointerEvents = 'none';
+                    closeBtn.style.opacity = '0';
+                    setTimeout(() => {
+                        if (transitionOverlay.parentNode) transitionOverlay.parentNode.removeChild(transitionOverlay);
+                        if (closeBtn.parentNode) closeBtn.parentNode.removeChild(closeBtn);
+                    }, 800);
+                });
+
+                document.body.appendChild(closeBtn);
+            }
+
+            // Hide hamburger
+            const menu = document.getElementById('hamburger-menu');
+            if (menu) menu.style.display = 'none';
+
+            // Fade in button
+            setTimeout(() => {
+                closeBtn.style.opacity = '1';
+            }, 100);
+        });
+    }
+});
 
 // Handle window resize - stars will automatically adjust since center is recalculated each frame
 window.addEventListener('resize', () => {
@@ -259,20 +604,6 @@ window.addEventListener('resize', () => {
 // Start animation
 animate(performance.now());
 
-// Initialize orbital lines after page loads
-// Wait for mountain to load so we can calculate center correctly
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => {
-        setTimeout(() => initializeOrbitalLines(), 100);
-    });
-} else {
-    setTimeout(() => initializeOrbitalLines(), 100);
-}
-
-// Also reinitialize on window resize
-window.addEventListener('resize', () => {
-    initializeOrbitalLines();
-});
 
 // Fade-in effect for explore page
 if (window.location.pathname.includes('explore.html')) {
@@ -303,132 +634,67 @@ document.addEventListener('click', (event) => {
     }
 });
 
-// Explore button functionality - fade out text lines and animate orbital lines
-const exploreButton = document.getElementById('explore-button');
-if (exploreButton) {
-    exploreButton.addEventListener('click', (e) => {
+// Explore/Back button functionality
+const actionButton = document.getElementById('explore-button');
+let isExploreState = true;
+
+if (actionButton) {
+    actionButton.addEventListener('click', (e) => {
         e.preventDefault();
-        // Fade out line-1, line-2, and line-3
+
         const line1 = document.querySelector('.line-1');
         const line2 = document.querySelector('.line-2');
         const line3 = document.querySelector('.line-3');
-        
-        if (line1) line1.style.opacity = '0';
-        if (line2) line2.style.opacity = '0';
-        if (line3) line3.style.opacity = '0';
-        
-        // Animate orbital lines
-        animateOrbitalLines();
-    });
-}
+        const fadeDuration = 500;
+        const fadeStartTime = performance.now();
 
-// Initialize orbital lines with full paths (called on page load)
-function initializeOrbitalLines() {
-    const orbitalLinesSvg = document.getElementById('orbital-lines');
-    const lines = orbitalLinesSvg.querySelectorAll('.orbital-line');
-    if (lines.length === 0) return;
-    
-    const center = getOrbitalCenter();
-    
-    // Calculate starting and ending angles from bottom corners of screen
-    const bottomY = window.innerHeight;
-    const centerX = center.x;
-    const centerY = center.y;
-    
-    // Left side of screen at bottom
-    const leftX = 0;
-    const leftY = bottomY;
-    const dxLeft = leftX - centerX;
-    const dyLeft = leftY - centerY;
-    const startAngle = Math.atan2(dyLeft, dxLeft);
-    
-    // Right side of screen at bottom
-    const rightX = window.innerWidth;
-    const rightY = bottomY;
-    const dxRight = rightX - centerX;
-    const dyRight = rightY - centerY;
-    const endAngle = Math.atan2(dyRight, dxRight);
-    
-    // Calculate base radius based on distance from center to bottom corners
-    const baseRadius = Math.max(
-        Math.sqrt(dxLeft * dxLeft + dyLeft * dyLeft),
-        Math.sqrt(dxRight * dxRight + dyRight * dyRight)
-    );
-    
-    // Different radii for each line to create parallel arcs with larger spacing
-    const radiusOffsets = [0, 100, 220, 360];
-    
-    // Create full paths for each line
-    lines.forEach((line, index) => {
-        const lineRadius = baseRadius + radiusOffsets[index];
-        
-        // Build full SVG path from start to end
-        const startX = center.x + Math.cos(startAngle) * lineRadius;
-        const startY = center.y + Math.sin(startAngle) * lineRadius;
-        const endX = center.x + Math.cos(endAngle) * lineRadius;
-        const endY = center.y + Math.sin(endAngle) * lineRadius;
-        
-        // Create full arc path
-        const largeArcFlag = 0;
-        const sweepFlag = 1; // Clockwise
-        
-        const pathData = `M ${startX} ${startY} A ${lineRadius} ${lineRadius} 0 ${largeArcFlag} ${sweepFlag} ${endX} ${endY}`;
-        line.setAttribute('d', pathData);
-        
-        // Get path length for stroke-dasharray animation
-        const pathLength = line.getTotalLength();
-        
-        // Set up dash array and offset to hide the line initially
-        line.style.strokeDasharray = pathLength;
-        line.style.strokeDashoffset = pathLength;
-        line.style.opacity = '0';
-    });
-}
+        if (isExploreState) {
+            // TRANSITION TO ORBITAL VIEW
+            resetOrbitalNodes(); // Ensure balls start at their designated positions
+            if (line1) line1.style.opacity = '0';
+            if (line2) line2.style.opacity = '0';
+            if (line3) line3.style.opacity = '0';
 
-// Function to animate 4 lines being drawn from left to right
-function animateOrbitalLines() {
-    const orbitalLinesSvg = document.getElementById('orbital-lines');
-    const lines = orbitalLinesSvg.querySelectorAll('.orbital-line');
-    if (lines.length === 0) return;
-    
-    // Different durations for each line (slower overall)
-    const durations = [1200, 1500, 1800, 2100]; // ms - each line has a different speed
-    const startTime = performance.now();
-    
-    // Stagger the lines slightly for visual effect
-    const staggerDelay = 100; // ms between each line
-    
-    lines.forEach((line, index) => {
-        const lineStartTime = startTime + (index * staggerDelay);
-        const duration = durations[index]; // Each line gets its own duration
-        const pathLength = line.getTotalLength();
-        
-        // Make line visible
-        line.style.opacity = '1';
-        
-        function animateLine(currentTime) {
-            const elapsed = currentTime - lineStartTime;
-            const progress = Math.min(Math.max(elapsed / duration, 0), 1);
-            
-            // Use ease-out for smoother animation
-            const easedProgress = 1 - Math.pow(1 - progress, 3);
-            
-            // Animate stroke-dashoffset from pathLength to 0 to reveal the line
-            const dashOffset = pathLength * (1 - easedProgress);
-            line.style.strokeDashoffset = dashOffset;
-            
-            if (progress < 1) {
-                requestAnimationFrame(animateLine);
-            } else {
-                // Animation complete, line fully revealed
-                line.style.strokeDashoffset = '0';
+            function animateIn(currentTime) {
+                const elapsed = currentTime - fadeStartTime;
+                const progress = Math.min(elapsed / fadeDuration, 1);
+                const easedProgress = 1 - Math.pow(1 - progress, 3);
+                orbitalPathOpacity = easedProgress;
+
+                if (progress < 1) {
+                    requestAnimationFrame(animateIn);
+                } else {
+                    orbitalPathOpacity = 1;
+                    actionButton.textContent = 'back →';
+                    isExploreState = false;
+                }
             }
+            requestAnimationFrame(animateIn);
+        } else {
+            // TRANSITION BACK TO LANDING
+            if (line1) line1.style.opacity = '1';
+            if (line2) line2.style.opacity = '1';
+            if (line3) line3.style.opacity = '1';
+
+            function animateOut(currentTime) {
+                const elapsed = currentTime - fadeStartTime;
+                const progress = Math.min(elapsed / fadeDuration, 1);
+                const easedProgress = 1 - Math.pow(1 - progress, 3);
+                orbitalPathOpacity = 1 - easedProgress;
+
+                if (progress < 1) {
+                    requestAnimationFrame(animateOut);
+                } else {
+                    orbitalPathOpacity = 0;
+                    actionButton.textContent = 'explore →';
+                    isExploreState = true;
+                }
+            }
+            requestAnimationFrame(animateOut);
         }
-        
-        // Start animation for this line
-        requestAnimationFrame(animateLine);
     });
 }
+
 
 // Homepage link functionality - transition back to homepage
 const homepageLinks = document.querySelectorAll('a[href="index.html"]');
@@ -438,7 +704,7 @@ homepageLinks.forEach(link => {
         // Add fade-out transition
         document.body.style.transition = 'opacity 0.5s ease-out';
         document.body.style.opacity = '0';
-        
+
         // Navigate to homepage after transition
         setTimeout(() => {
             window.location.href = 'index.html';
