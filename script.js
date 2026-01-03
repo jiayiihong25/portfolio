@@ -301,6 +301,7 @@ let showOrbitalPath = false; // Flag to show orbital path line when explore butt
 let trackedStar1 = null; // Star closest to center that we'll track (orbital-line-1)
 let trackedStar2 = null; // Star slightly further out that we'll track (orbital-line-2)
 let orbitalPathProgress = 0; // Drawing progress of the orbital path lines (0 to 1)
+let isTransitioning = false; // Flag to track if the transition overlay is active
 
 // Interactive node properties
 const orbitalNode = {
@@ -325,7 +326,7 @@ const orbitalNode3 = {
     hoverRadius: 26, // Expand to 52px diameter
     currentRadius: 22.5,
     isHovered: false,
-    text: 'designathons'
+    text: 'graphic design'
 };
 const orbitalNode4 = {
     angle: Math.PI * 1.5,
@@ -430,11 +431,15 @@ function animate(currentTime) {
             const nodeY = center.y + Math.sin(node.angle) * radius;
 
             // Hit testing
-            const dx = mouseX - nodeX;
-            const dy = mouseY - nodeY;
-            const dist = Math.sqrt(dx * dx + dy * dy);
-            node.isHovered = dist < 25; // Hit radius
-            if (node.isHovered) anyHovered = true;
+            if (!isTransitioning) {
+                const dx = mouseX - nodeX;
+                const dy = mouseY - nodeY;
+                const dist = Math.sqrt(dx * dx + dy * dy);
+                node.isHovered = dist < 25; // Hit radius
+                if (node.isHovered) anyHovered = true;
+            } else {
+                node.isHovered = false;
+            }
 
             // Smooth size transition
             const targetSize = node.isHovered ? node.hoverRadius : node.radius;
@@ -489,9 +494,9 @@ function animate(currentTime) {
         });
 
         // Handle cursor
-        if (anyHovered) {
+        if (!isTransitioning && anyHovered) {
             canvas.style.cursor = 'pointer';
-        } else if (canvas.style.cursor === 'pointer') {
+        } else if (canvas.style.cursor === 'pointer' || isTransitioning) {
             canvas.style.cursor = 'default';
         }
     }
@@ -592,37 +597,239 @@ window.addEventListener('mousemove', (e) => {
     mouseY = e.clientY;
 });
 
+// Function to show the "About Me" transition
+function showAboutMeTransition() {
+    isTransitioning = true;
+
+    // Disable other interactive elements
+    const hamburgerMenu = document.getElementById('hamburger-menu');
+    const exploreButton = document.getElementById('explore-button');
+    if (hamburgerMenu) hamburgerMenu.style.pointerEvents = 'none';
+    if (exploreButton) exploreButton.style.pointerEvents = 'none';
+
+    // Create transition element if it doesn't exist
+    let overlay = document.getElementById('transition-overlay');
+    if (!overlay) {
+        overlay = document.createElement('div');
+        overlay.id = 'transition-overlay';
+        overlay.style.position = 'fixed';
+        overlay.style.top = '0';
+        overlay.style.left = '0';
+        overlay.style.width = '100vw';
+        overlay.style.height = '100vh';
+        overlay.style.zIndex = '100000';
+        overlay.style.opacity = '0';
+        overlay.style.pointerEvents = 'none';
+        overlay.style.transition = 'opacity 0.8s ease-in-out';
+
+        // Add the background SVG
+        const bgImg = document.createElement('img');
+        bgImg.src = 'images/Rectangle 9.svg';
+        bgImg.style.width = '100%';
+        bgImg.style.height = '100%';
+        bgImg.style.objectFit = 'cover';
+        bgImg.style.position = 'absolute';
+        bgImg.style.top = '0';
+        bgImg.style.left = '0';
+        overlay.appendChild(bgImg);
+
+        // Add the content container
+        const contentDiv = document.createElement('div');
+        contentDiv.id = 'transition-content';
+        contentDiv.style.position = 'absolute';
+        contentDiv.style.top = '50%';
+        contentDiv.style.left = '38%'; // Moved closer to photos
+        contentDiv.style.transform = 'translateY(-50%)';
+        contentDiv.style.width = '45%';
+        contentDiv.style.textAlign = 'left';
+        contentDiv.style.color = 'rgba(203, 209, 220, 0.6)'; // 60% opacity
+        contentDiv.style.fontFamily = '"Manrope", sans-serif';
+        contentDiv.style.fontWeight = '500'; // Medium weight
+        contentDiv.style.fontSize = '14px';
+        contentDiv.style.lineHeight = '1.6';
+        contentDiv.style.whiteSpace = 'pre-line';
+        contentDiv.style.backdropFilter = 'blur(2px)'; // Layer blur of 2
+        contentDiv.style.textShadow = '0 0 2px #CBD1DC'; // Text blur of 2
+        contentDiv.style.padding = '20px'; // Add some breathable space
+        overlay.appendChild(contentDiv);
+
+        // Add photo container
+        const photoContainer = document.createElement('div');
+        photoContainer.id = 'photo-container';
+        photoContainer.style.position = 'absolute';
+        photoContainer.style.top = '50%';
+        photoContainer.style.left = '25%'; // Positions it to the left of text
+        photoContainer.style.transform = 'translate(-50%, -50%)';
+        photoContainer.style.width = '300px';
+        photoContainer.style.height = '400px';
+        photoContainer.style.pointerEvents = 'none'; // Allow clicking through to buttons if overlaps
+        overlay.appendChild(photoContainer);
+
+        // Add CSS for hover effects and photo styling
+        const style = document.createElement('style');
+        style.textContent = `
+            .about-btn {
+                color: rgba(203, 209, 220, 0.6);
+                text-decoration: none;
+                margin-right: 0px; /* Remove margin between buttons */
+                display: inline-block;
+                transition: all 0.3s ease;
+                cursor: pointer;
+                z-index: 10;
+                position: relative;
+            }
+            .about-btn:hover {
+                color: white;
+                text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+            }
+            #close-transition:hover {
+                transform: scale(1.1); /* Growth effect only for close button */
+            }
+            .about-photo {
+                position: absolute;
+                width: 220px;
+                height: auto;
+                border-radius: 8px;
+                box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+                transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+                cursor: pointer;
+                pointer-events: auto;
+            }
+            #photo-casual {
+                top: 0;
+                right: 0;
+                transform: rotate(5deg);
+                z-index: 1;
+            }
+            #photo-professional {
+                bottom: 0;
+                left: 0;
+                transform: rotate(-5deg);
+                z-index: 2;
+            }
+            .about-photo:hover {
+                transform: scale(1.05) rotate(0deg) !important;
+                z-index: 100 !important;
+            }
+        `;
+        document.head.appendChild(style);
+
+        document.body.appendChild(overlay);
+    }
+
+    const contentDiv = document.getElementById('transition-content');
+    const photoContainer = document.getElementById('photo-container');
+
+    // Clear previous if exist
+    contentDiv.innerHTML = '';
+    photoContainer.innerHTML = '';
+
+    photoContainer.innerHTML = `
+        <img src="images/jiayi-casual.JPG" id="photo-casual" class="about-photo" alt="Jiayi Casual">
+        <img src="images/jiayi-professional.JPG" id="photo-professional" class="about-photo" alt="Jiayi Professional">
+    `;
+
+    // Persistent foreground logic
+    const casual = document.getElementById('photo-casual');
+    const professional = document.getElementById('photo-professional');
+
+    const bringToFront = (el, other) => {
+        el.style.zIndex = '3';
+        other.style.zIndex = '1';
+    };
+
+    casual.addEventListener('mouseenter', () => bringToFront(casual, professional));
+    professional.addEventListener('mouseenter', () => bringToFront(professional, casual));
+
+    contentDiv.innerHTML = `<i># About me</i> 
+
+Hi! I'm Jiayi, a designer & business student @ Western University 
+
+I love solving ambiguous problems; either visually through design or through stories backed by data & analysis
+
+Outside of work I'm a addicted to concerts & food. I'm also a pretty fast typist!
+
+I'm always looking to meet new people, feel free to reach out :)
+<div style="margin-top: 0px; display: flex; align-items: center;">
+    <a href="https://www.linkedin.com/in/jiayiihong/" target="_blank" class="about-btn">[Linkedin]</a><span id="copy-email" class="about-btn">[Email]</span><a href="https://x.com/hong_jiayi380" target="_blank" class="about-btn">[X]</a>
+</div>
+
+<div style="margin-top: 10px;">
+    <span id="close-transition" class="about-btn">[close]</span>
+</div>`;
+
+    // Email copy logic
+    document.getElementById('copy-email').onclick = (e) => {
+        e.stopPropagation();
+        navigator.clipboard.writeText('jiayihong52@gmail.com').then(() => {
+            const originalText = e.target.innerText;
+            e.target.innerText = '[Copied!]';
+            setTimeout(() => {
+                e.target.innerText = originalText;
+            }, 2000);
+        });
+    };
+
+    // Handle close button
+    document.getElementById('close-transition').onclick = (e) => {
+        e.stopPropagation();
+        overlay.style.opacity = '0';
+        overlay.style.pointerEvents = 'none';
+        isTransitioning = false;
+
+        // Re-enable other interactive elements
+        const hamburgerMenu = document.getElementById('hamburger-menu');
+        const exploreButton = document.getElementById('explore-button');
+        if (hamburgerMenu) hamburgerMenu.style.pointerEvents = 'all';
+        if (exploreButton) exploreButton.style.pointerEvents = 'all';
+    };
+
+    // Trigger animation
+    requestAnimationFrame(() => {
+        overlay.style.opacity = '1';
+        overlay.style.pointerEvents = 'all'; // Block interaction with background
+    });
+}
+
 // Handle ball clicks for page transition
 canvas.addEventListener('click', () => {
     // Check if any node is currently hovered
     const anyHoveredNode = [orbitalNode, orbitalNode2, orbitalNode3, orbitalNode4].find(node => node.isHovered);
 
-    if (anyHoveredNode) {
-        // Create transition element if it doesn't exist
-        let transitionOverlay = document.getElementById('transition-overlay');
-        if (!transitionOverlay) {
-            transitionOverlay = document.createElement('img');
-            transitionOverlay.id = 'transition-overlay';
-            transitionOverlay.src = 'images/Rectangle 9.svg';
-            transitionOverlay.style.position = 'fixed';
-            transitionOverlay.style.top = '0';
-            transitionOverlay.style.left = '0';
-            transitionOverlay.style.width = '100vw';
-            transitionOverlay.style.height = '100vh';
-            transitionOverlay.style.objectFit = 'cover';
-            transitionOverlay.style.zIndex = '100000';
-            transitionOverlay.style.opacity = '0';
-            transitionOverlay.style.pointerEvents = 'none';
-            transitionOverlay.style.userSelect = 'none'; // Prevent text selection
-            transitionOverlay.style.transition = 'opacity 0.8s ease-in-out';
-            document.body.appendChild(transitionOverlay);
-        }
+    if (anyHoveredNode && !isTransitioning) {
+        if (anyHoveredNode.text === 'about me') {
+            showAboutMeTransition();
+        } else {
+            // For other balls, just show the blank overlay for now (standard behavior)
+            isTransitioning = true;
 
-        // Trigger animation
-        requestAnimationFrame(() => {
-            transitionOverlay.style.opacity = '1';
-            transitionOverlay.style.pointerEvents = 'all'; // Block interaction with background
-        });
+            // Disable other interactive elements
+            const hamburgerMenu = document.getElementById('hamburger-menu');
+            const exploreButton = document.getElementById('explore-button');
+            if (hamburgerMenu) hamburgerMenu.style.pointerEvents = 'none';
+            if (exploreButton) exploreButton.style.pointerEvents = 'none';
+
+            let transitionOverlay = document.getElementById('transition-overlay');
+            if (!transitionOverlay) {
+                // Initialize standard overlay if it doesnt exist (this will populate the structure)
+                showAboutMeTransition();
+                // We'll just clear the content if it's not "about me"
+                const contentDiv = document.getElementById('transition-content');
+                const photoContainer = document.getElementById('photo-container');
+                contentDiv.innerHTML = '';
+                photoContainer.innerHTML = '';
+            } else {
+                const contentDiv = document.getElementById('transition-content');
+                const photoContainer = document.getElementById('photo-container');
+                contentDiv.innerHTML = '';
+                photoContainer.innerHTML = '';
+
+                requestAnimationFrame(() => {
+                    transitionOverlay.style.opacity = '1';
+                    transitionOverlay.style.pointerEvents = 'all';
+                });
+            }
+        }
     }
 });
 
@@ -654,6 +861,21 @@ hamburgerButton.addEventListener('click', () => {
     dropdownMenu.classList.toggle('dropdown-hidden');
     dropdownMenu.classList.toggle('dropdown-visible');
 });
+
+// Link "about me" in dropdown to show the transition
+const aboutMeDropdownLink = Array.from(document.querySelectorAll('.dropdown-item')).find(el => el.textContent === 'about me');
+if (aboutMeDropdownLink) {
+    aboutMeDropdownLink.addEventListener('click', (e) => {
+        e.preventDefault();
+        // Close menu first
+        hamburgerButton.classList.remove('active');
+        dropdownMenu.classList.remove('dropdown-visible');
+        dropdownMenu.classList.add('dropdown-hidden');
+
+        // Trigger transition
+        showAboutMeTransition();
+    });
+}
 
 // Close dropdown when clicking outside
 document.addEventListener('click', (event) => {
