@@ -435,7 +435,7 @@ function animate(currentTime) {
                 const dx = mouseX - nodeX;
                 const dy = mouseY - nodeY;
                 const dist = Math.sqrt(dx * dx + dy * dy);
-                node.isHovered = dist < 25; // Hit radius
+                node.isHovered = dist < Math.max(25, node.currentRadius); // Hit radius matches visual size, min 25px
                 if (node.isHovered) anyHovered = true;
             } else {
                 node.isHovered = false;
@@ -600,6 +600,13 @@ window.addEventListener('mousemove', (e) => {
 // Shared function to ensure transition overlay exists
 function ensureTransitionOverlay() {
     let overlay = document.getElementById('transition-overlay');
+
+    // Reset pointer events on containers if they exist (fixes re-opening bug)
+    const contentDiv = document.getElementById('transition-content');
+    const photoContainer = document.getElementById('photo-container');
+    if (contentDiv) contentDiv.style.pointerEvents = 'auto';
+    if (photoContainer) photoContainer.style.pointerEvents = 'none';
+
     if (!overlay) {
         overlay = document.createElement('div');
         overlay.id = 'transition-overlay';
@@ -733,6 +740,23 @@ function ensureTransitionOverlay() {
                 box-shadow: 0 20px 50px rgba(0,0,0,0.6);
                 filter: brightness(1);
             }
+            
+            /* Cases Section Styles */
+            .case-photo {
+                position: absolute;
+                width: 260px; /* Uniform width */
+                height: auto;
+                border-radius: 12px;
+                box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+                box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+                transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+                cursor: pointer;
+            }
+            .case-photo:hover {
+                transform: scale(1.05) rotate(0deg) !important;
+                z-index: 100 !important;
+                box-shadow: 0 20px 50px rgba(0,0,0,0.6);
+            }
         `;
         document.head.appendChild(style);
         document.body.appendChild(overlay);
@@ -767,6 +791,9 @@ function showAboutMeTransition() {
     contentDiv.style.backdropFilter = 'blur(2px)';
     contentDiv.style.textShadow = '0 0 2px #CBD1DC';
     contentDiv.style.padding = '20px';
+    contentDiv.style.display = 'block'; // Reset display to block
+    contentDiv.style.alignItems = 'initial'; // Reset align-items
+    contentDiv.style.justifyContent = 'initial'; // Reset justify-content
 
     photoContainer.style.display = 'block';
     photoContainer.innerHTML = `
@@ -789,7 +816,7 @@ I love solving ambiguous problems; either visually through design or through sto
 Outside of work I'm a addicted to concerts & food. I'm also a pretty fast typist!
 
 I'm always looking to meet new people, feel free to reach out :)
-<div style="margin-top: 0px; display: flex; align-items: center;">
+<div style="margin-top: 0px; display: flex; align-items: center; gap: 10px;">
     <a href="https://www.linkedin.com/in/jiayiihong/" target="_blank" class="about-btn">[Linkedin]</a><span id="copy-email" class="about-btn">[Email]</span><a href="https://x.com/hong_jiayi380" target="_blank" class="about-btn">[X]</a>
 </div>
 
@@ -810,6 +837,10 @@ I'm always looking to meet new people, feel free to reach out :)
         e.stopPropagation();
         overlay.style.opacity = '0';
         overlay.style.pointerEvents = 'none';
+
+        // Immediately disable pointer events on all content to prevent blocking background clicks
+        overlay.querySelectorAll('*').forEach(el => el.style.pointerEvents = 'none');
+
         isTransitioning = false;
         if (hamburgerMenu) hamburgerMenu.style.pointerEvents = 'all';
         if (exploreButton) exploreButton.style.pointerEvents = 'all';
@@ -843,6 +874,9 @@ function showGraphicDesignTransition() {
     contentDiv.style.backdropFilter = 'none';
     contentDiv.style.textShadow = 'none';
     contentDiv.style.padding = '0';
+    contentDiv.style.display = 'block'; // Reset display to block
+    contentDiv.style.alignItems = 'initial';
+    contentDiv.style.justifyContent = 'initial';
     contentDiv.style.color = 'rgba(203, 209, 220, 0.6)';
     contentDiv.style.fontFamily = '"Manrope", sans-serif';
     contentDiv.style.fontWeight = '500';
@@ -921,6 +955,159 @@ function showGraphicDesignTransition() {
         e.stopPropagation();
         overlay.style.opacity = '0';
         overlay.style.pointerEvents = 'none';
+
+        // Immediately disable pointer events on all content
+        overlay.querySelectorAll('*').forEach(el => el.style.pointerEvents = 'none');
+
+        isTransitioning = false;
+        if (hamburgerMenu) hamburgerMenu.style.pointerEvents = 'all';
+        if (exploreButton) exploreButton.style.pointerEvents = 'all';
+    };
+
+    requestAnimationFrame(() => {
+        overlay.style.opacity = '1';
+        overlay.style.pointerEvents = 'all';
+    });
+}
+
+// Function to show the "Cases" transition
+function showCasesTransition() {
+    isTransitioning = true;
+
+    const hamburgerMenu = document.getElementById('hamburger-menu');
+    const exploreButton = document.getElementById('explore-button');
+    if (hamburgerMenu) hamburgerMenu.style.pointerEvents = 'none';
+    if (exploreButton) exploreButton.style.pointerEvents = 'none';
+
+    const overlay = ensureTransitionOverlay();
+    const contentDiv = document.getElementById('transition-content');
+    const photoContainer = document.getElementById('photo-container');
+
+    // Setup Cases specific layout
+    contentDiv.style.left = '40%'; // Center slightly more to balance with images
+    contentDiv.style.transform = 'translate(-50%, -50%)';
+    contentDiv.style.textAlign = 'left';
+    contentDiv.style.width = '70%'; // Wider container to hold both text and images
+    contentDiv.style.color = 'rgba(203, 209, 220, 0.6)';
+    contentDiv.style.fontFamily = '"Manrope", sans-serif';
+    contentDiv.style.fontWeight = '500';
+    contentDiv.style.fontSize = '14px';
+    contentDiv.style.lineHeight = '1.6';
+    contentDiv.style.whiteSpace = 'normal';
+    contentDiv.style.backdropFilter = 'none';
+    contentDiv.style.textShadow = '0 0 2px #CBD1DC';
+    contentDiv.style.padding = '20px';
+    contentDiv.style.display = 'flex';
+    contentDiv.style.alignItems = 'center';
+    contentDiv.style.justifyContent = 'center';
+    contentDiv.style.gap = '50px';
+
+    // Photos Setup
+    photoContainer.style.display = 'none'; // We will use inline images in contentDiv for better spacing control or absolute positioning relative to contentDiv
+
+    contentDiv.innerHTML = `
+        <div style="position: relative; width: 350px; height: 437px;">
+             <img src="images/Case Covers/BANXX.jpg" class="case-photo" style="top: -5px; left: 20px; transform: rotate(-3deg); z-index: 2;">
+             <img src="images/Case Covers/FINALS 1220 (2).jpg" class="case-photo" style="top: 120px; left: 100px; transform: rotate(5deg); z-index: 3;">
+             <img src="images/Case Covers/TCS.jpg" class="case-photo" style="top: 235px; left: 5px; transform: rotate(-5deg); z-index: 4;">
+             <img src="images/Case Covers/Hero Visual.png" class="case-photo" style="top: 335px; left: 90px; transform: rotate(3deg); z-index: 5;"> 
+        </div>
+
+        <div style="flex: 1; max-width: 400px; z-index: 10;">
+            <i># Cases</i>
+            <br><br>
+            <b>Strategy:</b> 
+            <br><br>
+            [Leveraging open banking to solve U.S. medical debt]
+            <br><br>
+            [Franchising a local London Dutch bakery]
+            <br><br>
+            <b>Design:</b> 
+            <br><br>
+            [Creating new occasions for Gen-Z Starbucks customers]
+            <br><br>
+            [Lowering the barrier to entry for genuine human interaction]
+            <br><br>
+            <div style="margin-top: 30px;">
+                <span id="close-transition" class="about-btn">[close]</span>
+            </div>
+        </div>
+    `;
+
+    // Add persistent Z-index logic
+    const casePhotos = contentDiv.querySelectorAll('.case-photo');
+    let maxZ = 10;
+    casePhotos.forEach(photo => {
+        photo.addEventListener('mouseenter', () => {
+            photo.style.zIndex = ++maxZ;
+        });
+    });
+
+    document.getElementById('close-transition').onclick = (e) => {
+        e.stopPropagation();
+        overlay.style.opacity = '0';
+        overlay.style.pointerEvents = 'none';
+
+        // Immediately disable pointer events on all content
+        overlay.querySelectorAll('*').forEach(el => el.style.pointerEvents = 'none');
+
+        isTransitioning = false;
+        if (hamburgerMenu) hamburgerMenu.style.pointerEvents = 'all';
+        if (exploreButton) exploreButton.style.pointerEvents = 'all';
+    };
+
+    requestAnimationFrame(() => {
+        overlay.style.opacity = '1';
+        overlay.style.pointerEvents = 'all';
+    });
+}
+
+// Function to show the "Projects" transition
+function showProjectsTransition() {
+    isTransitioning = true;
+
+    const hamburgerMenu = document.getElementById('hamburger-menu');
+    const exploreButton = document.getElementById('explore-button');
+    if (hamburgerMenu) hamburgerMenu.style.pointerEvents = 'none';
+    if (exploreButton) exploreButton.style.pointerEvents = 'none';
+
+    const overlay = ensureTransitionOverlay();
+    const contentDiv = document.getElementById('transition-content');
+    const photoContainer = document.getElementById('photo-container');
+
+    // Setup Projects specific layout
+    photoContainer.style.display = 'none';
+    contentDiv.style.left = '50%';
+    contentDiv.style.transform = 'translate(-50%, -50%)';
+    contentDiv.style.textAlign = 'center';
+    contentDiv.style.width = '100%';
+    contentDiv.style.color = 'rgba(203, 209, 220, 0.6)';
+    contentDiv.style.fontFamily = '"Manrope", sans-serif';
+    contentDiv.style.fontWeight = '500';
+    contentDiv.style.fontSize = '14px';
+    contentDiv.style.lineHeight = '1.6';
+    contentDiv.style.whiteSpace = 'pre-line';
+    contentDiv.style.backdropFilter = 'none';
+    contentDiv.style.textShadow = '0 0 2px #CBD1DC';
+    contentDiv.style.padding = '20px';
+    contentDiv.style.display = 'block';
+
+    contentDiv.innerHTML = `<i># Projects</i>
+
+In the works...
+
+<div style="margin-top: 30px;">
+    <span id="close-transition" class="about-btn">[close]</span>
+</div>`;
+
+    document.getElementById('close-transition').onclick = (e) => {
+        e.stopPropagation();
+        overlay.style.opacity = '0';
+        overlay.style.pointerEvents = 'none';
+
+        // Immediately disable pointer events on all content
+        overlay.querySelectorAll('*').forEach(el => el.style.pointerEvents = 'none');
+
         isTransitioning = false;
         if (hamburgerMenu) hamburgerMenu.style.pointerEvents = 'all';
         if (exploreButton) exploreButton.style.pointerEvents = 'all';
@@ -941,6 +1128,10 @@ canvas.addEventListener('click', () => {
             showAboutMeTransition();
         } else if (anyHoveredNode.text === 'graphic design') {
             showGraphicDesignTransition();
+        } else if (anyHoveredNode.text === 'cases') {
+            showCasesTransition();
+        } else if (anyHoveredNode.text === 'projects') {
+            showProjectsTransition();
         } else {
             isTransitioning = true;
             const hamburgerMenu = document.getElementById('hamburger-menu');
@@ -1027,6 +1218,30 @@ if (graphicDesignDropdownLink) {
         dropdownMenu.classList.remove('dropdown-visible');
         dropdownMenu.classList.add('dropdown-hidden');
         showGraphicDesignTransition();
+    });
+}
+
+// Link "cases" in dropdown to show the transition
+const casesDropdownLink = Array.from(document.querySelectorAll('.dropdown-item')).find(el => el.textContent === 'cases');
+if (casesDropdownLink) {
+    casesDropdownLink.addEventListener('click', (e) => {
+        e.preventDefault();
+        hamburgerButton.classList.remove('active');
+        dropdownMenu.classList.remove('dropdown-visible');
+        dropdownMenu.classList.add('dropdown-hidden');
+        showCasesTransition();
+    });
+}
+
+// Link "projects" in dropdown to show the transition
+const projectsDropdownLink = Array.from(document.querySelectorAll('.dropdown-item')).find(el => el.textContent === 'projects');
+if (projectsDropdownLink) {
+    projectsDropdownLink.addEventListener('click', (e) => {
+        e.preventDefault();
+        hamburgerButton.classList.remove('active');
+        dropdownMenu.classList.remove('dropdown-visible');
+        dropdownMenu.classList.add('dropdown-hidden');
+        showProjectsTransition();
     });
 }
 
