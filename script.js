@@ -314,25 +314,25 @@ const orbitalNode = {
 };
 const orbitalNode2 = {
     angle: Math.PI * 1.5,
-    radius: 15, // 30px diameter / 2
-    hoverRadius: 18, // Expand to 36px diameter
-    currentRadius: 15,
+    radius: 16, // 32px diameter / 2 (+2px size)
+    hoverRadius: 19,
+    currentRadius: 16,
     isHovered: false,
     text: 'projects'
 };
 const orbitalNode3 = {
     angle: Math.PI * 1.5,
-    radius: 22.5, // 45px diameter / 2
-    hoverRadius: 26, // Expand to 52px diameter
-    currentRadius: 22.5,
+    radius: 23, // 46px diameter / 2 (+1px size)
+    hoverRadius: 26.5,
+    currentRadius: 23,
     isHovered: false,
     text: 'graphic design'
 };
 const orbitalNode4 = {
     angle: Math.PI * 1.5,
-    radius: 27.5, // 55px diameter / 2
-    hoverRadius: 32, // Expand to 64px diameter
-    currentRadius: 27.5,
+    radius: 28, // 56px diameter / 2 (+1px size)
+    hoverRadius: 32.5,
+    currentRadius: 28,
     isHovered: false,
     text: 'cases'
 };
@@ -415,13 +415,24 @@ function animate(currentTime) {
         let anyHovered = false;
 
         nodes.forEach(({ node, radius }) => {
-            // Update node angle (10x slower orbit normally, 100000x faster between 3 and 9 o'clock)
-            // 3 o'clock = 0 rad, 9 o'clock = PI rad
-            const normalizedAngle = node.angle % (Math.PI * 2);
+            // Normalize angle to [0, 2PI)
+            let normalizedAngle = node.angle % (Math.PI * 2);
+            if (normalizedAngle < 0) normalizedAngle += Math.PI * 2;
+
+
+
+            // Assign specific base speeds
+            let baseSpeed = 0.00010;
+            if (node === orbitalNode) baseSpeed = 0.00014; // Updated speed
+            else if (node === orbitalNode2) baseSpeed = 0.00009;
+            else if (node === orbitalNode3) baseSpeed = 0.00007;
+            else if (node === orbitalNode4) baseSpeed = 0.00006;
+
+            // Slingshot from 3 o'clock (0) to 9 o'clock (PI)
             const isSlingshotZone = normalizedAngle >= 0 && normalizedAngle <= Math.PI;
 
-            const baseSpeed = 0.00001;
-            const slingshotSpeed = baseSpeed * 100000;
+            // Fast travel speed (traverse PI in ~200ms)
+            const slingshotSpeed = Math.PI / 200;
             const currentSpeed = isSlingshotZone ? slingshotSpeed : baseSpeed;
 
             node.angle += currentSpeed * clampedDeltaTime;
@@ -1007,10 +1018,10 @@ function showCasesTransition() {
 
     contentDiv.innerHTML = `
         <div style="position: relative; width: 350px; height: 437px;">
-             <img src="images/Case Covers/BANXX.jpg" class="case-photo" style="top: -5px; left: 20px; transform: rotate(-3deg); z-index: 2;">
-             <img src="images/Case Covers/FINALS 1220 (2).jpg" class="case-photo" style="top: 120px; left: 100px; transform: rotate(5deg); z-index: 3;">
-             <img src="images/Case Covers/TCS.jpg" class="case-photo" style="top: 235px; left: 5px; transform: rotate(-5deg); z-index: 4;">
-             <img src="images/Case Covers/Hero Visual.png" class="case-photo" style="top: 335px; left: 90px; transform: rotate(3deg); z-index: 5;"> 
+             <img src="images/Case Covers/BANXX.jpg" class="case-photo" id="img-banxx" style="top: -5px; left: 20px; transform: rotate(-3deg); z-index: 2;">
+             <img src="images/Case Covers/FINALS 1220 (2).jpg" class="case-photo" id="img-finals" style="top: 120px; left: 100px; transform: rotate(5deg); z-index: 3;">
+             <img src="images/Case Covers/TCS.jpg" class="case-photo" id="img-tcs" style="top: 235px; left: 5px; transform: rotate(-5deg); z-index: 4;">
+             <img src="images/Case Covers/Hero Visual.png" class="case-photo" id="img-hero" style="top: 335px; left: 90px; transform: rotate(3deg); z-index: 5;"> 
         </div>
 
         <div style="flex: 1; max-width: 400px; z-index: 10;">
@@ -1018,29 +1029,79 @@ function showCasesTransition() {
             <br><br>
             <b>Strategy:</b> 
             <br><br>
-            [Leveraging open banking to solve U.S. medical debt]
+            <span id="text-banxx" class="case-text">[Leveraging open banking to solve U.S. medical debt]</span>
             <br><br>
-            [Franchising a local London Dutch bakery]
+            <span id="text-finals" class="case-text">[Franchising a local London Dutch bakery]</span>
             <br><br>
             <b>Design:</b> 
             <br><br>
-            [Creating new occasions for Gen-Z Starbucks customers]
+            <span id="text-tcs" class="case-text">[Creating new occasions for Gen-Z Starbucks customers]</span>
             <br><br>
-            [Lowering the barrier to entry for genuine human interaction]
+            <span id="text-hero" class="case-text">[Lowering the barrier to entry for genuine human interaction]</span>
             <br><br>
             <div style="margin-top: 30px;">
                 <span id="close-transition" class="about-btn">[close]</span>
             </div>
         </div>
+        
+        <style>
+            .case-text {
+                transition: all 0.3s ease;
+                cursor: pointer;
+                display: inline-block;
+                padding: 2px 5px;
+                margin: -2px -5px;
+                border-radius: 4px;
+            }
+            .case-text.hovered, .case-text:hover {
+                transform: scale(1.05);
+                color: white;
+                text-shadow: 0 0 10px rgba(255, 255, 255, 0.8), 0 0 20px rgba(255, 255, 255, 0.4);
+            }
+            .case-photo.hovered {
+                transform: scale(1.05) rotate(0deg) !important;
+                z-index: 100 !important;
+                box-shadow: 0 20px 50px rgba(0,0,0,0.6);
+            }
+        </style>
     `;
 
-    // Add persistent Z-index logic
+    // Add persistent Z-index logic and synchronized hover effects
     const casePhotos = contentDiv.querySelectorAll('.case-photo');
     let maxZ = 10;
-    casePhotos.forEach(photo => {
-        photo.addEventListener('mouseenter', () => {
-            photo.style.zIndex = ++maxZ;
-        });
+
+    // Define the pairs of text and image IDs
+    const pairs = [
+        { textId: 'text-banxx', imgId: 'img-banxx' },
+        { textId: 'text-finals', imgId: 'img-finals' },
+        { textId: 'text-tcs', imgId: 'img-tcs' },
+        { textId: 'text-hero', imgId: 'img-hero' }
+    ];
+
+    pairs.forEach(pair => {
+        const textEl = document.getElementById(pair.textId);
+        const imgEl = document.getElementById(pair.imgId);
+
+        if (textEl && imgEl) {
+            // Function to handle showing hover state
+            const addHover = () => {
+                textEl.classList.add('hovered');
+                imgEl.classList.add('hovered');
+                imgEl.style.zIndex = ++maxZ; // Bring image to front
+            };
+
+            // Function to handle removing hover state
+            const removeHover = () => {
+                textEl.classList.remove('hovered');
+                imgEl.classList.remove('hovered');
+            };
+
+            // Add event listeners to both elements
+            textEl.addEventListener('mouseenter', addHover);
+            textEl.addEventListener('mouseleave', removeHover);
+            imgEl.addEventListener('mouseenter', addHover);
+            imgEl.addEventListener('mouseleave', removeHover);
+        }
     });
 
     document.getElementById('close-transition').onclick = (e) => {
@@ -1266,7 +1327,7 @@ if (actionButton) {
         const line1 = document.querySelector('.line-1');
         const line2 = document.querySelector('.line-2');
         const line3 = document.querySelector('.line-3');
-        const fadeDuration = 1000;
+        const fadeDuration = 1300;
         const fadeStartTime = performance.now();
 
         if (isExploreState) {
