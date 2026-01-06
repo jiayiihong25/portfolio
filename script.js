@@ -152,6 +152,96 @@ class Star {
     }
 }
 
+
+// Meteor class for the shower background
+class Meteor {
+    constructor() {
+        this.reset();
+    }
+
+    reset() {
+        // Start from left side to streak horizontally across screen
+        // Angle 0 degrees (Left -> Right)
+
+        // Spawn strictly from Left edge
+        this.x = -Math.random() * 200 - 100; // Start off-screen Left
+        // Y can be anywhere on screen
+        this.y = Math.random() * canvas.height;
+
+        this.length = Math.random() * 150 + 50; // Trail length
+        this.speed = Math.random() * 4 + 6; // Speed
+
+        const angleDeg = 10; // 10 degrees down
+        this.angle = angleDeg * (Math.PI / 180);
+
+        this.active = true;
+        this.opacity = 0;
+        this.fadeIn = true;
+    }
+
+    update(deltaTime) {
+        if (!this.active) return;
+
+        // Move meteor
+        this.x += Math.cos(this.angle) * this.speed;
+        this.y += Math.sin(this.angle) * this.speed;
+
+        // Fade in/out
+        if (this.fadeIn) {
+            this.opacity += 0.1;
+            if (this.opacity >= 1) {
+                this.opacity = 1;
+                this.fadeIn = false;
+            }
+        }
+
+        if (this.x < -300 || this.y > canvas.height + 300) {
+            this.active = false;
+        }
+    }
+
+    draw() {
+        if (!this.active) return;
+
+        // Draw trail
+        const tailX = this.x - Math.cos(this.angle) * this.length;
+        const tailY = this.y - Math.sin(this.angle) * this.length;
+
+        // Gradient for tail - Darker theme
+        const gradient = ctx.createLinearGradient(this.x, this.y, tailX, tailY);
+        // Head: less stark white, slightly bluish/grey
+        gradient.addColorStop(0, `rgba(200, 220, 255, ${this.opacity * 0.7})`);
+        // Mid: Darker blue-grey
+        gradient.addColorStop(0.4, `rgba(60, 80, 110, ${this.opacity * 0.3})`);
+        // Tail: Transparent
+        gradient.addColorStop(1, `rgba(0, 0, 30, 0)`);
+
+        ctx.strokeStyle = gradient;
+        ctx.lineWidth = 2;
+        ctx.lineCap = 'round';
+        ctx.beginPath();
+        ctx.moveTo(this.x, this.y);
+        ctx.lineTo(tailX, tailY);
+        ctx.stroke();
+
+        // Draw glowing head - subtler
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, 1.5, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(220, 230, 255, ${this.opacity * 0.8})`;
+        ctx.shadowBlur = 6;
+        ctx.shadowColor = `rgba(80, 120, 180, ${this.opacity * 0.5})`;
+        ctx.fill();
+        ctx.shadowBlur = 0;
+    }
+}
+
+const meteors = [];
+let lastMeteorTime = 0;
+let meteorShowerActive = false;
+let meteorShowerStartTime = 0;
+const METEOR_CYCLE = 10000; // 10 seconds cycle (5s duration + 5s gap)
+const METEOR_DURATION = 5000; // 5 seconds shower
+
 // Create stars array
 const stars = [];
 const numStars = 1500; // Adjust this number for more/fewer stars
@@ -371,6 +461,38 @@ function animate(currentTime) {
             star.update(clampedDeltaTime);
             star.draw();
         });
+
+        // --- METEOR SHOWER LOGIC ---
+        // Check cycle
+        if (!meteorShowerActive && currentTime - meteorShowerStartTime > METEOR_CYCLE) {
+            meteorShowerActive = true;
+            meteorShowerStartTime = currentTime;
+        }
+
+        // End shower
+        if (meteorShowerActive && currentTime - meteorShowerStartTime > METEOR_DURATION) {
+            meteorShowerActive = false;
+        }
+
+        // Spawn meteors
+        if (meteorShowerActive) {
+            // Spawn less frequently: random interval 800-1200ms
+            if (currentTime - lastMeteorTime > Math.random() * 400 + 800) {
+                meteors.push(new Meteor());
+                lastMeteorTime = currentTime;
+            }
+        }
+
+        // Update and draw meteors
+        for (let i = meteors.length - 1; i >= 0; i--) {
+            const m = meteors[i];
+            m.update(clampedDeltaTime);
+            m.draw();
+            if (!m.active) {
+                meteors.splice(i, 1);
+            }
+        }
+        // ---------------------------
 
         // Draw orbital-line-1: path for the first tracked star (0.5px white line with drawing animation)
         if (trackedStar1 && trackedStar1.orbitalRadius && trackedStar1.orbitalRadius > 0 && orbitalPathProgress > 0) {
