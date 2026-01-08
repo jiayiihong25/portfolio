@@ -543,23 +543,60 @@ function animate(currentTime) {
 
 
 
-            // Assign specific base speeds
-            let baseSpeed = 0.00010;
-            if (node === orbitalNode) baseSpeed = 0.00014; // Updated speed
-            else if (node === orbitalNode2) baseSpeed = 0.00009;
-            else if (node === orbitalNode3) baseSpeed = 0.00007;
-            else if (node === orbitalNode4) baseSpeed = 0.00006;
+            // Calculate current position first to determine speed
+            const currentX = center.x + Math.cos(node.angle) * radius;
+            const currentY = center.y + Math.sin(node.angle) * radius;
 
-            // Slingshot from 3 o'clock (0) to 9 o'clock (PI)
-            const isSlingshotZone = normalizedAngle >= 0 && normalizedAngle <= Math.PI;
+            // Default base speed requested "Above mountain"
+            let targetSpeed = 0.00010;
+            if (node === orbitalNode) targetSpeed = 0.00007; // "about me"
+            else if (node === orbitalNode2) targetSpeed = 0.00008; // "projects"
 
-            // Fast travel speed (traverse PI in ~200ms)
-            const slingshotSpeed = Math.PI / 200;
-            const currentSpeed = isSlingshotZone ? slingshotSpeed : baseSpeed;
+            // Check against mountain position
+            const mountain = document.getElementById('mountain');
+            let isBelowMountain = false;
 
-            node.angle += currentSpeed * clampedDeltaTime;
+            if (mountain) {
+                const mountainRect = mountain.getBoundingClientRect();
+                // mountainRect.top includes any transform if applicable in modern browsers, or we rely on visual position
+                // The user specified "below mountain.png". 
+                // We'll use a threshold slightly offset into the mountain to be safe.
+                if (currentY > mountainRect.top + 30) {
+                    isBelowMountain = true;
+                }
+            }
 
-            // Calculate position
+            // Handle Below Mountain State & Timing
+            if (isBelowMountain) {
+                if (!node.wasBelowMountain) {
+                    node.belowMountainStartTime = currentTime;
+                    node.wasBelowMountain = true;
+                }
+
+                // Ramp logic
+                const elapsed = currentTime - node.belowMountainStartTime;
+                if (elapsed < 200) {
+                    targetSpeed = 0.001; // First 200ms
+                } else {
+                    targetSpeed = 0.0015; // After 200ms
+                }
+            } else {
+                node.wasBelowMountain = false;
+                node.belowMountainStartTime = 0;
+            }
+
+            // Apply Speed Smoothing (Lerp)
+            if (typeof node.currentSpeed === 'undefined') node.currentSpeed = targetSpeed;
+
+            // Adjust lerp factor: 0.1 gives a nice smooth transition. 
+            // If targetSpeed jumps from 0.00007 to 0.001, it will take several frames to reach close to 0.001.
+            // This satisfies "ramp up".
+            node.currentSpeed += (targetSpeed - node.currentSpeed) * 0.1;
+
+            // Update angle with the determined speed
+            node.angle += node.currentSpeed * clampedDeltaTime;
+
+            // Update position for drawing
             const nodeX = center.x + Math.cos(node.angle) * radius;
             const nodeY = center.y + Math.sin(node.angle) * radius;
 
@@ -1225,6 +1262,24 @@ function showCasesTransition() {
             imgEl.addEventListener('mouseleave', removeHover);
         }
     });
+
+    // Add click listeners for Hero Visual navigation
+    const heroImg = document.getElementById('img-hero');
+    const heroText = document.getElementById('text-hero');
+
+    const navigateToHero = (e) => {
+        e.stopPropagation();
+        // Fade out transition
+        overlay.style.transition = 'opacity 0.5s ease-out';
+        overlay.style.opacity = '0';
+
+        setTimeout(() => {
+            window.location.href = 'hero-visual.html';
+        }, 500);
+    };
+
+    if (heroImg) heroImg.addEventListener('click', navigateToHero);
+    if (heroText) heroText.addEventListener('click', navigateToHero);
 
     document.getElementById('close-transition').onclick = (e) => {
         e.stopPropagation();
