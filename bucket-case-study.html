@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=1024, initial-scale=1.0">
+    <title>Buckets Case Study</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,600&family=Manrope:wght@500;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            overflow-y: auto;
+            margin: 0;
+            padding: 0;
+            background-color: #0B0E14;
+            /* Fallback color */
+        }
+
+        #star-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        #background-gradient {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+
+
+        #case-study-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 120px 24px 60px;
+            /* Top padding clears the fixed back link */
+            position: relative;
+            z-index: 10;
+            color: rgba(203, 209, 220, 0.9);
+            font-family: "Manrope", sans-serif;
+        }
+
+        .case-header {
+            text-align: left;
+            margin-bottom: 40px;
+        }
+
+        .case-title {
+            font-family: "EB Garamond", serif;
+            font-size: 56px;
+            color: white;
+            margin: 0 0 16px 0;
+            font-weight: 500;
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+        }
+
+        .case-subtitle {
+            font-size: 20px;
+            color: rgba(203, 209, 220, 0.8);
+            font-weight: 400;
+            max-width: 600px;
+            margin: 0;
+            line-height: 1.5;
+        }
+
+        .section {
+            margin-bottom: 40px;
+        }
+
+        .section-title {
+            font-family: "Manrope", sans-serif;
+            font-size: 32px;
+            color: white;
+            margin-bottom: 32px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        p {
+            font-size: 16px;
+            line-height: 1.8;
+            margin-bottom: 24px;
+        }
+
+        strong {
+            color: white;
+            font-weight: 700;
+        }
+
+        .quote-block {
+            font-family: "Manrope", sans-serif;
+            font-size: 28px;
+            color: white;
+            padding: 24px;
+            border-left: 2px solid rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.03);
+            margin: 24px 0;
+            line-height: 1.4;
+            font-style: italic;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        li {
+            margin-bottom: 24px;
+            padding-left: 24px;
+            border-left: 2px solid rgba(255, 255, 255, 0.15);
+        }
+
+        .image-group {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            margin: 20px 0;
+            align-items: flex-start;
+        }
+
+        .image-group img {
+            max-width: 48%;
+            height: auto;
+            border-radius: 12px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .case-title {
+                font-size: 40px;
+            }
+
+            .quote-block {
+                font-size: 24px;
+                padding: 24px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="star-canvas"></canvas>
+    <img src="images/background_gradient.svg" id="background-gradient" alt="Background Gradient">
+
+
+
+    <div id="case-study-container">
+
+        <header class="case-header">
+            <h1 class="case-title">Buckets</h1>
+            <div class="case-subtitle">Lowering the barrier to entry for genuine human interaction</div>
+        </header>
+
+        <img src="images/Case Covers/Hero Visual.png" alt="Buckets Cover"
+            style="width: 100%; height: auto; border-radius: 12px; margin-bottom: 40px; box-shadow: 0 10px 30px rgba(0,0,0,0.3);">
+
+        <section class="section">
+            <p><strong>60% of people report feeling lonely.</strong> While we are hyper-connected digitally, the prompt
+                for this designathon highlighted that these interactions often feel limiting and impersonal, making it
+                difficult to convey emotion or build meaningful new relationships.</p>
+            <p>My challenge here was to solve a "loneliness epidemic" with a digital product that helped its users
+                overcome social isolation by establishing meaningful social connections without sacrificing old
+                friendships.</p>
+        </section>
+
+        <section class="section">
+            <h2 class="section-title">Understanding the "Why"</h2>
+            <p>I conducted interviews with 11 students in our target demographic (University Students & Young Adults,
+                ages 18-30) to understand the root causes behind the "loneliness epidemic" and how it has affected them
+                in regards to maintaining existing friendships and building new, meaningful ones.</p>
+            <ul>
+                <li>
+                    <strong>"Texting Fatigue"</strong><br>
+                    Many users cited texting as a major pain point which boiled down to 2 main reasons: digital
+                    conversations lack effort and emotional engagement compared to in person meetings- making it hard to
+                    display & understand tone and they have limited conversation flow (in the sense that replies aren't
+                    instantaneous).
+                </li>
+                <li>
+                    <strong>"Distance"</strong><br>
+                    Almost every user echoed the idea that life has physically pulled many of their friendships apart as
+                    they moved to university, making catching up (especially in person) nuanced.
+                </li>
+                <li>
+                    <strong>"Shallow Remedies"</strong><br>
+                    Some users mentioned how forming connections online feels "gamified", with social discovery apps
+                    like Yubo or Hoop leading to shallow online friendships rather than meaningful ones.
+                </li>
+            </ul>
+        </section>
+
+        <section class="section">
+            <h2 class="section-title">Problem Statement</h2>
+            <p>These insights helped us narrow down our problem statement:</p>
+            <div class="quote-block">
+                "How might we lower the barrier of entry to in-person connections and catch up with close friends who
+                are busy?"
+            </div>
+        </section>
+
+        <section class="section">
+            <h2 class="section-title">Core Features</h2>
+
+            <p><strong>Interest Matching</strong><br>
+                To combat the shallow feeling of online relationships our onboarding process focused on shared context
+                during onboarding. Users fill up their buckets with their interests (i.e. I enjoy photography to an
+                extent so I’ll fill that bucket 45% full– once this is repeated across multiple hobbies, I have a
+                profile). When matching friendships (filtered by geographical area) instead of seeing the person or
+                their name, you sort by hobbies that allow you to "fill your bucket" for a specific hobby by connecting
+                with someone else who enjoys the same things.</p>
+
+            <div class="image-group">
+                <img src="case%20studies/BUCKETS/Filter%20Page.svg" alt="Filter Page">
+                <img src="case%20studies/BUCKETS/Connect%20Page.svg" alt="Connect Page">
+            </div>
+
+            <p><strong>Low Effort Maintenance of long distance friendships</strong><br>
+                To combat distance drifting our app includes a video update mailbox that allows users to film a 1-5
+                minute video every week sharing what’s new which are then delivered to friends, removing the need for
+                friends to be free at the exact same time while also adding tone and body language that texts lack.</p>
+
+            <div class="image-group">
+                <img src="case%20studies/BUCKETS/Chat%20Page.svg" alt="Chat Page">
+                <img src="case%20studies/BUCKETS/Pending%20Page.png" alt="Pending Page">
+            </div>
+        </section>
+
+        <section class="section">
+            <h2 class="section-title">Roadmap Strategy</h2>
+            <p>The 2 core features are only the beginning, we also brainstormed a product roadmap of secondary features
+                that would be essential to the product's maturity.</p>
+            <ul>
+                <li><strong>Security measures:</strong> Ensuring the users onboarded onto the app verify their
+                    identities as security is a critical concern for meeting strangers.</li>
+                <li><strong>Calendar syncing:</strong> In order to automate a tedious task: finding overlapping free
+                    time; our users can sync their calendars with the app so the app can automatically find free blocks
+                    to plan hangouts.</li>
+                <li><strong>Social events:</strong> Suggest local activities and venues (that use common interests) to
+                    serve as a launchpad for meetups and reduces barrier of planning in-person connections.</li>
+            </ul>
+        </section>
+
+        <section class="section">
+            <h2 class="section-title">Did we solve the problem?</h2>
+            <p>Buckets addressed the challenge of establishing meaningful connections and overcoming isolation through
+                centering the user experience around shared interests rather than appearance, and provides asynchronous
+                updates rather than high-pressure scheduling or text conversations that lack emotion.</p>
+        </section>
+
+        <section class="section">
+            <h2 class="section-title">Lessons Learnt & Improvements</h2>
+
+            <p><strong>Depth over breadth</strong><br>
+                A user I interviewed mentioned how they "didn't know over 400 of the people that followed me" on
+                Instagram. I then had a revelation where I realized that a social product doesn't necessarily need to
+                connect you with everyone, it just needs to connect you deeply with the right people.</p>
+
+            <p><strong>Think simple</strong><br>
+                Originally we toyed around with many complex features and an in-depth connection process, however we
+                settled on being straightforward and simple. In this case, connections are already hard to maintain so
+                if we make a complex process for the user to go through each time they want to connect it would deter
+                them even more. Therefore it's good to simplify the user experience without forcing anything unnecessary
+                at times.</p>
+
+            <h3
+                style="font-family: 'Manrope', sans-serif; font-size: 24px; color: white; margin-top: 40px; margin-bottom: 16px;">
+                Improvements</h3>
+            <p>Looking back, we focused a lot on the first interaction rather than the first meetup which still was a
+                high-friction point for those with social anxiety despite our digital product. If I were to redo the
+                process, I would add questions into the user interviews that specifically targeted meeting new people
+                IRL such as asking for stories of first hangouts with close friends and what went on in the user's mind.
+            <p>The questions that we asked were heavily leaning towards the digital side and ended up resulting in
+                answers that revolved around texting, long distance and a lack of alternatives and pushed us to create a
+                digital focused remedy and neglect the physical friction points as well.</p>
+        </section>
+
+        <a href="javascript:history.back()" class="back-link" style="margin-bottom: 40px;">[back]</a>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

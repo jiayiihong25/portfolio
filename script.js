@@ -237,7 +237,7 @@ class Meteor {
 
 const meteors = [];
 let lastMeteorTime = 0;
-let meteorShowerActive = false;
+let meteorShowerActive = true;
 let meteorShowerStartTime = 0;
 const METEOR_CYCLE = 10000; // 10 seconds cycle (5s duration + 5s gap)
 const METEOR_DURATION = 5000; // 5 seconds shower
@@ -268,34 +268,28 @@ function initializeStars() {
         stars.push(smallStar);
     }
 
-    // Find the star closest to the center of the page to track (orbital-line-1)
-    const screenCenterX = window.innerWidth / 2;
+    // Determine a consistent radius for the first orbital line (orbital-line-1)
+    // We calculate the distance from the orbital center (mountain) to the screen center
+    // This ensures the orbit always passes through the middle of the screen
     const screenCenterY = window.innerHeight / 2;
-    let closestStar = null;
-    let closestDistance = Infinity;
+    const targetRadius = Math.abs(center.y - screenCenterY);
 
-    stars.forEach(star => {
-        // Calculate distance from star to screen center
-        const dx = star.x - screenCenterX;
-        const dy = star.y - screenCenterY;
-        const distance = Math.sqrt(dx * dx + dy * dy);
-
-        if (distance < closestDistance) {
-            closestDistance = distance;
-            closestStar = star;
-        }
-    });
-
-    trackedStar1 = closestStar;
+    // Create a specific star for the primary track to ensure consistent positioning
+    // This replaces the previous random search which caused layout shifts
+    trackedStar1 = new Star(center);
+    trackedStar1.orbitalRadius = targetRadius;
+    trackedStar1.orbitalAngle = Math.PI * 1.5; // Start at 12 o'clock
+    trackedStar1.size = 1.2; // Slightly larger for visibility
+    stars.push(trackedStar1);
 
     // Find a second star that's 40px further out for orbital-line-2
     let secondClosestStar = null;
     let secondClosestDistance = Infinity;
-    const targetRadius = trackedStar1.orbitalRadius + 40; // 40px further out
+    const secondTargetRadius = trackedStar1.orbitalRadius + 40; // 40px further out
 
     stars.forEach(star => {
-        // Find a star with orbital radius close to targetRadius (within 30px range for 40px offset)
-        const radiusDiff = Math.abs(star.orbitalRadius - targetRadius);
+        // Find a star with orbital radius close to secondTargetRadius (within 30px range for 40px offset)
+        const radiusDiff = Math.abs(star.orbitalRadius - secondTargetRadius);
         if (radiusDiff < 30 && star !== trackedStar1) {
             if (radiusDiff < secondClosestDistance) {
                 secondClosestDistance = radiusDiff;
@@ -343,7 +337,7 @@ function resetOrbitalNodes() {
         // Shifted an additional 100px counterclockwise (total 220px offset)
         const totalShift = 220;
         // Move "about me" slightly clockwise (180px vs 220px)
-        orbitalNode.angle = (startAngle1 + 0.2) - (180 / trackedStar1.orbitalRadius);
+        orbitalNode.angle = (startAngle1 + 0.2);
         orbitalNode2.angle = (startAngle2 + 0.6) - (totalShift / line2Radius);
 
         // Ball 3 (designathons) starts at 12:00 position
@@ -1274,7 +1268,7 @@ function showCasesTransition() {
         overlay.style.opacity = '0';
 
         setTimeout(() => {
-            window.location.href = 'hero-visual.html';
+            window.location.href = 'bucket-case-study.html';
         }, 500);
     };
 
@@ -1357,201 +1351,109 @@ In the works...
     });
 }
 
-// Handle ball clicks for page transition
+// Handle ball clicks for page navigation
+// Handle ball clicks for page navigation
 canvas.addEventListener('click', () => {
     const anyHoveredNode = [orbitalNode, orbitalNode2, orbitalNode3, orbitalNode4].find(node => node.isHovered);
 
-    if (anyHoveredNode && !isTransitioning) {
-        if (anyHoveredNode.text === 'about me') {
-            showAboutMeTransition();
-        } else if (anyHoveredNode.text === 'graphic design') {
-            showGraphicDesignTransition();
-        } else if (anyHoveredNode.text === 'cases') {
-            showCasesTransition();
-        } else if (anyHoveredNode.text === 'projects') {
-            showProjectsTransition();
-        } else {
-            isTransitioning = true;
-            const hamburgerMenu = document.getElementById('hamburger-menu');
-            const exploreButton = document.getElementById('explore-button');
-            if (hamburgerMenu) hamburgerMenu.style.pointerEvents = 'none';
-            if (exploreButton) exploreButton.style.pointerEvents = 'none';
+    if (anyHoveredNode) {
+        // Fade out transition
+        document.body.style.transition = 'opacity 0.3s ease-out';
+        document.body.style.opacity = '0';
 
-            const overlay = ensureTransitionOverlay();
-            const contentDiv = document.getElementById('transition-content');
-            const photoContainer = document.getElementById('photo-container');
-            contentDiv.innerHTML = '';
-            photoContainer.innerHTML = '';
-            photoContainer.style.display = 'none'; // Ensure photo container is hidden for generic transition
-
-            // Reset contentDiv styles to generic for other transitions
-            contentDiv.style.left = '50%';
-            contentDiv.style.textAlign = 'center';
-            contentDiv.style.width = '90%';
-            contentDiv.style.backdropFilter = 'none';
-            contentDiv.style.textShadow = 'none';
-            contentDiv.style.padding = '0';
-            contentDiv.style.color = 'rgba(203, 209, 220, 0.6)';
-            contentDiv.style.fontFamily = '"Manrope", sans-serif';
-            contentDiv.style.fontWeight = '500';
-            contentDiv.style.fontSize = '14px';
-            contentDiv.style.lineHeight = '1.6';
-            contentDiv.style.whiteSpace = 'normal';
-
-            requestAnimationFrame(() => {
-                overlay.style.opacity = '1';
-                overlay.style.pointerEvents = 'all';
-            });
-        }
+        setTimeout(() => {
+            if (anyHoveredNode.text === 'about me') {
+                window.location.href = 'about.html';
+            } else if (anyHoveredNode.text === 'graphic design') {
+                window.location.href = 'graphic-design.html';
+            } else if (anyHoveredNode.text === 'cases') {
+                window.location.href = 'cases.html';
+            } else if (anyHoveredNode.text === 'projects') {
+                window.location.href = 'projects.html';
+            }
+        }, 300);
     }
 });
 
-// Handle window resize - stars will automatically adjust since center is recalculated each frame
+// Window resize handler
 window.addEventListener('resize', () => {
     resizeCanvas();
-    // Stars will naturally adjust since getOrbitalCenter() is called each frame in updatePosition
 });
 
-// Start animation
+// Start animation loop
 animate(performance.now());
 
 
-// Fade-in effect for explore page
-if (window.location.pathname.includes('explore.html')) {
+// Page Specific Initialization
+const path = window.location.pathname;
+if (path.includes('explore.html')) {
+    // We are on the explore page
+    isExploreState = false; // Start false to animate in? Or true?
+    // Let's animate in the lines
+    orbitalPathProgress = 0;
+
+    // Animate the orbital lines drawing in
+    const fadeDuration = 1000;
+    const fadeStartTime = performance.now();
+
+    function animateIn(currentTime) {
+        const elapsed = currentTime - fadeStartTime;
+        const progress = Math.min(elapsed / fadeDuration, 1);
+        const easedProgress = 1 - Math.pow(1 - progress, 3);
+        orbitalPathProgress = easedProgress;
+
+        if (progress < 1) {
+            requestAnimationFrame(animateIn);
+        } else {
+            orbitalPathProgress = 1;
+        }
+    }
+    // Start animation slightly delayed to ensure load
+    setTimeout(() => requestAnimationFrame(animateIn), 100);
+
+    // Fade in
     document.body.style.opacity = '0';
-    document.body.style.transition = 'opacity 0.5s ease-in';
+    document.body.style.transition = 'opacity 0.3s ease-in';
+    setTimeout(() => {
+        document.body.style.opacity = '1';
+    }, 50);
+
+} else if (path.includes('index.html') || path.endsWith('/')) {
+    // Landing page
+    orbitalPathProgress = 0; // No lines
+} else {
+    // Sub-pages (About, Cases, etc)
+    // No mountain, so stars will just spawn around center or fallback
+    // We don't want lines/balls on these pages usually?
+    // Ensure orbitalPathProgress remains 0
+    orbitalPathProgress = 0;
+
+    // Fade in
+    document.body.style.opacity = '0';
+    document.body.style.transition = 'opacity 0.3s ease-in';
     setTimeout(() => {
         document.body.style.opacity = '1';
     }, 50);
 }
 
-// Hamburger menu functionality
+// Hamburger menu functionality - update to just toggle
 const hamburgerButton = document.getElementById('hamburger-button');
 const dropdownMenu = document.getElementById('dropdown-menu');
 
-hamburgerButton.addEventListener('click', () => {
-    hamburgerButton.classList.toggle('active');
-    dropdownMenu.classList.toggle('dropdown-hidden');
-    dropdownMenu.classList.toggle('dropdown-visible');
-});
-
-// Link "about me" in dropdown to show the transition
-const aboutMeDropdownLink = Array.from(document.querySelectorAll('.dropdown-item')).find(el => el.textContent === 'about me');
-if (aboutMeDropdownLink) {
-    aboutMeDropdownLink.addEventListener('click', (e) => {
-        e.preventDefault();
-        hamburgerButton.classList.remove('active');
-        dropdownMenu.classList.remove('dropdown-visible');
-        dropdownMenu.classList.add('dropdown-hidden');
-        showAboutMeTransition();
+if (hamburgerButton && dropdownMenu) {
+    hamburgerButton.addEventListener('click', () => {
+        hamburgerButton.classList.toggle('active');
+        dropdownMenu.classList.toggle('dropdown-hidden');
+        dropdownMenu.classList.toggle('dropdown-visible');
     });
-}
 
-// Link "graphic design" in dropdown to show the transition
-const graphicDesignDropdownLink = Array.from(document.querySelectorAll('.dropdown-item')).find(el => el.textContent === 'graphic design');
-if (graphicDesignDropdownLink) {
-    graphicDesignDropdownLink.addEventListener('click', (e) => {
-        e.preventDefault();
-        hamburgerButton.classList.remove('active');
-        dropdownMenu.classList.remove('dropdown-visible');
-        dropdownMenu.classList.add('dropdown-hidden');
-        showGraphicDesignTransition();
-    });
-}
-
-// Link "cases" in dropdown to show the transition
-const casesDropdownLink = Array.from(document.querySelectorAll('.dropdown-item')).find(el => el.textContent === 'cases');
-if (casesDropdownLink) {
-    casesDropdownLink.addEventListener('click', (e) => {
-        e.preventDefault();
-        hamburgerButton.classList.remove('active');
-        dropdownMenu.classList.remove('dropdown-visible');
-        dropdownMenu.classList.add('dropdown-hidden');
-        showCasesTransition();
-    });
-}
-
-// Link "projects" in dropdown to show the transition
-const projectsDropdownLink = Array.from(document.querySelectorAll('.dropdown-item')).find(el => el.textContent === 'projects');
-if (projectsDropdownLink) {
-    projectsDropdownLink.addEventListener('click', (e) => {
-        e.preventDefault();
-        hamburgerButton.classList.remove('active');
-        dropdownMenu.classList.remove('dropdown-visible');
-        dropdownMenu.classList.add('dropdown-hidden');
-        showProjectsTransition();
-    });
-}
-
-// Close dropdown when clicking outside
-document.addEventListener('click', (event) => {
-    const isClickInside = hamburgerButton.contains(event.target) || dropdownMenu.contains(event.target);
-    if (!isClickInside && dropdownMenu.classList.contains('dropdown-visible')) {
-        hamburgerButton.classList.remove('active');
-        dropdownMenu.classList.remove('dropdown-visible');
-        dropdownMenu.classList.add('dropdown-hidden');
-    }
-});
-
-// Explore/Back button functionality
-const actionButton = document.getElementById('explore-button');
-let isExploreState = true;
-
-if (actionButton) {
-    actionButton.addEventListener('click', (e) => {
-        e.preventDefault();
-
-        const line1 = document.querySelector('.line-1');
-        const line2 = document.querySelector('.line-2');
-        const line3 = document.querySelector('.line-3');
-        const fadeDuration = 1300;
-        const fadeStartTime = performance.now();
-
-        if (isExploreState) {
-            // TRANSITION TO ORBITAL VIEW
-            // Fade text out faster (300ms) to reduce overlap with lines drawing in
-            if (line1) { line1.style.transition = 'opacity 0.3s ease-out'; line1.style.opacity = '0'; }
-            if (line2) { line2.style.transition = 'opacity 0.3s ease-out'; line2.style.opacity = '0'; }
-            if (line3) { line3.style.transition = 'opacity 0.3s ease-out'; line3.style.opacity = '0'; }
-
-            // Delay the line drawing slightly or just start it immediately while text is leaving
-            resetOrbitalNodes();
-            function animateIn(currentTime) {
-                const elapsed = currentTime - fadeStartTime;
-                const progress = Math.min(elapsed / fadeDuration, 1);
-                const easedProgress = 1 - Math.pow(1 - progress, 3);
-                orbitalPathProgress = easedProgress; // Update drawing progress
-
-                if (progress < 1) {
-                    requestAnimationFrame(animateIn);
-                } else {
-                    orbitalPathProgress = 1;
-                    actionButton.textContent = 'back →';
-                    isExploreState = false;
-                }
-            }
-            requestAnimationFrame(animateIn);
-        } else {
-            // TRANSITION BACK TO LANDING
-            function animateOut(currentTime) {
-                const elapsed = currentTime - fadeStartTime;
-                const progress = Math.min(elapsed / fadeDuration, 1);
-                const easedProgress = 1 - Math.pow(1 - progress, 3);
-                orbitalPathProgress = 1 - easedProgress; // Reverse drawing progress
-
-                if (progress < 1) {
-                    requestAnimationFrame(animateOut);
-                } else {
-                    orbitalPathProgress = 0;
-                    actionButton.textContent = 'explore →';
-                    isExploreState = true;
-                    // Fade text back in after lines are completely gone
-                    if (line1) { line1.style.transition = 'opacity 0.5s ease-in'; line1.style.opacity = '1'; }
-                    if (line2) { line2.style.transition = 'opacity 0.5s ease-in'; line2.style.opacity = '1'; }
-                    if (line3) { line3.style.transition = 'opacity 0.5s ease-in'; line3.style.opacity = '1'; }
-                }
-            }
-            requestAnimationFrame(animateOut);
+    // Close dropdown when clicking outside
+    document.addEventListener('click', (event) => {
+        const isClickInside = hamburgerButton.contains(event.target) || dropdownMenu.contains(event.target);
+        if (!isClickInside && dropdownMenu.classList.contains('dropdown-visible')) {
+            hamburgerButton.classList.remove('active');
+            dropdownMenu.classList.remove('dropdown-visible');
+            dropdownMenu.classList.add('dropdown-hidden');
         }
     });
 }
@@ -1570,6 +1472,26 @@ homepageLinks.forEach(link => {
         setTimeout(() => {
             window.location.href = 'index.html';
         }, 500);
+    });
+});
+
+// Back link functionality - transition before going back
+const backLinks = document.querySelectorAll('.back-link');
+backLinks.forEach(link => {
+    link.addEventListener('click', (e) => {
+        e.preventDefault();
+        // Add fade-out transition
+        document.body.style.transition = 'opacity 0.3s ease-out';
+        document.body.style.opacity = '0';
+
+        // Go back after transition
+        setTimeout(() => {
+            if (link.href.includes('javascript:history.back()')) {
+                history.back();
+            } else {
+                window.location.href = link.href;
+            }
+        }, 300);
     });
 });
 

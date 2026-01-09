@@ -1,0 +1,57 @@
+﻿Buckets: Lowering the barrier to entry for genuine human interaction
+
+
+60% of people report feeling lonely
+While we are hyper-connected digitally, the prompt for this designathon highlighted that these interactions often feel limiting and impersonal, making it difficult to convey emotion or build meaningful new relationships.
+
+
+My challenge here was to solve a “loneliness epidemic” with a digital product that helped its users overcome social isolation by establishing meaningful social connections without sacrificing old friendships. 
+
+
+
+
+Understanding the "Why"
+I conducted interviews with 11 students in our target demographic (University Students & Young Adults, ages 18-30) to understand the root causes behind the “loneliness epidemic” and how it has affected them in regards to maintaining existing friendships and building new, meaningful ones
+
+
+1. “Texting Fatigue”, many users cited texting as a major pain point which boiled down to 2 main reasons: digital conversations lack effort and emotional engagement compared to in person meetings- making it hard to display & understand tone and they have limited conversation flow (in the sense that replies aren’t instantaneous)
+2. “Distance”, almost every user echoed the idea that life has physically pulled many of their friendships apart as they moved to university, making catching up (especially in person) nuanced 
+3. “Shallow Remedies”, some users mentioned how forming connections online feels “gamified”, with social discovery apps like Yubo or Hoop leading to shallow online friendships rather than meaningful ones
+
+
+These insights helped us narrow down our problem statement: 
+
+
+“How might we lower the barrier of entry to in-person connections and catch up with close friends who are busy?” 
+
+
+Core Features:
+Interest Matching, to combat the shallow feeling of online relationships our onboarding process focused on shared context during onboarding. Users fill up their buckets with their interests (i.e. I enjoy photography to an extent so I’ll fill that bucket 45% full– once this is repeated across multiple hobbies, I have a profile). When matching friendships (filtered by geographical area) instead of seeing the person or their name, you sort by hobbies that allow you to “fill your bucket” for a specific hobby by connecting with someone else who enjoys the same things. 
+
+
+Low Effort Maintenance of long distance friendships, to combat distance drifting our app includes a video update mailbox that allows users to film a 1-5 minute video every week sharing what’s new which are then delivered to friends, removing the need for friends to be free at the exact same time while also adding tone and body language that texts lack.
+        
+Roadmap Strategy: 
+The 2 core features are only the beginning, we also brainstormed a product roadmap of secondary features that would be essential to the product’s maturity. 
+
+
+1. Security measures, ensuring the users onboarded onto the app verify their identities as security is a critical concern for meeting strangers
+2. Calendar syncing, in order to automate a tedious task: finding overlapping free time; our users can sync their calendars with the app so the app can automatically find free blocks to plan hangouts 
+3. Social events, suggest local activities and venues (that use common interests) to serve as a launchpad for meetups and reduces barrier of planning in-person connections 
+
+
+Did we solve the problem?: 
+Buckets addressed the challenge of establishing meaningful connections and overcoming isolation through centering the user experience around shared interests rather than appearance, and provides asynchronous updates rather than high-pressure scheduling or text conversations that lack emotion.
+
+
+Lessons Learnt: 
+Depth over breadth: A user I interviewed mentioned how they “didn’t know over 400 of the people that followed me” on Instagram. I then had a revelation where I realized that a social product doesn’t necessarily need to connect you with everyone, it just needs to connect you deeply with the right people. 
+
+
+Think simple: Originally we toyed around with many complex features and an in-depth connection process, however we settled on being straightforward and simple. In this case, connections are already hard to maintain so if we make a complex process for the user to go through each time they want to connect it would deter them even more. Therefore it’s good to simplify the user experience without forcing anything unnecessary at times. 
+
+
+Improvements: 
+
+
+Looking back, we focused a lot on the first interaction rather than the first meetup which still was a high-friction point for those with social anxiety despite our digital product. If I were to redo the process, I would add questions into the user interviews that specifically targeted meeting new people IRL such as asking for stories of first hangouts with close friends and what went on in the user's mind. The questions that we asked were heavily leaning towards the digital side and ended up resulting in answers that revolved around texting, long distance and a lack of alternatives and pushed us to create a digital focused remedy and neglect the physical friction points as well.

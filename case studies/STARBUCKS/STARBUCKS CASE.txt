@@ -1,0 +1,46 @@
+﻿Brew Buddies: Gamifying the Starbucks experience through moments
+
+
+Gen Z rarely buys Starbucks food
+The Starbucks beverage brand is so powerful it creates a “Halo Effect” that casts its food menu into the shadows. Especially for Gen Z, Starbucks food was nearly invisible because it is perceived as high quality but non-essential due to its price. 
+
+
+My challenge here is to increase the food attachment rate of Gen Z consumers who visit Starbucks by designing a moment that makes food feel more like an essential partner to every drink rather than non-essential afterthought. 
+
+
+Understanding the "Why"
+After researching Gen Z group behaviours, I realized there were 3 main areas that my solution had to target if it were to successfully increase food attachment rates
+
+
+1. Perceived Value, 38% of Gen Z consumers say menu prices directly affects their decision to purchase- making a $7 add-on for a treat a hard sell
+2. Social Trends, 72% discover food visually through social trends like on TikTok, and 22% of that often try the menu items they discover- meaning they are willing to spend if the product is relevant and shareable
+3. Urgent Moments, BeReal- a popular social media proved that Gen Z responds well to time-sensitive triggers and are willing to participate as the moment is deemed urgent enough
+
+
+Walking through the consumer journey of frequent Starbucks customer and 21 year old university student: Alex, I noticed a few things
+
+
+1. Alex often gets coffee for his study sessions and plans to order Starbucks out of habit, the issue is that Starbucks food is off his radar right now due to a lack of digital discovery from social trends
+2. When Alex opens the app, he scrolls to the drinks on autopilot and makes a repeat mobile order of a Venti Cold Brew, there is no moment where food pops up and compels him to order
+3. Before checkout, the app provides a few food options to consider, but the price point immediately turns Alex away, without value here Gen-Z consumers won’t consider the addition
+4. Alex out of habit checks out without considering the food, this current process is passive because there is no intervention to challenge his routine
+5. “I could grab a bite somewhere else later”, during the purchase Alex doesn’t feel the urgent need to grab food 
+
+
+Brew Buddies
+The idea we developed was “Brew Buddies”. Drawing on the idea of creating an iconic name for food (McDonalds- McChicken, McValue– Tim Hortons- Timbits) we wanted to reframe food attachments as a companion to a drink. Instead of discounting food items directly or premium drinks directly and lowering the perception of quality, we could bundle the two and offer a modest discount to create a “smart purchase”.
+
+
+The bundle itself is just a menu item but in order to make it stick I still had to design to capture social trends and create urgent moments. 
+
+
+1. Creating a Nudge, currently the checkout on the app is passive because it only provides a few “you might also like” recommendations. In order to make it force a low-friction decision I used the McDonalds Kiosk model that prompts a specific pairing with your order (e.g. pair your Matcha with a Lemon Loaf for $3.25). The idea is that by presenting a curated “Perfect Pair” at the moment of highest purchase intent, the disruption is no longer noise for the consumer but it is now a value add to the consumer. 
+2. Creating an Impulse, currently a user would only open the Starbucks app if they are already looking to purchase. Taking inspiration from BeReal, I created BrewHour- a push notification that is randomly sent to app users during store hours where users can order a Brew Buddy bundle within the next 15 minutes for pickup within the next hour to receive bonus rewards. By locking the reward behind a bundle and not just a drink, we gamified food attachment and manufacture urgency. 
+
+
+Lessons Learnt
+Don’t straight up dismiss the obvious: In early ideation when we realized that price was a major friction point, our initial solution was obvious: make a happy hour discount on certain foods like many restaurants do. Although we originally thought it was boring and it wasn’t innovative enough, we iterated on it and thought: what if the time wasn’t fixed? what if it wasn’t on a singular food item but rather a bundle? what if we could create surprise by not announcing when it was going to be? Eventually this led to the BrewHour strategy that we settled on. Sometimes the best solutions come from polishing originally boring ones into unique ones, so it’s important to never toss away ideas before exploring! 
+
+
+Improvements
+My biggest regret was not being able to think beyond the initial impulse and nudge positioned before the purchase and at checkout. Our solution relies on our user being in a buying mindset or responding to a nudge but isn't collectively exhaustive in the sense that it doesn’t shift the attention of those browsing their Starbucks app home feed. There are many opportunities to push food earlier in the process before checkout but our solution didn’t explore that enough. If I were to do it again, I would love to analyze scroll data/heatmaps to see where a typical user focuses on while going through their order flow. Which would give me a better understanding of how to position food to make it more visible and appealing to the consumer.

@@ -6,9 +6,10 @@
 
 body {
     background-color: #0a0a0f;
-    overflow: hidden;
+    overflow: auto;
     width: 100vw;
     height: 100vh;
+    min-width: 1024px;
 }
 
 #star-canvas {
@@ -259,4 +260,22 @@ body {
 
 #orbital-lines .orbital-line {
     opacity: 0;
+}
+
+.back-link {
+    display: inline-block;
+    margin-top: 20px;
+    color: rgba(203, 209, 220, 0.6);
+    text-decoration: none;
+    font-family: "Manrope", sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.back-link:hover {
+    color: white;
+    transform: scale(1.1);
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
 }

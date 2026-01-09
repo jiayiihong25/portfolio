@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=1024, initial-scale=1.0">
+    <title>Cases</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,600&family=Manrope:wght@500;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #0B0E14;
+            overflow-y: auto;
+        }
+
+        #star-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        #background-gradient {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+
+        .cases-container {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 50px;
+            z-index: 10;
+            color: rgba(203, 209, 220, 0.6);
+            font-family: "Manrope", sans-serif;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .photos-area {
+            position: relative;
+            width: 350px;
+            height: 437px;
+            flex-shrink: 0;
+        }
+
+        .case-photo {
+            position: absolute;
+            width: 260px;
+            height: auto;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s ease;
+            cursor: pointer;
+        }
+
+        .case-photo:hover,
+        .case-photo.hovered {
+            transform: scale(1.05) rotate(0deg) !important;
+            z-index: 100 !important;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+        }
+
+        .text-area {
+            flex: 1;
+            max-width: 400px;
+        }
+
+        .case-text {
+            transition: all 0.3s ease;
+            cursor: pointer;
+            display: inline-block;
+            padding: 2px 5px;
+            margin: -2px -5px;
+            border-radius: 4px;
+        }
+
+        .case-text:hover,
+        .case-text.hovered {
+            transform: scale(1.05);
+            color: white;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.8), 0 0 20px rgba(255, 255, 255, 0.4);
+        }
+
+        @media (max-width: 900px) {
+            .cases-container {
+                flex-direction: column;
+                top: 60px;
+                transform: translateX(-50%);
+                position: relative;
+                padding-bottom: 50px;
+            }
+
+            .photos-area {
+                width: 300px;
+                height: 350px;
+            }
+
+            .case-photo {
+                width: 200px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="star-canvas"></canvas>
+    <img src="images/background_gradient.svg" id="background-gradient" alt="Background Gradient">
+
+
+    <div class="cases-container">
+        <div class="photos-area">
+            <img src="images/Case Covers/BANXX.jpg" class="case-photo" id="img-banxx"
+                style="top: -5px; left: 20px; transform: rotate(-3deg); z-index: 2;">
+            <img src="images/Case Covers/FINALS 1220 (2).jpg" class="case-photo" id="img-finals"
+                style="top: 120px; left: 100px; transform: rotate(5deg); z-index: 3;">
+            <img src="images/Case Covers/TCS.jpg" class="case-photo" id="img-tcs"
+                style="top: 235px; left: 5px; transform: rotate(-5deg); z-index: 4;">
+            <img src="images/Case Covers/Hero Visual.png" class="case-photo" id="img-hero"
+                style="top: 335px; left: 90px; transform: rotate(3deg); z-index: 5;">
+        </div>
+
+        <div class="text-area">
+            <i># Cases</i>
+            <br><br>
+            <b style="color: white;">Strategy:</b>
+            <br><br>
+            <span id="text-banxx" class="case-text">[Leveraging open banking to solve U.S. medical debt]</span>
+            <br><br>
+            <span id="text-finals" class="case-text">[Franchising a local London Dutch bakery]</span>
+            <br><br>
+            <b style="color: white;">Design:</b>
+            <br><br>
+            <span id="text-tcs" class="case-text">[Gamifying the Starbucks experience through moments]</span>
+            <br><br>
+            <span id="text-hero" class="case-text">[Lowering the barrier to entry for genuine human interaction]</span>
+            <br><br>
+            <a href="javascript:history.back()" class="back-link">[back]</a>
+        </div>
+    </div>
+
+    <script>
+        // Hover Sync Logic
+        const pairs = [
+            { textId: 'text-banxx', imgId: 'img-banxx' },
+            { textId: 'text-finals', imgId: 'img-finals' },
+            { textId: 'text-tcs', imgId: 'img-tcs' },
+            { textId: 'text-hero', imgId: 'img-hero' }
+        ];
+
+        let maxZ = 10;
+        pairs.forEach(pair => {
+            const textEl = document.getElementById(pair.textId);
+            const imgEl = document.getElementById(pair.imgId);
+
+            if (textEl && imgEl) {
+                const addHover = () => {
+                    textEl.classList.add('hovered');
+                    imgEl.classList.add('hovered');
+                    imgEl.style.zIndex = ++maxZ;
+                };
+                const removeHover = () => {
+                    textEl.classList.remove('hovered');
+                    imgEl.classList.remove('hovered');
+                };
+
+                textEl.addEventListener('mouseenter', addHover);
+                textEl.addEventListener('mouseleave', removeHover);
+                imgEl.addEventListener('mouseenter', addHover);
+                imgEl.addEventListener('mouseleave', removeHover);
+            }
+        });
+
+        // Navigation for Hero Visual
+        const heroImg = document.getElementById('img-hero');
+        const heroText = document.getElementById('text-hero');
+        const goToHero = () => window.location.href = 'bucket-case-study.html';
+
+        if (heroImg) heroImg.onclick = goToHero;
+        if (heroText) heroText.onclick = goToHero;
+
+        // Navigation for TCS (Starbucks)
+        const tcsImg = document.getElementById('img-tcs');
+        const tcsText = document.getElementById('text-tcs');
+        const goToTcs = () => window.location.href = 'starbucks-case-study.html';
+
+        if (tcsImg) tcsImg.onclick = goToTcs;
+        if (tcsText) tcsText.onclick = goToTcs;
+    </script>
+    <script src="script.js"></script>
+</body>
+
+</html>

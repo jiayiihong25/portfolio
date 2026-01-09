@@ -4,19 +4,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=1024, initial-scale=1.0">
-    <title>Twinkling Stars Background</title>
+    <title>Explore</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
         href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,600&family=Manrope:wght@500&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Specific override to ensure back button is visible if needed, though script might handle it */
+    </style>
 </head>
 
 <body>
     <canvas id="star-canvas"></canvas>
     <img src="images/background_gradient.svg" id="background-gradient" alt="Background Gradient">
     <img src="images/mountain.png" id="mountain" alt="Mountain">
+    <!-- Orbital Lines SVG -->
     <svg id="orbital-lines"
         style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1;">
         <path class="orbital-line" d="" stroke="white" stroke-width="0.5" fill="none" />
@@ -24,14 +28,8 @@
         <path class="orbital-line" d="" stroke="white" stroke-width="0.5" fill="none" />
         <path class="orbital-line" d="" stroke="white" stroke-width="0.5" fill="none" />
     </svg>
-    <div id="text">
-        <p class="line-1">hi,</p>
-        <p class="line-2"><span class="im-text">i'm</span> <span class="jiayi-text">jiayi.</span></p>
-        <p class="line-3">
-            <span class="line-3-glow">a problem solver designing clear solutions to ambiguous problems</span>
-            <span class="line-3-text">a problem solver designing clear solutions to ambiguous problems</span>
-        </p>
-    </div>
+
+    <!-- Navigation -->
     <nav id="hamburger-menu">
         <button id="hamburger-button" aria-label="Menu">
             <span class="hamburger-line"></span>
@@ -39,7 +37,6 @@
             <span class="hamburger-line"></span>
         </button>
         <div id="dropdown-menu" class="dropdown-hidden">
-
             <a href="index.html" class="dropdown-item">homepage</a>
             <a href="cases.html" class="dropdown-item">cases</a>
             <a href="graphic-design.html" class="dropdown-item">graphic design</a>
@@ -47,8 +44,14 @@
             <a href="about.html" class="dropdown-item">about me</a>
         </div>
     </nav>
-    <a href="explore.html" id="explore-button" style="text-decoration: none;">explore →</a>
+
+    <button id="explore-button" onclick="location.href='index.html'">back →</button>
+
     <script src="script.js"></script>
+    <script>
+        // Inline script to enforce explore state immediately if script.js doesn't pick it up fast enough
+        // But better to let script.js handle logic based on filename
+    </script>
 </body>
 
 </html>

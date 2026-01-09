@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=1024, initial-scale=1.0">
+    <title>Starbucks Case Study</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,600&family=Manrope:wght@500;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            overflow-y: auto;
+            margin: 0;
+            padding: 0;
+            background-color: #0B0E14;
+        }
+
+        #star-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        #background-gradient {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+
+
+        #case-study-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 120px 24px 60px;
+            position: relative;
+            z-index: 10;
+            color: rgba(203, 209, 220, 0.9);
+            font-family: "Manrope", sans-serif;
+        }
+
+        .case-header {
+            text-align: left;
+            margin-bottom: 40px;
+        }
+
+        .case-title {
+            font-family: "EB Garamond", serif;
+            font-size: 56px;
+            color: white;
+            margin: 0 0 16px 0;
+            font-weight: 500;
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+        }
+
+        .case-subtitle {
+            font-size: 20px;
+            color: rgba(203, 209, 220, 0.8);
+            font-weight: 400;
+            max-width: 600px;
+            margin: 0;
+            line-height: 1.5;
+        }
+
+        .section {
+            margin-bottom: 40px;
+        }
+
+        .section-title {
+            font-family: "Manrope", sans-serif;
+            font-size: 32px;
+            color: white;
+            margin-bottom: 32px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        p {
+            font-size: 16px;
+            line-height: 1.8;
+            margin-bottom: 24px;
+        }
+
+        strong {
+            color: white;
+            font-weight: 700;
+        }
+
+        .quote-block {
+            font-family: "Manrope", sans-serif;
+            font-size: 28px;
+            color: white;
+            padding: 24px;
+            border-left: 2px solid rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.03);
+            margin: 24px 0;
+            line-height: 1.4;
+            font-style: italic;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        li {
+            margin-bottom: 24px;
+            padding-left: 24px;
+            border-left: 2px solid rgba(255, 255, 255, 0.15);
+        }
+
+        .image-group {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            margin: 20px 0;
+            align-items: flex-start;
+        }
+
+        .image-group img {
+            max-width: 30%;
+            height: auto;
+            border-radius: 12px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .feature-row {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .feature-row img {
+            height: auto;
+            border-radius: 12px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .nudge-img {
+            width: 35%;
+        }
+
+        .impulse-img {
+            width: 55%;
+        }
+
+        .feature-row .text-content {
+            flex: 1;
+        }
+
+        @media (max-width: 768px) {
+            .case-title {
+                font-size: 40px;
+            }
+
+            .quote-block {
+                font-size: 24px;
+                padding: 24px;
+            }
+
+            .image-group img {
+                max-width: 100%;
+            }
+
+            .feature-row {
+                flex-direction: column;
+            }
+
+            .feature-row img {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="star-canvas"></canvas>
+    <img src="images/background_gradient.svg" id="background-gradient" alt="Background Gradient">
+
+
+    <div id="case-study-container">
+
+        <header class="case-header">
+            <h1 class="case-title">Brew Buddies</h1>
+            <div class="case-subtitle">Gamifying the Starbucks experience through moments</div>
+        </header>
+
+        <img src="images/Case Covers/TCS.jpg" alt="Starbucks Cover"
+            style="width: 100%; height: auto; border-radius: 12px; margin-bottom: 40px; box-shadow: 0 10px 30px rgba(0,0,0,0.3);">
+
+        <section class="section">
+            <p><strong>Gen Z rarely buys Starbucks food.</strong> The Starbucks beverage brand is so powerful it creates
+                a "Halo Effect" that casts its food menu into the shadows. Especially for Gen Z, Starbucks food was
+                nearly invisible because it is perceived as high quality but non-essential due to its price.</p>
+            <p>My challenge here is to increase the food attachment rate of Gen Z consumers who visit Starbucks by
+                designing a moment that makes food feel more like an essential partner to every drink rather than
+                non-essential afterthought.</p>
+        </section>
+
+        <section class="section">
+            <h2 class="section-title">Understanding the "Why"</h2>
+            <p>After researching Gen Z group behaviours, I realized there were 3 main areas that my solution had to
+                target if it were to successfully increase food attachment rates:</p>
+            <ul>
+                <li><strong>Perceived Value:</strong> 38% of Gen Z consumers say menu prices directly affects their
+                    decision to purchase- making a $7 add-on for a treat a hard sell.</li>
+                <li><strong>Social Trends:</strong> 72% discover food visually through social trends like on TikTok, and
+                    22% of that often try the menu items they discover- meaning they are willing to spend if the product
+                    is relevant and shareable.</li>
+                <li><strong>Urgent Moments:</strong> BeReal- a popular social media proved that Gen Z responds well to
+                    time-sensitive triggers and are willing to participate as the moment is deemed urgent enough.</li>
+            </ul>
+
+            <p>Walking through the consumer journey of frequent Starbucks customer and 21 year old university student:
+                Alex, I noticed a few things:</p>
+            <ul>
+                <li>Alex often gets coffee for his study sessions and plans to order Starbucks out of habit, the issue
+                    is that Starbucks food is off his radar right now due to a lack of digital discovery from social
+                    trends.</li>
+                <li>When Alex opens the app, he scrolls to the drinks on autopilot and makes a repeat mobile order of a
+                    Venti Cold Brew, there is no moment where food pops up and compels him to order.</li>
+                <li>Before checkout, the app provides a few food options to consider, but the price point immediately
+                    turns Alex away, without value here Gen-Z consumers won’t consider the addition.</li>
+            </ul>
+        </section>
+
+        <section class="section">
+            <h2 class="section-title">Brew Buddies</h2>
+            <p>The idea we developed was "Brew Buddies". Drawing on the idea of creating an iconic name for food
+                (McDonalds- McChicken, McValue– Tim Hortons- Timbits) we wanted to reframe food attachments as a
+                companion to a drink. Instead of discounting food items directly or premium drinks directly and lowering
+                the perception of quality, we could bundle the two and offer a modest discount to create a "smart
+                purchase".</p>
+
+
+
+            <p>The bundle itself is just a menu item but in order to make it stick I still had to design to capture
+                social trends and create urgent moments.</p>
+
+            <p><strong>Creating a Nudge</strong><br>
+                Currently the checkout on the app is passive because it only provides a few "you might also like"
+                recommendations. In order to make it force a low-friction decision I used the McDonalds Kiosk model that
+                prompts a specific pairing with your order (e.g. pair your Matcha with a Lemon Loaf for $3.25). The idea
+                is that by presenting a curated "Perfect Pair" at the moment of highest purchase intent, the disruption
+                is no longer noise for the consumer but it is now a value add to the consumer.</p>
+
+            <p><strong>Creating an Impulse</strong><br>
+                Currently a user would only open the Starbucks app if they are already looking to purchase. Taking
+                inspiration from BeReal, I created BrewHour- a push notification that is randomly sent to app users
+                during store hours where users can order a Brew Buddy bundle within the next 15 minutes for pickup
+                within the next hour to receive bonus rewards. By locking the reward behind a bundle and not just a
+                drink, we gamified food attachment and manufacture urgency.</p>
+
+            <div class="image-group">
+                <img src="case%20studies/STARBUCKS/nudge.png" alt="Nudge Design">
+                <img src="case%20studies/STARBUCKS/impulse1.png" alt="Impulse Design 1">
+                <img src="case%20studies/STARBUCKS/impulse2.png" alt="Impulse Design 2">
+            </div>
+        </section>
+
+        <section class="section">
+            <h2 class="section-title">Lessons Learnt</h2>
+            <p><strong>Don’t straight up dismiss the obvious:</strong> In early ideation when we realized that price was
+                a major friction point, our initial solution was obvious: make a happy hour discount on certain foods
+                like many restaurants do. Although we originally thought it was boring and it wasn’t innovative enough,
+                we iterated on it and thought: what if the time wasn’t fixed? what if it wasn’t on a singular food item
+                but rather a bundle? what if we could create surprise by not announcing when it was going to be?
+                Eventually this led to the BrewHour strategy that we settled on. Sometimes the best solutions come from
+                polishing originally boring ones into unique ones, so it’s important to never toss away ideas before
+                exploring!</p>
+        </section>
+
+        <section class="section">
+            <h3
+                style="font-family: 'Manrope', sans-serif; font-size: 24px; color: white; margin-top: 40px; margin-bottom: 16px;">
+                Improvements</h3>
+            <p>My biggest regret was not being able to think beyond the initial impulse and nudge positioned before the
+                purchase and at checkout. Our solution relies on our user being in a buying mindset or responding to a
+                nudge but isn't collectively exhaustive in the sense that it doesn’t shift the attention of those
+                browsing their Starbucks app home feed. There are many opportunities to push food earlier in the process
+                before checkout but our solution didn’t explore that enough. If I were to do it again, I would love to
+                analyze scroll data/heatmaps to see where a typical user focuses on while going through their order
+                flow. Which would give me a better understanding of how to position food to make it more visible and
+                appealing to the consumer.</p>
+        </section>
+
+        <a href="javascript:history.back()" class="back-link" style="margin-bottom: 40px;">[back]</a>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
