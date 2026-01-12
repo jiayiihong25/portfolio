@@ -110,6 +110,7 @@
                 transform: translateX(-50%);
                 position: relative;
                 padding-bottom: 50px;
+                width: 95%;
             }
 
             .photos-area {
@@ -119,6 +120,32 @@
 
             .case-photo {
                 width: 200px;
+            }
+
+            .text-area {
+                max-width: 100%;
+                font-size: 13px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .cases-container {
+                top: 40px;
+                padding-bottom: 40px;
+                font-size: 12px;
+            }
+
+            .photos-area {
+                width: 250px;
+                height: 300px;
+            }
+
+            .case-photo {
+                width: 170px;
+            }
+
+            .text-area {
+                padding: 0 10px;
             }
         }
     </style>
