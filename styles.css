@@ -45,6 +45,13 @@ body {
     transform: translateY(2vw);
 }
 
+@media (min-width: 1500px) {
+    #mountain {
+        transform: translateY(6vw);
+        /* Shift down more on large screens */
+    }
+}
+
 #text {
     position: fixed;
     top: 50%;
@@ -297,4 +304,27 @@ body {
     color: white;
     transform: scale(1.1);
     text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+}
+
+.back-link-center {
+    position: fixed;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 9999;
+    background: none;
+    border: none;
+    color: rgba(203, 209, 220, 0.5);
+    font-family: "Manrope", sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    cursor: pointer;
+    padding: 12px 24px;
+    transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.back-link-center:hover {
+    color: #ffffff;
+    transform: translateX(-50%) scale(1.05);
 }

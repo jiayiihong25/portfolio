@@ -2,61 +2,20 @@
 function getResponsiveValues() {
     // Base design width approx 1440px
     const scale = Math.max(0.5, window.innerWidth / 1440); // Prevent getting too small
+    const isLargeScreen = window.innerWidth > 1500;
+
     return {
         offset1: 60 * scale,
         offset2: 140 * scale,
         offset3: 240 * scale,
-        node1Radius: 12.5 * scale,
+        node1Radius: (isLargeScreen ? 14.5 : 12.5) * scale, // Push barely out if large screen
         node2Radius: 16 * scale,
         node3Radius: 23 * scale,
         node4Radius: 28 * scale,
-        glLine1: 1.5 * scale, // scalable line width if desired, or keep fixed
-        glLine2: 0.5  // hairline shouldn't scale too much
     };
 }
 
 let responsiveVars = getResponsiveValues();
-
-// Set canvas size to match window
-function resizeCanvas() {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-
-    responsiveVars = getResponsiveValues();
-
-    // Update node base sizes
-    orbitalNode.radius = responsiveVars.node1Radius;
-    orbitalNode.hoverRadius = responsiveVars.node1Radius * 1.2;
-    // Don't reset currentRadius abruptly to avoid jump, or do if resizing
-    // orbitalNode.currentRadius = orbitalNode.radius; 
-
-    orbitalNode2.radius = responsiveVars.node2Radius;
-    orbitalNode2.hoverRadius = responsiveVars.node2Radius * 1.2;
-
-    orbitalNode3.radius = responsiveVars.node3Radius;
-    orbitalNode3.hoverRadius = responsiveVars.node3Radius * 1.2;
-
-    orbitalNode4.radius = responsiveVars.node4Radius;
-    orbitalNode4.hoverRadius = responsiveVars.node4Radius * 1.2;
-}
-resizeCanvas();
-window.addEventListener('resize', resizeCanvas);
-
-// ... (rest of simple setup)
-
-// Star class
-// ...
-
-// ... (rest of code)
-
-// Animation variables
-let lastTime = performance.now();
-let isTabVisible = true;
-let showOrbitalPath = false; // Flag to show orbital path line when explore button is clicked
-let trackedStar1 = null; // Star closest to center that we'll track (orbital-line-1)
-let trackedStar2 = null; // Star slightly further out that we'll track (orbital-line-2)
-let orbitalPathProgress = 0; // Drawing progress of the orbital path lines (0 to 1)
-let isTransitioning = false; // Flag to track if the transition overlay is active
 
 // Interactive node properties
 const orbitalNode = {
@@ -92,19 +51,53 @@ const orbitalNode4 = {
     text: 'cases'
 };
 let mouseX = 0;
-let mouseY = 0; const mountain = document.getElementById('mountain');
-if (mountain) {
-    const rect = mountain.getBoundingClientRect();
-    return {
-        x: rect.left + rect.width / 2,
-        y: rect.top + rect.height / 2
-    };
+let mouseY = 0;
+
+// Get canvas and context
+const canvas = document.getElementById('star-canvas');
+const ctx = canvas.getContext('2d');
+
+// Set canvas size to match window
+function resizeCanvas() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    // Update responsive variables
+    responsiveVars = getResponsiveValues();
+
+    // Update node base sizes if they are initialized
+    if (typeof orbitalNode !== 'undefined') {
+        orbitalNode.radius = responsiveVars.node1Radius;
+        orbitalNode.hoverRadius = responsiveVars.node1Radius * 1.2;
+
+        orbitalNode2.radius = responsiveVars.node2Radius;
+        orbitalNode2.hoverRadius = responsiveVars.node2Radius * 1.2;
+
+        orbitalNode3.radius = responsiveVars.node3Radius;
+        orbitalNode3.hoverRadius = responsiveVars.node3Radius * 1.2;
+
+        orbitalNode4.radius = responsiveVars.node4Radius;
+        orbitalNode4.hoverRadius = responsiveVars.node4Radius * 1.2;
+    }
 }
-// Fallback to center bottom if mountain not found
-return {
-    x: canvas.width / 2,
-    y: canvas.height * 0.85
-};
+resizeCanvas(); // Initial call
+window.addEventListener('resize', resizeCanvas);
+
+// Calculate orbital center (middle of the mountain)
+function getOrbitalCenter() {
+    const mountain = document.getElementById('mountain');
+    if (mountain) {
+        const rect = mountain.getBoundingClientRect();
+        return {
+            x: rect.left + rect.width / 2,
+            y: rect.top + rect.height / 2
+        };
+    }
+    // Fallback to center bottom if mountain not found
+    return {
+        x: canvas.width / 2,
+        y: canvas.height * 0.85
+    };
 }
 
 // Star class
@@ -362,15 +355,16 @@ function initializeStars() {
     trackedStar1.size = 1.2; // Slightly larger for visibility
     stars.push(trackedStar1);
 
-    // Find a second star that's 40px further out for orbital-line-2
+    // Find a second star that's further out for orbital-line-2
     let secondClosestStar = null;
     let secondClosestDistance = Infinity;
-    const secondTargetRadius = trackedStar1.orbitalRadius + 40; // 40px further out
+    const secondTargetRadius = trackedStar1.orbitalRadius + responsiveVars.offset1; // Scaled offset
 
     stars.forEach(star => {
-        // Find a star with orbital radius close to secondTargetRadius (within 30px range for 40px offset)
+        // Find a star with orbital radius close to secondTargetRadius
         const radiusDiff = Math.abs(star.orbitalRadius - secondTargetRadius);
-        if (radiusDiff < 30 && star !== trackedStar1) {
+        // Relax check here slightly to find somewhat decent star
+        if (radiusDiff < 50 && star !== trackedStar1) {
             if (radiusDiff < secondClosestDistance) {
                 secondClosestDistance = radiusDiff;
                 secondClosestStar = star;
@@ -409,16 +403,16 @@ function resetOrbitalNodes() {
         const clampedRatio1 = Math.max(-1, Math.min(1, dy / trackedStar1.orbitalRadius));
         const startAngle1 = Math.PI - Math.asin(clampedRatio1);
 
-        const line2Radius = trackedStar1.orbitalRadius + 60;
+        const line2Radius = trackedStar1.orbitalRadius + responsiveVars.offset1;
         // Ensure dy / line2Radius is within [-1, 1] for asin
         const clampedRatio2 = Math.max(-1, Math.min(1, dy / line2Radius));
         const startAngle2 = Math.PI - Math.asin(clampedRatio2);
 
         // Shifted an additional 100px counterclockwise (total 220px offset)
-        const totalShift = 220;
+        const totalShift = 220; // This shift might need scaling too if it represents arc length, but angle logic is complex. Leaving fixed for now.
         // Move "about me" slightly clockwise (180px vs 220px)
         orbitalNode.angle = (startAngle1 + 0.2);
-        orbitalNode2.angle = (startAngle2 + 0.6) - (totalShift / line2Radius);
+        orbitalNode2.angle = (startAngle2 + 0.6); // Simplified
 
         // Ball 3 (designathons) starts at 12:00 position
         orbitalNode3.angle = Math.PI * 1.5;
@@ -466,42 +460,6 @@ let trackedStar1 = null; // Star closest to center that we'll track (orbital-lin
 let trackedStar2 = null; // Star slightly further out that we'll track (orbital-line-2)
 let orbitalPathProgress = 0; // Drawing progress of the orbital path lines (0 to 1)
 let isTransitioning = false; // Flag to track if the transition overlay is active
-
-// Interactive node properties
-const orbitalNode = {
-    angle: Math.PI * 1.5, // Start at top
-    radius: 12.5, // 25px diameter / 2
-    hoverRadius: 15, // Expand to 30px diameter
-    currentRadius: 12.5,
-    isHovered: false,
-    text: 'about me'
-};
-const orbitalNode2 = {
-    angle: Math.PI * 1.5,
-    radius: 16, // 32px diameter / 2 (+2px size)
-    hoverRadius: 19,
-    currentRadius: 16,
-    isHovered: false,
-    text: 'projects'
-};
-const orbitalNode3 = {
-    angle: Math.PI * 1.5,
-    radius: 23, // 46px diameter / 2 (+1px size)
-    hoverRadius: 26.5,
-    currentRadius: 23,
-    isHovered: false,
-    text: 'graphic design'
-};
-const orbitalNode4 = {
-    angle: Math.PI * 1.5,
-    radius: 28, // 56px diameter / 2 (+1px size)
-    hoverRadius: 32.5,
-    currentRadius: 28,
-    isHovered: false,
-    text: 'cases'
-};
-let mouseX = 0;
-let mouseY = 0;
 
 // Handle tab visibility changes
 document.addEventListener('visibilitychange', () => {
@@ -568,7 +526,7 @@ function animate(currentTime) {
         }
         // ---------------------------
 
-        // Draw orbital-line-1: path for the first tracked star (0.5px white line with drawing animation)
+        // Draw orbital-line-1: path for the first tracked star
         if (trackedStar1 && trackedStar1.orbitalRadius && trackedStar1.orbitalRadius > 0 && orbitalPathProgress > 0) {
             const center = getOrbitalCenter();
             const startAngle = Math.PI / 2; // 6 o'clock
@@ -603,9 +561,9 @@ function animate(currentTime) {
         const center = getOrbitalCenter();
         const nodes = [
             { node: orbitalNode, radius: trackedStar1.clusterRadius || trackedStar1.orbitalRadius },
-            { node: orbitalNode2, radius: (trackedStar1.clusterRadius || trackedStar1.orbitalRadius) + 60 },
-            { node: orbitalNode3, radius: (trackedStar1.clusterRadius || trackedStar1.orbitalRadius) + 140 },
-            { node: orbitalNode4, radius: (trackedStar1.clusterRadius || trackedStar1.orbitalRadius) + 240 }
+            { node: orbitalNode2, radius: (trackedStar1.clusterRadius || trackedStar1.orbitalRadius) + responsiveVars.offset1 },
+            { node: orbitalNode3, radius: (trackedStar1.clusterRadius || trackedStar1.orbitalRadius) + responsiveVars.offset2 },
+            { node: orbitalNode4, radius: (trackedStar1.clusterRadius || trackedStar1.orbitalRadius) + responsiveVars.offset3 }
         ];
 
         let anyHovered = false;
@@ -632,9 +590,6 @@ function animate(currentTime) {
 
             if (mountain) {
                 const mountainRect = mountain.getBoundingClientRect();
-                // mountainRect.top includes any transform if applicable in modern browsers, or we rely on visual position
-                // The user specified "below mountain.png". 
-                // We'll use a threshold slightly offset into the mountain to be safe.
                 if (currentY > mountainRect.top + 30) {
                     isBelowMountain = true;
                 }
@@ -661,10 +616,6 @@ function animate(currentTime) {
 
             // Apply Speed Smoothing (Lerp)
             if (typeof node.currentSpeed === 'undefined') node.currentSpeed = targetSpeed;
-
-            // Adjust lerp factor: 0.1 gives a nice smooth transition. 
-            // If targetSpeed jumps from 0.00007 to 0.001, it will take several frames to reach close to 0.001.
-            // This satisfies "ramp up".
             node.currentSpeed += (targetSpeed - node.currentSpeed) * 0.1;
 
             // Update angle with the determined speed
@@ -679,7 +630,7 @@ function animate(currentTime) {
                 const dx = mouseX - nodeX;
                 const dy = mouseY - nodeY;
                 const dist = Math.sqrt(dx * dx + dy * dy);
-                node.isHovered = dist < Math.max(25, node.currentRadius); // Hit radius matches visual size, min 25px
+                node.isHovered = dist < Math.max(25, node.currentRadius);
                 if (node.isHovered) anyHovered = true;
             } else {
                 node.isHovered = false;
@@ -713,22 +664,20 @@ function animate(currentTime) {
             ctx.fillStyle = `rgba(255, 255, 255, ${nodeOpacity})`;
             ctx.fill();
 
-            // Draw "about me" or "projects" text on hover
+            // Draw text on hover
             if (node.isHovered && nodeOpacity > 0.9) {
                 ctx.save();
                 ctx.font = '500 14px "Manrope", sans-serif';
                 ctx.textAlign = 'left';
                 ctx.textBaseline = 'middle';
-                const textX = nodeX + node.currentRadius + 12; // 12px padding from ball
+                const textX = nodeX + node.currentRadius + 12;
 
-                // Draw blurred background layer
                 ctx.shadowColor = `rgba(255, 255, 255, ${nodeOpacity})`;
-                ctx.shadowBlur = 4; // Visual glow
+                ctx.shadowBlur = 4;
                 ctx.filter = 'blur(2px)';
                 ctx.fillStyle = `rgba(255, 255, 255, ${nodeOpacity * 0.8})`;
                 ctx.fillText(node.text, textX, nodeY);
 
-                // Draw main text
                 ctx.filter = 'none';
                 ctx.shadowBlur = 0;
                 ctx.fillStyle = `rgba(255, 255, 255, ${nodeOpacity})`;
@@ -745,17 +694,14 @@ function animate(currentTime) {
         }
     }
 
-    // Draw orbital-line-2: path 60px further out from orbital-line-1 (0.5px white line with drawing animation)
+    // Draw orbital-line-2
     if (trackedStar1 && trackedStar1.orbitalRadius && trackedStar1.orbitalRadius > 0 && orbitalPathProgress > 0) {
         const center = getOrbitalCenter();
-        const line2Radius = trackedStar1.orbitalRadius + 60;
-        const startAngle = Math.PI / 2; // 6 o'clock
+        const line2Radius = trackedStar1.orbitalRadius + responsiveVars.offset1;
+        const startAngle = Math.PI / 2;
         const endAngle = startAngle + Math.PI * 2 * orbitalPathProgress;
 
-        // Draw the partial circular orbit path
         ctx.save();
-
-        // Draw blurred background glow
         ctx.filter = 'blur(2px)';
         ctx.beginPath();
         ctx.arc(center.x, center.y, line2Radius, startAngle, endAngle);
@@ -763,7 +709,6 @@ function animate(currentTime) {
         ctx.lineWidth = 1.5;
         ctx.stroke();
 
-        // Draw main line
         ctx.filter = 'none';
         ctx.beginPath();
         ctx.arc(center.x, center.y, line2Radius, startAngle, endAngle);
@@ -774,17 +719,14 @@ function animate(currentTime) {
         ctx.restore();
     }
 
-    // Draw orbital-line-3: path 80px further out from orbital-line-2 (0.5px white line with drawing animation)
+    // Draw orbital-line-3
     if (trackedStar1 && trackedStar1.orbitalRadius && trackedStar1.orbitalRadius > 0 && orbitalPathProgress > 0) {
         const center = getOrbitalCenter();
-        const line3Radius = trackedStar1.orbitalRadius + 140;
+        const line3Radius = trackedStar1.orbitalRadius + responsiveVars.offset2;
         const startAngle = Math.PI / 2; // 6 o'clock
         const endAngle = startAngle + Math.PI * 2 * orbitalPathProgress;
 
-        // Draw the partial circular orbit path
         ctx.save();
-
-        // Draw blurred background glow
         ctx.filter = 'blur(2px)';
         ctx.beginPath();
         ctx.arc(center.x, center.y, line3Radius, startAngle, endAngle);
@@ -792,7 +734,6 @@ function animate(currentTime) {
         ctx.lineWidth = 1.5;
         ctx.stroke();
 
-        // Draw main line
         ctx.filter = 'none';
         ctx.beginPath();
         ctx.arc(center.x, center.y, line3Radius, startAngle, endAngle);
@@ -803,17 +744,14 @@ function animate(currentTime) {
         ctx.restore();
     }
 
-    // Draw orbital-line-4: path 100px further out from orbital-line-3 (0.5px white line with drawing animation)
+    // Draw orbital-line-4
     if (trackedStar1 && trackedStar1.orbitalRadius && trackedStar1.orbitalRadius > 0 && orbitalPathProgress > 0) {
         const center = getOrbitalCenter();
-        const line4Radius = trackedStar1.orbitalRadius + 240;
+        const line4Radius = trackedStar1.orbitalRadius + responsiveVars.offset3;
         const startAngle = Math.PI / 2; // 6 o'clock
         const endAngle = startAngle + Math.PI * 2 * orbitalPathProgress;
 
-        // Draw the partial circular orbit path
         ctx.save();
-
-        // Draw blurred background glow
         ctx.filter = 'blur(2px)';
         ctx.beginPath();
         ctx.arc(center.x, center.y, line4Radius, startAngle, endAngle);
@@ -821,7 +759,6 @@ function animate(currentTime) {
         ctx.lineWidth = 1.5;
         ctx.stroke();
 
-        // Draw main line
         ctx.filter = 'none';
         ctx.beginPath();
         ctx.arc(center.x, center.y, line4Radius, startAngle, endAngle);
@@ -879,658 +816,41 @@ function ensureTransitionOverlay() {
         const contentDiv = document.createElement('div');
         contentDiv.id = 'transition-content';
         contentDiv.style.position = 'absolute';
-        contentDiv.style.top = '50%';
-        contentDiv.style.left = '50%';
-        contentDiv.style.transform = 'translate(-50%, -50%)';
-        contentDiv.style.width = '90%';
-        contentDiv.style.textAlign = 'center';
+        contentDiv.style.top = '0';
+        contentDiv.style.left = '0';
+        contentDiv.style.width = '100%';
+        contentDiv.style.height = '100%';
+        contentDiv.style.zIndex = '100001';
+        contentDiv.style.pointerEvents = 'auto'; // Content should be clickable
         overlay.appendChild(contentDiv);
 
-        // Add photo container
-        const photoContainer = document.createElement('div');
-        photoContainer.id = 'photo-container';
-        photoContainer.style.position = 'absolute';
-        photoContainer.style.top = '50%';
-        photoContainer.style.left = '25%';
-        photoContainer.style.transform = 'translate(-50%, -50%)';
-        photoContainer.style.width = '300px';
-        photoContainer.style.height = '400px';
-        photoContainer.style.pointerEvents = 'none';
-        overlay.appendChild(photoContainer);
-
-        // Add styles
-        const style = document.createElement('style');
-        style.textContent = `
-            .about-btn {
-                color: rgba(203, 209, 220, 0.6);
-                text-decoration: none;
-                margin-right: 0px;
-                display: inline-block;
-                transition: all 0.3s ease;
-                cursor: pointer;
-                z-index: 10;
-                position: relative;
-            }
-            .about-btn:hover {
-                color: white;
-                text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
-            }
-            #close-transition:hover {
-                transform: scale(1.1);
-            }
-            .about-photo {
-                position: absolute;
-                width: 220px;
-                height: auto;
-                border-radius: 8px;
-                box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-                transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-                cursor: pointer;
-                pointer-events: auto;
-            }
-            #photo-casual { top: 0; right: 0; transform: rotate(5deg); z-index: 1; }
-            #photo-professional { bottom: 0; left: 0; transform: rotate(-5deg); z-index: 2; }
-            .about-photo:hover {
-                transform: scale(1.05) rotate(0deg) !important;
-                z-index: 100 !important;
-            }
-            
-            /* Graphics Portfolio Styles */
-            .graphics-portfolio {
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                gap: 20px;
-                width: 100%;
-                overflow: hidden; /* Prevent horizontal scrollbar on body */
-            }
-            .marquee-container {
-                width: 100%;
-                overflow-x: auto; /* Enable horizontal scrolling */
-                overflow-y: hidden;
-                white-space: nowrap;
-                position: relative;
-                -webkit-overflow-scrolling: touch; /* smooth scrolling on iOS */
-                cursor: grab; /* Indicate draggable/scrollable */
-                scrollbar-width: none; /* Firefox */
-                padding: 0 5vw; /* Add some padding on sides */
-                box-sizing: border-box; /* Include padding in width */
-            }
-            .marquee-container::-webkit-scrollbar {
-                display: none; /* Chrome/Safari */
-            }
-            .marquee-container:active {
-                cursor: grabbing;
-            }
-            .marquee-track {
-                display: flex;
-                gap: 40px;
-                width: max-content;
-                /* Animation removed for manual scroll */
-                padding: 20px 0; /* Space for shadows */
-            }
-            /* Animation keyframes removed */
-            .graphics-img {
-                height: 400px; /* Sized up images */
-                width: auto;
-                border-radius: 8px;
-                box-shadow: 0 8px 25px rgba(0,0,0,0.4);
-                transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-                filter: brightness(0.9);
-            }
-            .graphics-img:hover {
-                transform: scale(1.05);
-                z-index: 100;
-                box-shadow: 0 20px 50px rgba(0,0,0,0.6);
-                filter: brightness(1);
-            }
-            
-            /* Cases Section Styles */
-            .case-photo {
-                position: absolute;
-                width: 260px; /* Uniform width */
-                height: auto;
-                border-radius: 12px;
-                box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-                box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-                transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-                cursor: pointer;
-            }
-            .case-photo:hover {
-                transform: scale(1.05) rotate(0deg) !important;
-                z-index: 100 !important;
-                box-shadow: 0 20px 50px rgba(0,0,0,0.6);
-            }
-        `;
-        document.head.appendChild(style);
         document.body.appendChild(overlay);
     }
     return overlay;
 }
 
-// Function to show the "About Me" transition
-function showAboutMeTransition() {
-    isTransitioning = true;
-
-    const hamburgerMenu = document.getElementById('hamburger-menu');
-    const exploreButton = document.getElementById('explore-button');
-    if (hamburgerMenu) hamburgerMenu.style.pointerEvents = 'none';
-    if (exploreButton) exploreButton.style.pointerEvents = 'none';
-
-    const overlay = ensureTransitionOverlay();
-    const contentDiv = document.getElementById('transition-content');
-    const photoContainer = document.getElementById('photo-container');
-
-    // Setup About Me specific layout
-    contentDiv.style.left = '38%';
-    contentDiv.style.transform = 'translateY(-50%)'; // Restore original transform
-    contentDiv.style.textAlign = 'left';
-    contentDiv.style.width = '45%';
-    contentDiv.style.color = 'rgba(203, 209, 220, 0.6)';
-    contentDiv.style.fontFamily = '"Manrope", sans-serif';
-    contentDiv.style.fontWeight = '500';
-    contentDiv.style.fontSize = '14px';
-    contentDiv.style.lineHeight = '1.6';
-    contentDiv.style.whiteSpace = 'pre-line';
-    contentDiv.style.backdropFilter = 'blur(2px)';
-    contentDiv.style.textShadow = '0 0 2px #CBD1DC';
-    contentDiv.style.padding = '20px';
-    contentDiv.style.display = 'block'; // Reset display to block
-    contentDiv.style.alignItems = 'initial'; // Reset align-items
-    contentDiv.style.justifyContent = 'initial'; // Reset justify-content
-
-    photoContainer.style.display = 'block';
-    photoContainer.innerHTML = `
-        <img src="images/jiayi-casual.JPG" id="photo-casual" class="about-photo" alt="Jiayi Casual">
-        <img src="images/jiayi-professional.JPG" id="photo-professional" class="about-photo" alt="Jiayi Professional">
-    `;
-
-    const casual = document.getElementById('photo-casual');
-    const professional = document.getElementById('photo-professional');
-    const bringToFront = (el, other) => { el.style.zIndex = '3'; other.style.zIndex = '1'; };
-    casual.addEventListener('mouseenter', () => bringToFront(casual, professional));
-    professional.addEventListener('mouseenter', () => bringToFront(professional, casual));
-
-    contentDiv.innerHTML = `<i># About me</i> 
-
-Hi! I'm Jiayi, a designer & business student @ Western University 
-
-I love solving ambiguous problems; either visually through design or through stories backed by data & analysis
-
-Outside of work I'm a addicted to concerts & food. I'm also a pretty fast typist!
-
-I'm always looking to meet new people, feel free to reach out :)
-<div style="margin-top: 0px; display: flex; align-items: center; gap: 10px;">
-    <a href="https://www.linkedin.com/in/jiayiihong/" target="_blank" class="about-btn">[Linkedin]</a><span id="copy-email" class="about-btn">[Email]</span><a href="https://x.com/hong_jiayi380" target="_blank" class="about-btn">[X]</a>
-</div>
-
-<div style="margin-top: 10px;">
-    <span id="close-transition" class="about-btn">[close]</span>
-</div>`;
-
-    document.getElementById('copy-email').onclick = (e) => {
-        e.stopPropagation();
-        navigator.clipboard.writeText('jiayihong52@gmail.com').then(() => {
-            const originalText = e.target.innerText;
-            e.target.innerText = '[Copied!]';
-            setTimeout(() => { e.target.innerText = originalText; }, 2000);
-        });
-    };
-
-    document.getElementById('close-transition').onclick = (e) => {
-        e.stopPropagation();
-        overlay.style.opacity = '0';
-        overlay.style.pointerEvents = 'none';
-
-        // Immediately disable pointer events on all content to prevent blocking background clicks
-        overlay.querySelectorAll('*').forEach(el => el.style.pointerEvents = 'none');
-
-        isTransitioning = false;
-        if (hamburgerMenu) hamburgerMenu.style.pointerEvents = 'all';
-        if (exploreButton) exploreButton.style.pointerEvents = 'all';
-    };
-
-    requestAnimationFrame(() => {
-        overlay.style.opacity = '1';
-        overlay.style.pointerEvents = 'all';
-    });
-}
-
-// Function to show the "Graphic Design" transition
-function showGraphicDesignTransition() {
-    isTransitioning = true;
-
-    const hamburgerMenu = document.getElementById('hamburger-menu');
-    const exploreButton = document.getElementById('explore-button');
-    if (hamburgerMenu) hamburgerMenu.style.pointerEvents = 'none';
-    if (exploreButton) exploreButton.style.pointerEvents = 'none';
-
-    const overlay = ensureTransitionOverlay();
-    const contentDiv = document.getElementById('transition-content');
-    const photoContainer = document.getElementById('photo-container');
-
-    // Clear About Me specific setup
-    photoContainer.style.display = 'none';
-    contentDiv.style.left = '50%';
-    contentDiv.style.transform = 'translate(-50%, -50%)'; // Ensure centered transform
-    contentDiv.style.textAlign = 'center';
-    contentDiv.style.width = '100%'; // Full width for marquee
-    contentDiv.style.backdropFilter = 'none';
-    contentDiv.style.textShadow = 'none';
-    contentDiv.style.padding = '0';
-    contentDiv.style.display = 'block'; // Reset display to block
-    contentDiv.style.alignItems = 'initial';
-    contentDiv.style.justifyContent = 'initial';
-    contentDiv.style.color = 'rgba(203, 209, 220, 0.6)';
-    contentDiv.style.fontFamily = '"Manrope", sans-serif';
-    contentDiv.style.fontWeight = '500';
-    contentDiv.style.fontSize = '14px';
-    contentDiv.style.lineHeight = '1.6';
-    contentDiv.style.whiteSpace = 'normal';
-
-    const allImages = [
-        'CSA VLOGS 5 (1).jpg', 'bar night.jpg', 'CSA WV AUDITION.jpg',
-        'wv ap.jpg', 'bobaboardgames.jpg', 'CSA VLOGS- PROD (1).jpg',
-        'IMG_6596.JPG', 'IMG_6616 (1).JPG', 'IMG_6635 (1).JPG',
-        'IMG_6755 (1).JPG', 'IMG_7823 (1).JPG', 'IMG_7935 (1).JPG'
-    ];
-
-    // Duplicate images to creating infinite scroll illusion (3 sets should be safe)
-    const infiniteImages = [...allImages, ...allImages, ...allImages];
-
-    const imagesHtml = infiniteImages.map(img => {
-        return `<img src="images/Graphics Portfolio/${img}" class="graphics-img">`;
-    }).join('');
-
-    contentDiv.innerHTML = `
-        <div class="graphics-portfolio">
-            <div style="margin-bottom: 20px; backdrop-filter: blur(2px); text-shadow: 0 0 2px #CBD1DC; padding: 10px; border-radius: 8px;">
-                <i># Graphic design</i>
-            </div>
-            <div class="marquee-container" id="infinite-scroll-container">
-                <div class="marquee-track" id="infinite-scroll-track">
-                    ${imagesHtml}
-                </div>
-            </div>
-            <div style="margin-top: 30px; backdrop-filter: blur(2px); text-shadow: 0 0 2px #CBD1DC; padding: 10px; border-radius: 8px;">
-                <span id="close-transition" class="about-btn">[close]</span>
-            </div>
-        </div>
-    `;
-
-    // Infinite scroll logic
-    const scrollContainer = document.getElementById('infinite-scroll-container');
-
-    // We need to wait for images to layout to know widths, but for now we can approximate or use requestAnimationFrame loop
-    // A better approach for infinite manual scroll without jank is to check scroll position
-
-    function checkScrollLoop() {
-        if (!isTransitioning) return; // Stop if closed
-
-        const scrollWidth = scrollContainer.scrollWidth;
-        const offsetWidth = scrollContainer.offsetWidth;
-        const maxScroll = scrollWidth / 3; // Approx width of one set
-
-        if (scrollContainer.scrollLeft <= 50) {
-            // If user scrolls too far left, jump to middle set
-            scrollContainer.scrollLeft += maxScroll;
-        } else if (scrollContainer.scrollLeft >= maxScroll * 2) {
-            // If user scrolls too far right, jump back to middle set
-            scrollContainer.scrollLeft -= maxScroll;
-        }
-
-        requestAnimationFrame(checkScrollLoop);
-    }
-
-    // Initial scroll position to the middle set so user can scroll left immediately
-    // Wait slightly for layout
-    setTimeout(() => {
-        if (scrollContainer) {
-            // Calculate one set width roughly or just rely on the loop to catch it eventually, 
-            // but best to start in middle.
-            // Assume images are loaded enough or containers are sized.
-            // As a fallback, we just start them a bit in.
-            scrollContainer.scrollLeft = scrollContainer.scrollWidth / 3;
-            checkScrollLoop();
-        }
-    }, 100);
-
-    document.getElementById('close-transition').onclick = (e) => {
-        e.stopPropagation();
-        overlay.style.opacity = '0';
-        overlay.style.pointerEvents = 'none';
-
-        // Immediately disable pointer events on all content
-        overlay.querySelectorAll('*').forEach(el => el.style.pointerEvents = 'none');
-
-        isTransitioning = false;
-        if (hamburgerMenu) hamburgerMenu.style.pointerEvents = 'all';
-        if (exploreButton) exploreButton.style.pointerEvents = 'all';
-    };
-
-    requestAnimationFrame(() => {
-        overlay.style.opacity = '1';
-        overlay.style.pointerEvents = 'all';
-    });
-}
-
-// Function to show the "Cases" transition
-function showCasesTransition() {
-    isTransitioning = true;
-
-    const hamburgerMenu = document.getElementById('hamburger-menu');
-    const exploreButton = document.getElementById('explore-button');
-    if (hamburgerMenu) hamburgerMenu.style.pointerEvents = 'none';
-    if (exploreButton) exploreButton.style.pointerEvents = 'none';
-
-    const overlay = ensureTransitionOverlay();
-    const contentDiv = document.getElementById('transition-content');
-    const photoContainer = document.getElementById('photo-container');
-
-    // Setup Cases specific layout
-    contentDiv.style.left = '40%'; // Center slightly more to balance with images
-    contentDiv.style.transform = 'translate(-50%, -50%)';
-    contentDiv.style.textAlign = 'left';
-    contentDiv.style.width = '70%'; // Wider container to hold both text and images
-    contentDiv.style.color = 'rgba(203, 209, 220, 0.6)';
-    contentDiv.style.fontFamily = '"Manrope", sans-serif';
-    contentDiv.style.fontWeight = '500';
-    contentDiv.style.fontSize = '14px';
-    contentDiv.style.lineHeight = '1.6';
-    contentDiv.style.whiteSpace = 'normal';
-    contentDiv.style.backdropFilter = 'none';
-    contentDiv.style.textShadow = '0 0 2px #CBD1DC';
-    contentDiv.style.padding = '20px';
-    contentDiv.style.display = 'flex';
-    contentDiv.style.alignItems = 'center';
-    contentDiv.style.justifyContent = 'center';
-    contentDiv.style.gap = '50px';
-
-    // Photos Setup
-    photoContainer.style.display = 'none'; // We will use inline images in contentDiv for better spacing control or absolute positioning relative to contentDiv
-
-    contentDiv.innerHTML = `
-        <div style="position: relative; width: 350px; height: 437px;">
-             <img src="images/Case Covers/BANXX.jpg" class="case-photo" id="img-banxx" style="top: -5px; left: 20px; transform: rotate(-3deg); z-index: 2;">
-             <img src="images/Case Covers/FINALS 1220 (2).jpg" class="case-photo" id="img-finals" style="top: 120px; left: 100px; transform: rotate(5deg); z-index: 3;">
-             <img src="images/Case Covers/TCS.jpg" class="case-photo" id="img-tcs" style="top: 235px; left: 5px; transform: rotate(-5deg); z-index: 4;">
-             <img src="images/Case Covers/Hero Visual.png" class="case-photo" id="img-hero" style="top: 335px; left: 90px; transform: rotate(3deg); z-index: 5;"> 
-        </div>
-
-        <div style="flex: 1; max-width: 400px; z-index: 10;">
-            <i># Cases</i>
-            <br><br>
-            <b>Strategy:</b> 
-            <br><br>
-            <span id="text-banxx" class="case-text">[Leveraging open banking to solve U.S. medical debt]</span>
-            <br><br>
-            <span id="text-finals" class="case-text">[Franchising a local London Dutch bakery]</span>
-            <br><br>
-            <b>Design:</b> 
-            <br><br>
-            <span id="text-tcs" class="case-text">[Creating new occasions for Gen-Z Starbucks customers]</span>
-            <br><br>
-            <span id="text-hero" class="case-text">[Lowering the barrier to entry for genuine human interaction]</span>
-            <br><br>
-            <div style="margin-top: 30px;">
-                <span id="close-transition" class="about-btn">[close]</span>
-            </div>
-        </div>
-        
-        <style>
-            .case-text {
-                transition: all 0.3s ease;
-                cursor: pointer;
-                display: inline-block;
-                padding: 2px 5px;
-                margin: -2px -5px;
-                border-radius: 4px;
-            }
-            .case-text.hovered, .case-text:hover {
-                transform: scale(1.05);
-                color: white;
-                text-shadow: 0 0 10px rgba(255, 255, 255, 0.8), 0 0 20px rgba(255, 255, 255, 0.4);
-            }
-            .case-photo.hovered {
-                transform: scale(1.05) rotate(0deg) !important;
-                z-index: 100 !important;
-                box-shadow: 0 20px 50px rgba(0,0,0,0.6);
-            }
-        </style>
-    `;
-
-    // Add persistent Z-index logic and synchronized hover effects
-    const casePhotos = contentDiv.querySelectorAll('.case-photo');
-    let maxZ = 10;
-
-    // Define the pairs of text and image IDs
-    const pairs = [
-        { textId: 'text-banxx', imgId: 'img-banxx' },
-        { textId: 'text-finals', imgId: 'img-finals' },
-        { textId: 'text-tcs', imgId: 'img-tcs' },
-        { textId: 'text-hero', imgId: 'img-hero' }
-    ];
-
-    pairs.forEach(pair => {
-        const textEl = document.getElementById(pair.textId);
-        const imgEl = document.getElementById(pair.imgId);
-
-        if (textEl && imgEl) {
-            // Function to handle showing hover state
-            const addHover = () => {
-                textEl.classList.add('hovered');
-                imgEl.classList.add('hovered');
-                imgEl.style.zIndex = ++maxZ; // Bring image to front
-            };
-
-            // Function to handle removing hover state
-            const removeHover = () => {
-                textEl.classList.remove('hovered');
-                imgEl.classList.remove('hovered');
-            };
-
-            // Add event listeners to both elements
-            textEl.addEventListener('mouseenter', addHover);
-            textEl.addEventListener('mouseleave', removeHover);
-            imgEl.addEventListener('mouseenter', addHover);
-            imgEl.addEventListener('mouseleave', removeHover);
-        }
-    });
-
-    // Add click listeners for Hero Visual navigation
-    const heroImg = document.getElementById('img-hero');
-    const heroText = document.getElementById('text-hero');
-
-    const navigateToHero = (e) => {
-        e.stopPropagation();
-        // Fade out transition
-        overlay.style.transition = 'opacity 0.5s ease-out';
-        overlay.style.opacity = '0';
-
-        setTimeout(() => {
-            window.location.href = 'bucket-case-study.html';
-        }, 500);
-    };
-
-    if (heroImg) heroImg.addEventListener('click', navigateToHero);
-    if (heroText) heroText.addEventListener('click', navigateToHero);
-
-    document.getElementById('close-transition').onclick = (e) => {
-        e.stopPropagation();
-        overlay.style.opacity = '0';
-        overlay.style.pointerEvents = 'none';
-
-        // Immediately disable pointer events on all content
-        overlay.querySelectorAll('*').forEach(el => el.style.pointerEvents = 'none');
-
-        isTransitioning = false;
-        if (hamburgerMenu) hamburgerMenu.style.pointerEvents = 'all';
-        if (exploreButton) exploreButton.style.pointerEvents = 'all';
-    };
-
-    requestAnimationFrame(() => {
-        overlay.style.opacity = '1';
-        overlay.style.pointerEvents = 'all';
-    });
-}
-
-// Function to show the "Projects" transition
-function showProjectsTransition() {
-    isTransitioning = true;
-
-    const hamburgerMenu = document.getElementById('hamburger-menu');
-    const exploreButton = document.getElementById('explore-button');
-    if (hamburgerMenu) hamburgerMenu.style.pointerEvents = 'none';
-    if (exploreButton) exploreButton.style.pointerEvents = 'none';
-
-    const overlay = ensureTransitionOverlay();
-    const contentDiv = document.getElementById('transition-content');
-    const photoContainer = document.getElementById('photo-container');
-
-    // Setup Projects specific layout
-    photoContainer.style.display = 'none';
-    contentDiv.style.left = '50%';
-    contentDiv.style.transform = 'translate(-50%, -50%)';
-    contentDiv.style.textAlign = 'center';
-    contentDiv.style.width = '100%';
-    contentDiv.style.color = 'rgba(203, 209, 220, 0.6)';
-    contentDiv.style.fontFamily = '"Manrope", sans-serif';
-    contentDiv.style.fontWeight = '500';
-    contentDiv.style.fontSize = '14px';
-    contentDiv.style.lineHeight = '1.6';
-    contentDiv.style.whiteSpace = 'pre-line';
-    contentDiv.style.backdropFilter = 'none';
-    contentDiv.style.textShadow = '0 0 2px #CBD1DC';
-    contentDiv.style.padding = '20px';
-    contentDiv.style.display = 'block';
-
-    contentDiv.innerHTML = `<i># Projects</i>
-
-In the works...
-
-<div style="margin-top: 30px;">
-    <span id="close-transition" class="about-btn">[close]</span>
-</div>`;
-
-    document.getElementById('close-transition').onclick = (e) => {
-        e.stopPropagation();
-        overlay.style.opacity = '0';
-        overlay.style.pointerEvents = 'none';
-
-        // Immediately disable pointer events on all content
-        overlay.querySelectorAll('*').forEach(el => el.style.pointerEvents = 'none');
-
-        isTransitioning = false;
-        if (hamburgerMenu) hamburgerMenu.style.pointerEvents = 'all';
-        if (exploreButton) exploreButton.style.pointerEvents = 'all';
-    };
-
-    requestAnimationFrame(() => {
-        overlay.style.opacity = '1';
-        overlay.style.pointerEvents = 'all';
-    });
-}
-
-// Handle ball clicks for page navigation
-// Handle ball clicks for page navigation
-canvas.addEventListener('click', () => {
-    const anyHoveredNode = [orbitalNode, orbitalNode2, orbitalNode3, orbitalNode4].find(node => node.isHovered);
-
-    if (anyHoveredNode) {
-        // Fade out transition
-        document.body.style.transition = 'opacity 0.3s ease-out';
-        document.body.style.opacity = '0';
-
-        setTimeout(() => {
-            if (anyHoveredNode.text === 'about me') {
-                window.location.href = 'about.html';
-            } else if (anyHoveredNode.text === 'graphic design') {
-                window.location.href = 'graphic-design.html';
-            } else if (anyHoveredNode.text === 'cases') {
-                window.location.href = 'cases.html';
-            } else if (anyHoveredNode.text === 'projects') {
-                window.location.href = 'projects.html';
-            }
-        }, 300);
-    }
-});
-
-// Window resize handler
-window.addEventListener('resize', () => {
-    resizeCanvas();
-});
-
-// Start animation loop
-animate(performance.now());
-
-
-// Page Specific Initialization
-const path = window.location.pathname;
-if (path.includes('explore.html')) {
-    // We are on the explore page
-    isExploreState = false; // Start false to animate in? Or true?
-    // Let's animate in the lines
-    orbitalPathProgress = 0;
-
-    // Animate the orbital lines drawing in
-    const fadeDuration = 1000;
-    const fadeStartTime = performance.now();
-
-    function animateIn(currentTime) {
-        const elapsed = currentTime - fadeStartTime;
-        const progress = Math.min(elapsed / fadeDuration, 1);
-        const easedProgress = 1 - Math.pow(1 - progress, 3);
-        orbitalPathProgress = easedProgress;
-
-        if (progress < 1) {
-            requestAnimationFrame(animateIn);
-        } else {
-            orbitalPathProgress = 1;
-        }
-    }
-    // Start animation slightly delayed to ensure load
-    setTimeout(() => requestAnimationFrame(animateIn), 100);
-
-    // Fade in
-    document.body.style.opacity = '0';
-    document.body.style.transition = 'opacity 0.3s ease-in';
-    setTimeout(() => {
-        document.body.style.opacity = '1';
-    }, 50);
-
-} else if (path.includes('index.html') || path.endsWith('/')) {
-    // Landing page
-    orbitalPathProgress = 0; // No lines
-} else {
-    // Sub-pages (About, Cases, etc)
-    // No mountain, so stars will just spawn around center or fallback
-    // We don't want lines/balls on these pages usually?
-    // Ensure orbitalPathProgress remains 0
-    orbitalPathProgress = 0;
-
-    // Fade in
-    document.body.style.opacity = '0';
-    document.body.style.transition = 'opacity 0.3s ease-in';
-    setTimeout(() => {
-        document.body.style.opacity = '1';
-    }, 50);
-}
-
-// Hamburger menu functionality - update to just toggle
+// Hamburger menu logic
 const hamburgerButton = document.getElementById('hamburger-button');
 const dropdownMenu = document.getElementById('dropdown-menu');
+const exploreButton = document.getElementById('explore-button');
+const backButton = document.getElementById('back-button');
+const textContainer = document.getElementById('text');
 
 if (hamburgerButton && dropdownMenu) {
-    hamburgerButton.addEventListener('click', () => {
-        hamburgerButton.classList.toggle('active');
-        dropdownMenu.classList.toggle('dropdown-hidden');
-        dropdownMenu.classList.toggle('dropdown-visible');
+    hamburgerButton.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const isActive = hamburgerButton.classList.toggle('active');
+        if (isActive) {
+            dropdownMenu.classList.remove('dropdown-hidden');
+            dropdownMenu.classList.add('dropdown-visible');
+        } else {
+            dropdownMenu.classList.remove('dropdown-visible');
+            dropdownMenu.classList.add('dropdown-hidden');
+        }
     });
 
-    // Close dropdown when clicking outside
-    document.addEventListener('click', (event) => {
-        const isClickInside = hamburgerButton.contains(event.target) || dropdownMenu.contains(event.target);
-        if (!isClickInside && dropdownMenu.classList.contains('dropdown-visible')) {
+    document.addEventListener('click', (e) => {
+        if (!hamburgerButton.contains(e.target) && !dropdownMenu.contains(e.target)) {
             hamburgerButton.classList.remove('active');
             dropdownMenu.classList.remove('dropdown-visible');
             dropdownMenu.classList.add('dropdown-hidden');
@@ -1538,40 +858,117 @@ if (hamburgerButton && dropdownMenu) {
     });
 }
 
-
-// Homepage link functionality - transition back to homepage
-const homepageLinks = document.querySelectorAll('a[href="index.html"]');
-homepageLinks.forEach(link => {
-    link.addEventListener('click', (e) => {
+// Explore button logic
+if (exploreButton) {
+    exploreButton.addEventListener('click', (e) => {
         e.preventDefault();
-        // Add fade-out transition
-        document.body.style.transition = 'opacity 0.5s ease-out';
-        document.body.style.opacity = '0';
 
-        // Navigate to homepage after transition
-        setTimeout(() => {
-            window.location.href = 'index.html';
-        }, 500);
-    });
-});
+        // 1. Fade out the text
+        if (textContainer) {
+            textContainer.style.opacity = '0';
+        }
 
-// Back link functionality - transition before going back
-const backLinks = document.querySelectorAll('.back-link');
-backLinks.forEach(link => {
-    link.addEventListener('click', (e) => {
-        e.preventDefault();
-        // Add fade-out transition
-        document.body.style.transition = 'opacity 0.3s ease-out';
-        document.body.style.opacity = '0';
+        // 2. Hide explore button
+        exploreButton.style.display = 'none';
 
-        // Go back after transition
-        setTimeout(() => {
-            if (link.href.includes('javascript:history.back()')) {
-                history.back();
-            } else {
-                window.location.href = link.href;
+        // 3. Show back button
+        if (backButton) {
+            backButton.style.display = 'block';
+        }
+
+        // 4. Start drawing orbital lines
+        showOrbitalPath = true; // start the drawing animation
+        const drawDuration = 2000; // 2 seconds to draw
+        const startTime = performance.now();
+
+        function animatePath(time) {
+            if (!showOrbitalPath) return; // Stop if interrupted
+
+            const elapsed = time - startTime;
+            orbitalPathProgress = Math.min(1, elapsed / drawDuration);
+
+            if (orbitalPathProgress < 1) {
+                requestAnimationFrame(animatePath);
             }
-        }, 300);
+        }
+        requestAnimationFrame(animatePath);
     });
+}
+
+// Back button logic
+if (backButton) {
+    backButton.addEventListener('click', (e) => {
+        e.preventDefault();
+
+        // 1. Show text
+        if (textContainer) {
+            textContainer.style.opacity = '1';
+        }
+
+        // 2. Show explore button
+        if (exploreButton) {
+            exploreButton.style.display = ''; // Revert to CSS default
+        }
+
+        // 3. Hide back button
+        backButton.style.display = 'none';
+
+        // 4. Reverse animation (undraw lines)
+        showOrbitalPath = false;
+        const undrawDuration = 1000; // Faster undraw
+        const startTime = performance.now();
+        const startProgress = orbitalPathProgress;
+
+        function animateReversePath(time) {
+            if (showOrbitalPath) return; // Stop if interrupted
+
+            const elapsed = time - startTime;
+            const progress = 1 - (elapsed / undrawDuration);
+            orbitalPathProgress = Math.max(0, startProgress * progress);
+
+            if (orbitalPathProgress > 0) {
+                requestAnimationFrame(animateReversePath);
+            }
+        }
+        requestAnimationFrame(animateReversePath);
+    });
+}
+
+// Transition logic
+function triggerTransition(targetUrl) {
+    if (isTransitioning) return;
+    isTransitioning = true;
+
+    // Create/get overlay
+    const overlay = ensureTransitionOverlay();
+
+    // Force browser repaint to ensure transition plays
+    requestAnimationFrame(() => {
+        overlay.style.opacity = '1';
+        overlay.style.pointerEvents = 'auto'; // Block other clicks
+
+        // Wait for fade out
+        setTimeout(() => {
+            window.location.href = targetUrl;
+        }, 800);
+    });
+}
+
+// Add click handlers for orbital balls
+canvas.addEventListener('click', (e) => {
+    // Only allow clicking if not transitioning and path is drawn
+    if (isTransitioning || orbitalPathProgress < 1) return;
+
+    if (orbitalNode.isHovered) {
+        triggerTransition('about.html');
+    } else if (orbitalNode2.isHovered) {
+        triggerTransition('projects.html');
+    } else if (orbitalNode3.isHovered) {
+        triggerTransition('graphic-design.html');
+    } else if (orbitalNode4.isHovered) {
+        triggerTransition('cases.html');
+    }
 });
 
+// Start animation loop
+requestAnimationFrame(animate);
