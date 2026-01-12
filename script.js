@@ -799,7 +799,7 @@ function ensureTransitionOverlay() {
         overlay.style.zIndex = '100000';
         overlay.style.opacity = '0';
         overlay.style.pointerEvents = 'none';
-        overlay.style.transition = 'opacity 0.8s ease-in-out';
+        overlay.style.transition = 'opacity 0.4s ease-in-out';
 
         // Add the background SVG
         const bgImg = document.createElement('img');
@@ -896,14 +896,13 @@ if (exploreButton) {
 }
 
 // Back button logic
+// Back button logic
 if (backButton) {
     backButton.addEventListener('click', (e) => {
         e.preventDefault();
 
-        // 1. Show text
-        if (textContainer) {
-            textContainer.style.opacity = '1';
-        }
+        // 1. Keep text hidden initially
+        // if (textContainer) { textContainer.style.opacity = '0'; } // It should already be 0
 
         // 2. Show explore button
         if (exploreButton) {
@@ -928,6 +927,11 @@ if (backButton) {
 
             if (orbitalPathProgress > 0) {
                 requestAnimationFrame(animateReversePath);
+            } else {
+                // Animation complete, NOW fade in text
+                if (textContainer) {
+                    textContainer.style.opacity = '1';
+                }
             }
         }
         requestAnimationFrame(animateReversePath);
@@ -950,7 +954,7 @@ function triggerTransition(targetUrl) {
         // Wait for fade out
         setTimeout(() => {
             window.location.href = targetUrl;
-        }, 800);
+        }, 400);
     });
 }
 
@@ -969,6 +973,16 @@ canvas.addEventListener('click', (e) => {
         triggerTransition('cases.html');
     }
 });
+
+// Check if we are on explore.html and auto-trigger animation state
+if (window.location.pathname.endsWith('explore.html')) {
+    showOrbitalPath = true;
+    orbitalPathProgress = 1; // Immediate show
+    if (textContainer) textContainer.style.opacity = '0';
+    if (exploreButton) exploreButton.style.display = 'none'; // Should already be handled by HTML but good safety
+    // No backButton logic needed here as explore.html has its own hardcoded button, 
+    // but we need to ensure the animation loop knows to draw lines.
+}
 
 // Start animation loop
 requestAnimationFrame(animate);
