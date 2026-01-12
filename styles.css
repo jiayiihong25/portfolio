@@ -279,3 +279,23 @@ body {
     transform: scale(1.1);
     text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
 }
+
+.back-link-fixed {
+    position: fixed;
+    top: 40px;
+    left: 40px;
+    z-index: 100;
+    color: rgba(203, 209, 220, 0.6);
+    text-decoration: none;
+    font-family: "Manrope", sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.back-link-fixed:hover {
+    color: white;
+    transform: scale(1.1);
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+}
