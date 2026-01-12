@@ -192,6 +192,14 @@
             }
         });
 
+        // Navigation for BANXX
+        const banxxImg = document.getElementById('img-banxx');
+        const banxxText = document.getElementById('text-banxx');
+        const goToBanxx = () => window.location.href = 'banxx-case-study.html';
+
+        if (banxxImg) banxxImg.onclick = goToBanxx;
+        if (banxxText) banxxText.onclick = goToBanxx;
+
         // Navigation for Hero Visual
         const heroImg = document.getElementById('img-hero');
         const heroText = document.getElementById('text-hero');
