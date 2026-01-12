@@ -1,30 +1,110 @@
-// Get canvas and context
-const canvas = document.getElementById('star-canvas');
-const ctx = canvas.getContext('2d');
+// Responsive scaling helper
+function getResponsiveValues() {
+    // Base design width approx 1440px
+    const scale = Math.max(0.5, window.innerWidth / 1440); // Prevent getting too small
+    return {
+        offset1: 60 * scale,
+        offset2: 140 * scale,
+        offset3: 240 * scale,
+        node1Radius: 12.5 * scale,
+        node2Radius: 16 * scale,
+        node3Radius: 23 * scale,
+        node4Radius: 28 * scale,
+        glLine1: 1.5 * scale, // scalable line width if desired, or keep fixed
+        glLine2: 0.5  // hairline shouldn't scale too much
+    };
+}
+
+let responsiveVars = getResponsiveValues();
 
 // Set canvas size to match window
 function resizeCanvas() {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
+
+    responsiveVars = getResponsiveValues();
+
+    // Update node base sizes
+    orbitalNode.radius = responsiveVars.node1Radius;
+    orbitalNode.hoverRadius = responsiveVars.node1Radius * 1.2;
+    // Don't reset currentRadius abruptly to avoid jump, or do if resizing
+    // orbitalNode.currentRadius = orbitalNode.radius; 
+
+    orbitalNode2.radius = responsiveVars.node2Radius;
+    orbitalNode2.hoverRadius = responsiveVars.node2Radius * 1.2;
+
+    orbitalNode3.radius = responsiveVars.node3Radius;
+    orbitalNode3.hoverRadius = responsiveVars.node3Radius * 1.2;
+
+    orbitalNode4.radius = responsiveVars.node4Radius;
+    orbitalNode4.hoverRadius = responsiveVars.node4Radius * 1.2;
 }
 resizeCanvas();
 window.addEventListener('resize', resizeCanvas);
 
-// Calculate orbital center (middle of the mountain)
-function getOrbitalCenter() {
-    const mountain = document.getElementById('mountain');
-    if (mountain) {
-        const rect = mountain.getBoundingClientRect();
-        return {
-            x: rect.left + rect.width / 2,
-            y: rect.top + rect.height / 2
-        };
-    }
-    // Fallback to center bottom if mountain not found
+// ... (rest of simple setup)
+
+// Star class
+// ...
+
+// ... (rest of code)
+
+// Animation variables
+let lastTime = performance.now();
+let isTabVisible = true;
+let showOrbitalPath = false; // Flag to show orbital path line when explore button is clicked
+let trackedStar1 = null; // Star closest to center that we'll track (orbital-line-1)
+let trackedStar2 = null; // Star slightly further out that we'll track (orbital-line-2)
+let orbitalPathProgress = 0; // Drawing progress of the orbital path lines (0 to 1)
+let isTransitioning = false; // Flag to track if the transition overlay is active
+
+// Interactive node properties
+const orbitalNode = {
+    angle: Math.PI * 1.5, // Start at top
+    radius: responsiveVars.node1Radius,
+    hoverRadius: responsiveVars.node1Radius * 1.2,
+    currentRadius: responsiveVars.node1Radius,
+    isHovered: false,
+    text: 'about me'
+};
+const orbitalNode2 = {
+    angle: Math.PI * 1.5,
+    radius: responsiveVars.node2Radius,
+    hoverRadius: responsiveVars.node2Radius * 1.2,
+    currentRadius: responsiveVars.node2Radius,
+    isHovered: false,
+    text: 'projects'
+};
+const orbitalNode3 = {
+    angle: Math.PI * 1.5,
+    radius: responsiveVars.node3Radius,
+    hoverRadius: responsiveVars.node3Radius * 1.2,
+    currentRadius: responsiveVars.node3Radius,
+    isHovered: false,
+    text: 'graphic design'
+};
+const orbitalNode4 = {
+    angle: Math.PI * 1.5,
+    radius: responsiveVars.node4Radius,
+    hoverRadius: responsiveVars.node4Radius * 1.2,
+    currentRadius: responsiveVars.node4Radius,
+    isHovered: false,
+    text: 'cases'
+};
+let mouseX = 0;
+let mouseY = 0; const mountain = document.getElementById('mountain');
+if (mountain) {
+    const rect = mountain.getBoundingClientRect();
     return {
-        x: canvas.width / 2,
-        y: canvas.height * 0.85
+        x: rect.left + rect.width / 2,
+        y: rect.top + rect.height / 2
     };
+}
+// Fallback to center bottom if mountain not found
+return {
+    x: canvas.width / 2,
+    y: canvas.height * 0.85
+};
 }
 
 // Star class

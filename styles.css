@@ -9,7 +9,6 @@ body {
     overflow: auto;
     width: 100vw;
     height: 100vh;
-    min-width: 1024px;
 }
 
 #star-canvas {
@@ -43,14 +42,14 @@ body {
     object-position: bottom;
     z-index: 3;
     pointer-events: none;
-    transform: translateY(30px);
+    transform: translateY(2vw);
 }
 
 #text {
     position: fixed;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, calc(-50% - 60px));
+    transform: translate(-50%, calc(-50% - 4vw));
     z-index: 4;
     pointer-events: none;
     text-align: center;
@@ -60,7 +59,7 @@ body {
 .line-1 {
     color: white;
     font-family: "EB Garamond", serif;
-    font-size: 64px;
+    font-size: 4.5vw;
     font-weight: 500;
     margin: 0;
     text-shadow: 3px 3px 5px #465975;
@@ -70,9 +69,9 @@ body {
 .line-2 {
     color: white;
     margin: 0;
-    margin-top: -34px;
+    margin-top: -2.3vw;
     font-family: "EB Garamond", serif;
-    font-size: 128px;
+    font-size: 9vw;
     transition: opacity 0.5s ease-out;
 }
 
@@ -90,10 +89,10 @@ body {
 .line-3 {
     color: white;
     margin: 0;
-    margin-top: 8px;
+    margin-top: 0.5vw;
     position: relative;
     font-family: "Manrope", sans-serif;
-    font-size: 14px;
+    font-size: 1vw;
     font-weight: 500;
     display: inline-block;
     transition: opacity 0.5s ease-out;

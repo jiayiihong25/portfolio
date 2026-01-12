@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=1024, initial-scale=1.0">
+    <title>1220 Case Study - The Fritter Shop</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,600&family=Manrope:wght@500;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            overflow-y: auto;
+            margin: 0;
+            padding: 0;
+            background-color: #0B0E14;
+        }
+
+        #star-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        #background-gradient {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        #case-study-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 120px 24px 60px;
+            position: relative;
+            z-index: 10;
+            color: rgba(203, 209, 220, 0.9);
+            font-family: "Manrope", sans-serif;
+        }
+
+        .case-header {
+            text-align: left;
+            margin-bottom: 40px;
+        }
+
+        .case-title {
+            font-family: "EB Garamond", serif;
+            font-size: 42px;
+            color: white;
+            margin: 0 0 16px 0;
+            font-weight: 500;
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+        }
+
+        .case-subtitle {
+            font-size: 16px;
+            color: rgba(203, 209, 220, 0.8);
+            font-weight: 400;
+            max-width: 600px;
+            margin: 0 0 24px 0;
+            line-height: 1.5;
+        }
+
+        .case-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 24px;
+            margin-top: 24px;
+            padding-top: 24px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .meta-item {
+            font-size: 13px;
+            color: rgba(203, 209, 220, 0.6);
+            line-height: 1.4;
+        }
+
+        .meta-item strong {
+            display: block;
+            color: white;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 4px;
+        }
+
+        .section {
+            margin-bottom: 40px;
+        }
+
+        .section-title {
+            font-family: "Manrope", sans-serif;
+            font-size: 24px;
+            color: white;
+            margin-bottom: 32px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        p {
+            font-size: 14px;
+            line-height: 1.8;
+            margin-bottom: 24px;
+        }
+
+        strong {
+            color: white;
+            font-weight: 700;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        li {
+            margin-bottom: 24px;
+            padding-left: 24px;
+            border-left: 2px solid rgba(255, 255, 255, 0.15);
+        }
+
+        .case-image {
+            width: 100%;
+            height: auto;
+            border-radius: 12px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        @media (max-width: 768px) {
+            .case-title {
+                font-size: 40px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="star-canvas"></canvas>
+    <img src="images/background_gradient.svg" id="background-gradient" alt="Background Gradient">
+    <a href="javascript:history.back()" class="back-link-fixed">[back]</a>
+
+    <div id="case-study-container">
+        <header class="case-header">
+            <h1 class="case-title">The Fritter Shop</h1>
+            <div class="case-subtitle">Determining the optimal growth strategy for a local Dutch bakery</div>
+            <div class="case-meta">
+                <div class="meta-item"><strong>Case Type:</strong> 1220/1299E Ivey Business Foundations Competition; 1st
+                    place</div>
+                <div class="meta-item"><strong>Role:</strong> Strategy Consultant & Designer</div>
+                <div class="meta-item"><strong>Focus:</strong> Storytelling, Business Strategy</div>
+            </div>
+        </header>
+
+        <img src="case studies/1220/FullSizeRender copy.jpg" alt="The Fritter Shop Cover" class="case-image">
+
+        <section class="section">
+            <h2 class="section-title">Context</h2>
+            <p>The 1220/1299E Ivey Business Foundations Case Competition is the largest first year case competition at
+                Western University with over 400 student participants.</p>
+        </section>
+
+        <section class="section">
+            <h2 class="section-title">The Challenge</h2>
+            <p>Kelvin Van Rijn, the founder of The Fritter Shop, had successfully relocated his business to London,
+                Ontario. He had captured the local market with his authentic Dutch fritters, but his growth had hit a
+                ceiling. He faced a common founder’s dilemma: he wanted to expand across Ontario, but he was constrained
+                by his own time and capital.</p>
+            <p>Our task was to determine the optimal growth strategy to scale the business without diluting the brand’s
+                quality or burning out the founder.</p>
+        </section>
+
+        <section class="section">
+            <h2 class="section-title">Understanding the "Why"</h2>
+            <p>To crack this case, we looked closely at the consumer experience and the operational reality of the
+                business to guide our strategy.</p>
+            <ul>
+                <li>
+                    <strong>1. The Sensory Experience:</strong> We analyzed the customer journey and realized that The
+                    Fritter Shop sold comfort and nostalgia alongside their pastries. The smell of the fritters and the
+                    warmth of the shop were essential to the value proposition. This insight steered us away from a CPG
+                    licensing strategy, as putting frozen fritters in grocery stores would strip away the sensory magic
+                    that drove sales.
+                </li>
+                <li>
+                    <strong>2. The Founder Bottleneck:</strong> Kelvin was central to the operation, which became a
+                    limiting factor for growth. A corporate expansion strategy would require him to manage multiple
+                    locations personally, which significantly increased the risk of burnout. We needed a model that
+                    would decentralize operations while maintaining his high standards.
+                </li>
+                <li>
+                    <strong>3. The Value of Local Ownership:</strong> The brand’s success was rooted in its feel as a
+                    "local gem." We determined that a franchisee invested in their specific community would be better
+                    positioned to replicate this authenticity than a distant corporate manager.
+                </li>
+            </ul>
+            <img src="case studies/1220/FINALS 1220 (3).jpg" alt="Finals 1220 (3)" class="case-image">
+        </section>
+
+        <section class="section">
+            <h2 class="section-title">The Solution</h2>
+            <p>We proposed a Phased Franchise Model as the winning strategy. This approach leveraged the capital and
+                drive of local entrepreneurs to fuel expansion while keeping Kelvin focused on product innovation and
+                brand standards.</p>
+            <p><strong>Phase 1: The Pilot</strong><br>
+                Instead of aggressive expansion, we prioritized establishing one flagship franchise location first. This
+                acted as a proof of concept to refine the training manual and supply chain before scaling further.</p>
+            <p><strong>Risk Mitigation</strong><br>
+                We built in rigorous monthly performance reviews and direct operational support lines to Kelvin. This
+                directly addressed the risk of quality slippage, which was a major concern given a previous failed
+                partnership in the brand's history.</p>
+        </section>
+
+        <img src="case studies/1220/FINALS 1220 (2).jpg" alt="Finals 1220 (2)" class="case-image">
+        <section class="section">
+            <h2 class="section-title">Lessons Learnt</h2>
+            <p><strong>History repeats itself if you let it:</strong> A major part of our strategy involved analyzing
+                why a previous partnership failed for the business. I learned that proposing a strategy like franchising
+                requires building safety rails, such as strict vetting and QA checks, to prevent past mistakes from
+                recurring. Strategy is as much about risk management as it is about growth.</p>
+            <p><strong>The power of storytelling:</strong> We used a narrative hook involving tired parents finding the
+                shop to sell our strategy to the judges. I learned that while data justifies the decision, empathy sells
+                it. Grounding the business problem in a relatable human moment, especially during our final presentation
+                in front of hundreds of spectators truly made the solution feel inevitable.</p>
+        </section>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
