@@ -124,6 +124,17 @@
             font-weight: 700;
         }
 
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        li {
+            margin-bottom: 24px;
+            padding-left: 24px;
+            border-left: 2px solid rgba(255, 255, 255, 0.15);
+        }
+
         .video-container {
             position: relative;
             width: 100%;
@@ -182,11 +193,12 @@
 
     <div id="case-study-container">
         <header class="case-header">
-            <h1 class="case-title">Wundr</h1>
-            <div class="case-subtitle">AI game design studio for cocreation of games</div>
+            <h1 class="case-title">Wundr: Turning Passive Screen Time into Active Co-Creation</h1>
+            <div class="case-subtitle">An AI-powered design suite that empowers parents and children to co-create
+                personalized, educational 2D RPGs from study materials.</div>
             <div class="case-meta">
-                <div class="meta-item"><strong>Project:</strong> AI Game Design Studio</div>
-                <div class="meta-item"><strong>Objective:</strong> Cocreation of games using AI</div>
+                <div class="meta-item"><strong>Competition:</strong> UoftHacks13 Theme: Identity</div>
+                <div class="meta-item"><strong>Role:</strong> Design Engineer</div>
             </div>
         </header>
 
@@ -197,7 +209,73 @@
                 referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
         </div>
 
-        <!-- Case study content will be added here -->
+        <section class="section">
+            <h2 class="section-title">Why Wundr?</h2>
+            <p>The theme of UoftHacks13 was identity. While brainstorming, I ran into a shocking statistic: the average
+                middle school child spends 5+ hours online every day. I realized the problem isn’t the time spent, but
+                the passive nature of that time. Most children’s apps are traps to capture attention, not tools to
+                inspire identity creation.</p>
+            <p><strong>Wundr</strong> is the solution. It’s an AI-powered design team that gives children autonomy,
+                allowing them to turn schoolwork alongside their parents into a world they create themselves.</p>
+        </section>
+
+        <section class="section">
+            <h2 class="section-title">The "IKEA" Effect</h2>
+            <p>The "IKEA effect" is the idea that people value products more if they helped create them. My hypothesis
+                was that if a child were to design their own game rather than play a pre-existing one, their emotional
+                investment in the educational components would skyrocket.</p>
+            <p>To make this work for a 7-year-old, I had to solve two main pain points:
+            <ul>
+                <li><strong>Complexity:</strong> Most game engines are far too complex for children.</li>
+                <li><strong>The Parent Gap:</strong> Parents struggle to bridge the gap between homework and play time.
+                </li>
+            </ul>
+            </p>
+            <p>To remove "blank page syndrome," I structured the journey into three distinct <strong>"Booths"</strong>
+                to guide the child through the creative process. I also integrated a microphone feature into every booth
+                to lower the friction of typing for young users.</p>
+        </section>
+
+        <section class="section">
+            <h2 class="section-title">The Design Booths</h2>
+            <ul>
+                <li>
+                    <strong>1. The Character Designer: Bringing the Hero to Life</strong><br>
+                    I didn't want children to just pick a skin. Using a <strong>Dual-Input Canvas</strong>, children can
+                    sketch directly on a digital pad. Our system captures their unique handwriting—transforming a blue
+                    scribble into a fully animated walking sprite.
+                </li>
+                <li>
+                    <strong>2. The World Designer: Engineering an Environment</strong><br>
+                    The child acts as the stage-setter. By describing an atmosphere (e.g., "I love beaches"), our
+                    generative
+                    pipeline creates a custom 2D map with specific assets like palm trees and crashing waves. This
+                    ensures
+                    every study session feels like a new authority over their digital space.
+                </li>
+                <li>
+                    <strong>3. The Sound Designer: Crafting the Vibe</strong><br>
+                    Audio is vital for immersion. The system translates abstract feelings (e.g., "cool, excited tone")
+                    into
+                    multiple .mp3 options. By choosing the music, the child completes the sensory identity of their
+                    game.
+                </li>
+            </ul>
+        </section>
+
+        <section class="section">
+            <h2 class="section-title">The Portal: The Parental Bridge</h2>
+            <p>For parents, the process is simple: they paste study notes (math, history, etc.) into the Portal. I
+                designed a <strong>Difficulty Level selector</strong> (ages 0 to 11+) to ensures the AI parses the notes
+                into developmentally appropriate "Battle Challenges" within the child's created world.</p>
+        </section>
+
+        <section class="section">
+            <h2 class="section-title">Conclusion</h2>
+            <p>Wundr achieved exactly what we set out to do: it turned a child from a consumer into a creator. By
+                leveraging the IKEA effect through AI, we transformed "5 hours of screen time" from a statistic of
+                concern into a window of active, identity-building play!</p>
+        </section>
 
 
     </div>

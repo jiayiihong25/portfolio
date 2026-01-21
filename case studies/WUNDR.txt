@@ -1,0 +1,46 @@
+Wundr: Turning Passive Screen Time into Active Co-Creation
+Project Overview: An AI-powered design suite that empowers parents and children to co-create personalized, educational 2D RPGs from study materials. Role: Design Engineer
+Why Wundr? 
+The theme of UoftHacks13 was identity. 
+
+As I was brainstorming, I ran into a shocking statistic. The average (middle school) child spends 5+ hours online every day. As I thought about this, I realized the problem isn’t the time they spend but it’s the nature of how they spend that time. Most children apps available are not built to inspire children to create their own identity, they are more so traps to capture their attention. 
+
+Wundr is supposed to be the solution to children finding their own identity. It’s an AI powered design team that gives children autonomy and allows them to turn their schoolwork alongside their parents into a world that they create themselves. 
+
+The “IKEA” Effect
+Have you ever felt more fulfilled when you built an IKEA bed all by yourself? The “IKEA effect” is the idea that people value products more if they helped create them. My hypothesis was that if a child were to design their own game rather than play a pre-existing game, their emotional investment in the more boring educational part of the game would skyrocket. 
+
+Obviously there were 2 main pain points to keep in mind: 
+
+Most game engines are too complex for a 7-year old to use.
+Parents find it hard to bridge the gap between homework and play time for their children.
+
+The biggest design challenge was removing "blank page syndrome." If you ask a child to "make a game," they might freeze but if you give them an intuitive design team, they create. Therefore, I structured the user journey into three distinct "Booths" to guide the child through the creative process without it feeling like homework.
+When designing, I had to account for a major constraint: typing is a high-friction task for young children. To solve this, I integrated a microphone feature into every single design booth.
+Speaking Creativity into Existence: Children can simply click the mic icon to speak their ideas instead of typing.
+Lowering the Barrier: This allows a 6-year-old who might struggle with a keyboard to still exert full creative control.
+
+The Character Designer: Bringing the Hero to Life
+To maximize the "IKEA Effect," I didn't want children to just pick a skin from a gallery. I wanted them to feel the pride of creation.
+The Dual-Input Canvas: I implemented a system where children could either type a description or sketch directly on a digital canvas.
+From Scribble to Sprite: AI-generated assets can be messy, but by using a drawing pad, we captured the child's unique handwriting, allowing them to see their blue scribble transformed into a walking sprite (like the "Hello Kitty" example in our demo)
+
+The World Designer: Engineering an Environment
+The World Designer booth allows the child to be the stage-setter.
+Setting the Stage: When a child interacts with this booth, they describe the atmosphere they want to inhabit.
+The Generation Loop: Once the child provides an idea such as "I love beaches" our generative pipeline creates a custom 2D map with specific assets like palm trees and crashing waves.
+Visual Variety: This ensures that no two study sessions ever look the same, giving the child a sense of true authority over their digital space.
+
+The Sound Designer: Crafting the Vibe
+Audio is often an afterthought in educational apps, but it is vital for immersion. I designed the Sound Designer to translate abstract feelings into a custom soundtrack.
+Translating Emotion: A child can use the audio input to request a "cool, excited tone".
+Auditory Choice: The system generates multiple .mp3 options, allowing the child to audition different tracks for their world.
+Sensory Cohesion: By choosing the music, the child completes the sensory "identity" of their game
+
+The Portal: The Parental Bridge
+Contextual Learning: A parent pastes study notes (e.g., math or history) into a text field.
+Complexity Mapping: I designed a Difficulty Level selector (ages 0 to 11+) to ensure the AI parses the notes into developmentally appropriate "Battle Challenges".
+
+The Conclusion: Did it work?
+Wundr achieved exactly what we set out to do: it turned a child from a consumer into a creator. By leveraging the IKEA effect through AI, we transformed "5 hours of screen time" from a statistic of concern into a window of active, identity-building play!
+
