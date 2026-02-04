@@ -82,12 +82,16 @@ body {
     pointer-events: none;
     text-align: center;
     transition: opacity 0.5s ease-out;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .line-1 {
     color: white;
     font-family: "EB Garamond", serif;
-    font-size: 4.5vw;
+    font-size: 5vw;
+    /* Increased from 4.5vw */
     font-weight: 500;
     margin: 0;
     text-shadow: 3px 3px 5px #465975;
@@ -99,8 +103,10 @@ body {
     margin: 0;
     margin-top: -2.3vw;
     font-family: "EB Garamond", serif;
-    font-size: 9vw;
+    font-size: 10vw;
+    /* Increased from 9vw */
     transition: opacity 0.5s ease-out;
+    white-space: nowrap;
 }
 
 .im-text {
@@ -120,26 +126,37 @@ body {
     margin-top: 0.5vw;
     position: relative;
     font-family: "Manrope", sans-serif;
-    font-size: 1vw;
+    font-size: 1.1vw;
     font-weight: 500;
     display: inline-block;
     transition: opacity 0.5s ease-out;
+    width: 0;
+    min-width: 100%;
 }
 
 .line-3-glow {
     position: absolute;
     top: 0;
-    left: 0;
+    left: 50%;
+    transform: translateX(-50%);
     filter: blur(4px);
     opacity: 0.8;
     z-index: 0;
     white-space: nowrap;
+    width: 100%;
+    display: block;
 }
 
 .line-3-text {
     position: relative;
     z-index: 1;
     white-space: nowrap;
+    opacity: 0.7;
+    /* Make tagline more subtle */
+}
+
+.mobile-only {
+    display: none;
 }
 
 #hamburger-menu {
@@ -361,22 +378,28 @@ body {
 
     #text {
         transform: translate(-50%, calc(-50% - 15vw));
-        width: 90%;
-        padding: 0 20px;
+        width: 90vw;
+        padding: 0;
     }
 
     .line-1 {
-        font-size: 11vw;
+        font-size: 8vw;
     }
 
     .line-2 {
-        font-size: 22vw;
-        margin-top: -5vw;
+        font-size: 18vw;
+        /* Increased from 13vw */
+        margin-top: -2vw;
     }
 
     .line-3 {
-        font-size: 4.2vw;
-        margin-top: 2.5vw;
+        font-size: 3.2vw;
+        margin-top: 2vw;
+        line-height: 1.2;
+    }
+
+    .mobile-only {
+        display: block;
     }
 
     /* Zoom in mountain to take up ~20% of viewport */
@@ -449,20 +472,27 @@ body {
 
     #text {
         transform: translate(-50%, calc(-50% - 18vw));
+        width: 90vw;
     }
 
     .line-1 {
-        font-size: 13vw;
+        font-size: 10vw;
     }
 
     .line-2 {
-        font-size: 26vw;
-        margin-top: -6vw;
+        font-size: 22vw;
+        /* Increased from 16vw */
+        margin-top: -3vw;
     }
 
     .line-3 {
-        font-size: 4.8vw;
-        margin-top: 3.5vw;
+        font-size: 3.8vw;
+        margin-top: 3vw;
+        line-height: 1.3;
+    }
+
+    .mobile-only {
+        display: block;
     }
 
     /* Zoom in mountain even more on smaller screens */
