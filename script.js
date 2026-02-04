@@ -1,17 +1,26 @@
 // Responsive scaling helper
 function getResponsiveValues() {
-    // Base design width approx 1440px
-    const scale = Math.max(0.5, window.innerWidth / 1440); // Prevent getting too small
-    const isLargeScreen = window.innerWidth > 1500;
+    const screenWidth = window.innerWidth;
+    const isMobile = screenWidth <= 768;
+
+    // Scale factor for desktop vs mobile
+    const baseScale = isMobile ? screenWidth / 375 : screenWidth / 1440;
+    const scale = Math.max(0.4, baseScale);
+    const isLargeScreen = screenWidth > 1500;
+
+    // Radius calculation for orbits
+    // On mobile, we want the orbits to be much tighter so they stay on screen
+    const orbitGap = isMobile ? 30 * scale : 60 * scale;
 
     return {
-        offset1: 60 * scale,
-        offset2: 140 * scale,
-        offset3: 240 * scale,
-        node1Radius: (isLargeScreen ? 14.5 : 12.5) * scale, // Push barely out if large screen
-        node2Radius: 16 * scale,
-        node3Radius: 23 * scale,
-        node4Radius: 28 * scale,
+        offset1: orbitGap,
+        offset2: orbitGap * 1.8,
+        offset3: orbitGap * 2.6,
+        node1Radius: (isMobile ? 8 : (isLargeScreen ? 14.5 : 12.5)) * scale,
+        node2Radius: (isMobile ? 10 : 16) * scale,
+        node3Radius: (isMobile ? 14 : 23) * scale,
+        node4Radius: (isMobile ? 18 : 28) * scale,
+        isMobile: isMobile
     };
 }
 
@@ -88,15 +97,17 @@ function getOrbitalCenter() {
     const mountain = document.getElementById('mountain');
     if (mountain) {
         const rect = mountain.getBoundingClientRect();
+        // Shift center up significantly on mobile so orbits peek over the mountain top more
+        const mobileYShift = responsiveVars.isMobile ? rect.height * 0.4 : 0;
         return {
             x: rect.left + rect.width / 2,
-            y: rect.top + rect.height / 2
+            y: (rect.top + rect.height / 2) - mobileYShift
         };
     }
-    // Fallback to center bottom if mountain not found
+    // Fallback to center bottom if mountain not found (shifted up for mobile)
     return {
         x: canvas.width / 2,
-        y: canvas.height * 0.85
+        y: canvas.height * (responsiveVars.isMobile ? 0.6 : 0.85)
     };
 }
 
@@ -345,7 +356,12 @@ function initializeStars() {
     // We calculate the distance from the orbital center (mountain) to the screen center
     // This ensures the orbit always passes through the middle of the screen
     const screenCenterY = window.innerHeight / 2;
-    const targetRadius = Math.abs(center.y - screenCenterY);
+    let targetRadius = Math.abs(center.y - screenCenterY);
+
+    // On mobile, cap the radius more strictly to ensure all 4 lines are fully visible
+    if (responsiveVars.isMobile) {
+        targetRadius = Math.min(targetRadius, window.innerWidth * 0.30);
+    }
 
     // Create a specific star for the primary track to ensure consistent positioning
     // This replaces the previous random search which caused layout shifts
