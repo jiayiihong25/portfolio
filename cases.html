@@ -106,46 +106,56 @@
         @media (max-width: 900px) {
             .cases-container {
                 flex-direction: column;
-                top: 60px;
-                transform: translateX(-50%);
+                margin-top: 60px;
                 position: relative;
                 padding-bottom: 50px;
-                width: 95%;
+                width: 90%;
+                left: auto;
+                top: auto;
+                transform: none;
+                margin-left: auto;
+                margin-right: auto;
             }
 
             .photos-area {
-                width: 300px;
-                height: 350px;
+                width: 100%;
+                height: auto;
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 15px;
+                margin-bottom: 30px;
             }
 
             .case-photo {
-                width: 200px;
+                position: relative !important;
+                top: auto !important;
+                left: auto !important;
+                transform: none !important;
+                width: 100% !important;
+                height: auto !important;
+                max-width: none !important;
             }
 
             .text-area {
                 max-width: 100%;
                 font-size: 13px;
+                text-align: center;
             }
         }
 
         @media (max-width: 480px) {
             .cases-container {
-                top: 40px;
+                margin-top: 40px;
                 padding-bottom: 40px;
                 font-size: 12px;
             }
 
             .photos-area {
-                width: 250px;
-                height: 300px;
-            }
-
-            .case-photo {
-                width: 170px;
+                gap: 10px;
             }
 
             .text-area {
-                padding: 0 10px;
+                padding: 0;
             }
         }
     </style>

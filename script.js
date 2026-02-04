@@ -788,11 +788,26 @@ function animate(currentTime) {
     requestAnimationFrame(animate);
 }
 
-// Track mouse position
+// Track mouse/touch position for interaction
 window.addEventListener('mousemove', (e) => {
     mouseX = e.clientX;
     mouseY = e.clientY;
 });
+
+// Accurate tracking for mobile touch
+window.addEventListener('touchstart', (e) => {
+    if (e.touches.length > 0) {
+        mouseX = e.touches[0].clientX;
+        mouseY = e.touches[0].clientY;
+    }
+}, { passive: true });
+
+window.addEventListener('touchmove', (e) => {
+    if (e.touches.length > 0) {
+        mouseX = e.touches[0].clientX;
+        mouseY = e.touches[0].clientY;
+    }
+}, { passive: true });
 
 // Shared function to ensure transition overlay exists
 function ensureTransitionOverlay() {
@@ -974,19 +989,32 @@ function triggerTransition(targetUrl) {
     });
 }
 
-// Add click handlers for orbital balls
+// Add click handlers for orbital balls with immediate hit-testing
 canvas.addEventListener('click', (e) => {
     // Only allow clicking if not transitioning and path is drawn
     if (isTransitioning || orbitalPathProgress < 1) return;
 
-    if (orbitalNode.isHovered) {
-        triggerTransition('about.html');
-    } else if (orbitalNode2.isHovered) {
-        triggerTransition('projects.html');
-    } else if (orbitalNode3.isHovered) {
-        triggerTransition('graphic-design.html');
-    } else if (orbitalNode4.isHovered) {
-        triggerTransition('cases.html');
+    const center = getOrbitalCenter();
+    const nodes = [
+        { node: orbitalNode4, radius: (trackedStar1.clusterRadius || trackedStar1.orbitalRadius) + responsiveVars.offset3, url: 'cases.html' },
+        { node: orbitalNode3, radius: (trackedStar1.clusterRadius || trackedStar1.orbitalRadius) + responsiveVars.offset2, url: 'graphic-design.html' },
+        { node: orbitalNode2, radius: (trackedStar1.clusterRadius || trackedStar1.orbitalRadius) + responsiveVars.offset1, url: 'projects.html' },
+        { node: orbitalNode, radius: trackedStar1.clusterRadius || trackedStar1.orbitalRadius, url: 'about.html' }
+    ];
+
+    // Check hit against each ball (outer to inner for better layering selection)
+    for (const item of nodes) {
+        const nodeX = center.x + Math.cos(item.node.angle) * item.radius;
+        const nodeY = center.y + Math.sin(item.node.angle) * item.radius;
+
+        const dx = mouseX - nodeX;
+        const dy = mouseY - nodeY;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+
+        if (dist < Math.max(25, item.node.currentRadius)) {
+            triggerTransition(item.url);
+            return; // Only trigger one transition
+        }
     }
 });
 

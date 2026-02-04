@@ -16,7 +16,7 @@
             margin: 0;
             padding: 0;
             background-color: #0B0E14;
-            overflow-y: hidden;
+            overflow-y: auto;
         }
 
         /* Hidden overflow for marquee page style */
@@ -108,7 +108,13 @@
 
         @media (max-width: 768px) {
             .graphics-container {
-                transform: translate(-50%, -50%);
+                position: relative;
+                top: auto;
+                left: auto;
+                transform: none;
+                margin-top: 60px;
+                padding-bottom: 80px;
+                width: 100%;
             }
 
             .graphics-title {
