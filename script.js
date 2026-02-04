@@ -16,10 +16,10 @@ function getResponsiveValues() {
         offset1: orbitGap,
         offset2: orbitGap * 1.8,
         offset3: orbitGap * 2.6,
-        node1Radius: (isMobile ? 8 : (isLargeScreen ? 14.5 : 12.5)) * scale,
-        node2Radius: (isMobile ? 10 : 16) * scale,
-        node3Radius: (isMobile ? 14 : 23) * scale,
-        node4Radius: (isMobile ? 18 : 28) * scale,
+        node1Radius: (isMobile ? 6 : (isLargeScreen ? 12 : 10)) * scale,
+        node2Radius: (isMobile ? 8 : 14) * scale,
+        node3Radius: (isMobile ? 11 : 20) * scale,
+        node4Radius: (isMobile ? 15 : 24) * scale,
         isMobile: isMobile
     };
 }
@@ -683,7 +683,7 @@ function animate(currentTime) {
             // Draw text on hover
             if (node.isHovered && nodeOpacity > 0.9) {
                 ctx.save();
-                ctx.font = '500 14px "Manrope", sans-serif';
+                ctx.font = `500 ${responsiveVars.isMobile ? '10px' : '12px'} "Manrope", sans-serif`;
                 ctx.textAlign = 'left';
                 ctx.textBaseline = 'middle';
                 const textX = nodeX + node.currentRadius + 12;

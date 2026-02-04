@@ -451,14 +451,16 @@ body {
     #explore-button,
     .back-link-center {
         bottom: 30px;
-        font-size: 12px;
+        font-size: 3.5vw;
         padding: 10px 20px;
     }
 
-    .back-link-fixed {
+    .back-link-fixed,
+    .back-link {
         top: 30px;
         left: 30px;
-        font-size: 12px;
+        font-size: 13px;
+        /* Matched to content text */
     }
 
     #content h1 {
@@ -534,14 +536,16 @@ body {
     #explore-button,
     .back-link-center {
         bottom: 20px;
-        font-size: 11px;
+        font-size: 4vw;
         padding: 8px 16px;
     }
 
-    .back-link-fixed {
+    .back-link-fixed,
+    .back-link {
         top: 20px;
         left: 20px;
-        font-size: 11px;
+        font-size: 12px;
+        /* Matched to content text */
     }
 
     #content h1 {
