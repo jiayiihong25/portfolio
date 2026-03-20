@@ -239,6 +239,16 @@
         </section>
 
         <section class="section">
+            <h2 class="section-title">User Interview Insights</h2>
+            <ul>
+                <li><strong>Planning and scheduling:</strong> Most participants took a day-by-day approach to fitting in exercise, with workouts being the first thing cut during busy weeks. Group workouts were desired but rarely materialised due to no follow-through.</li>
+                <li><strong>Motivation and the mental hurdle:</strong> Skipping was decided well before the workout window, driven by low mood and passive phone use. Knowing a specific friend was already getting ready, or was waiting on them, was the one consistent override.</li>
+                <li><strong>Physical preparation and follow-through:</strong> Once participants began physically preparing, they almost always followed through. The decision to skip forms before any physical action is taken, making that pre-preparation window the critical intervention point.</li>
+            </ul>
+            <p><strong>Summary:</strong> The barrier is motivational, not logistical. What pushed users to act was a named peer already in motion or actively waiting on them.</p>
+        </section>
+
+        <section class="section">
             <h2 class="section-title">The Solution</h2>
             <p>A connected 4-part social accountability loop embedded in the Record tab that meets intermittent users before the workout begins and uses real-time peer visibility and social pressure to bridge the gap between intent and action.</p>
             <ul>
@@ -262,13 +272,51 @@
         </section>
 
         <section class="section">
-            <h2 class="section-title">User Interview Insights</h2>
-            <ul>
-                <li><strong>Planning and scheduling:</strong> Most participants took a day-by-day approach to fitting in exercise, with workouts being the first thing cut during busy weeks. Group workouts were desired but rarely materialised due to no follow-through.</li>
-                <li><strong>Motivation and the mental hurdle:</strong> Skipping was decided well before the workout window, driven by low mood and passive phone use. Knowing a specific friend was already getting ready, or was waiting on them, was the one consistent override.</li>
-                <li><strong>Physical preparation and follow-through:</strong> Once participants began physically preparing, they almost always followed through. The decision to skip forms before any physical action is taken, making that pre-preparation window the critical intervention point.</li>
-            </ul>
-            <p><strong>Summary:</strong> The barrier is motivational, not logistical. What pushed users to act was a named peer already in motion or actively waiting on them.</p>
+            <h2 class="section-title">Implementation & Test Plan</h2>
+            <div style="overflow-x: auto;">
+                <table style="width: 100%; border-collapse: collapse; margin-bottom: 24px; font-size: 14px; text-align: left;">
+                    <thead>
+                        <tr style="border-bottom: 1px solid rgba(255, 255, 255, 0.2); color: white;">
+                            <th style="padding: 12px 0;">Time</th>
+                            <th style="padding: 12px 16px;">Milestone</th>
+                            <th style="padding: 12px 16px;">Description</th>
+                            <th style="padding: 12px 0;">Exit Criteria</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr style="border-bottom: 1px solid rgba(255, 255, 255, 0.05);">
+                            <td style="padding: 12px 0; font-weight: 700;">Month 1</td>
+                            <td style="padding: 12px 16px;">Internal testing</td>
+                            <td style="padding: 12px 16px; color: rgba(203, 209, 220, 0.8);">Build and test the full flow internally. Ensure notification triggers, 5-min escalation, and live group status work.</td>
+                            <td style="padding: 12px 0; color: rgba(203, 209, 220, 0.8);">No crashes or bugs for 5 consecutive days.</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid rgba(255, 255, 255, 0.05);">
+                            <td style="padding: 12px 0; font-weight: 700;">Month 2</td>
+                            <td style="padding: 12px 16px;">Small beta launch</td>
+                            <td style="padding: 12px 16px; color: rgba(203, 209, 220, 0.8);">Testing with select pilot communities (2-3). All "Lacing Up" flows are live.</td>
+                            <td style="padding: 12px 0; color: rgba(203, 209, 220, 0.8);">≥ 25% of active users tap "I’m Getting Ready". Live group loads constantly.</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid rgba(255, 255, 255, 0.05);">
+                            <td style="padding: 12px 0; font-weight: 700;">Month 3</td>
+                            <td style="padding: 12px 16px;">Review & A/B test</td>
+                            <td style="padding: 12px 16px; color: rgba(203, 209, 220, 0.8);">Expand to 10% of users on iOS and Android. Test whether pings make a real difference.</td>
+                            <td style="padding: 12px 0; color: rgba(203, 209, 220, 0.8);">Positive feedback, 5% reaction increase, no spikes in app uninstalls or muted notifications.</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid rgba(255, 255, 255, 0.05);">
+                            <td style="padding: 12px 0; font-weight: 700;">Month 5</td>
+                            <td style="padding: 12px 16px;">Wider rollout</td>
+                            <td style="padding: 12px 16px; color: rgba(203, 209, 220, 0.8);">Roll out to 50% of users. Analyze full journey completion from notification to pressing Start.</td>
+                            <td style="padding: 12px 0; color: rgba(203, 209, 220, 0.8);">Intermittent users work out 10% more frequently on average.</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid rgba(255, 255, 255, 0.05);">
+                            <td style="padding: 12px 0; font-weight: 700;">Month 6</td>
+                            <td style="padding: 12px 16px;">Official Launch</td>
+                            <td style="padding: 12px 16px; color: rgba(203, 209, 220, 0.8);">Release to all users everywhere. Move into ongoing monitoring.</td>
+                            <td style="padding: 12px 0; color: rgba(203, 209, 220, 0.8);">All previous targets met, sustained rate of workouts.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </section>
     </div>
 
