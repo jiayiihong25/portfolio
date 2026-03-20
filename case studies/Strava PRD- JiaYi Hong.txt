@@ -1,0 +1,175 @@
+﻿Strava needs a pre-activity social tool for intermittent users to overcome the mental activation barrier and avoid skipping planned workouts.
+* Users can toggle a "Lacing Up" status on the Record tab to signal their active preparation and provide peer visibility to their club or friends .
+* Users can send a "Waiting on You" ping to friends who are lagging, creating the immediate social accountability needed to move from intent to action .
+* Users can view a live module of friends currently preparing, encouraging them to push through the "difficult 15 minutes" of preparation rather than choosing a digital distraction.
+
+
+Contributors: Jia Yi Hong
+Last Updated: 17/03/2026
+Opportunity
+The energy required to transition from a resting state to a workout-ready state represents a significant friction point for Strava’s largest user segment: the intermittent user. Unlike running fanatics who are intrinsically motivated by established rigid habit loops, these intermittent users possess the intent to exercise (evidenced by downloading Strava), but frequently fail at the point of execution due to immediate distractions or a lack of mood. Currently, Strava caters primarily to the post-activity flex, leaving the intermittent user alone during the most difficult part of the journey: the critical 15-minute preparation window where they are most likely to skip in their mind and abandon their intent entirely.
+Why is this a problem? 
+1. Barrier to Retention - When the app only supports the finish line, users start to associate Strava with the pressure of being a perfect athlete . For intermittent users who struggle with motivation, the app can become a negative reminder of failed plans, causing them to eventually disengage or delete the app to avoid the guilt of being inactive.
+2. Mission Alignment Gap - Strava aims to connect athletes to what motivates them, but it currently offers no support during the hardest 15 minutes of the workout. Losing users to distractions right before a workout begins goes against the app's core purpose of helping people be active .
+3. Losing the Battle for Attention - In the 15 minutes before a workout, Strava is in a direct competition with social media and other sedentary digital distractions . By remaining silent during this window, Strava allows users to choose low-effort entertainment over their physical health, stopping the user journey before it ever reaches the "Record" button.
+High Level Approach
+While Strava’s primary use case is the recording and analysis of athletic data, this behavior must not be disrupted by new social features. This means that pre-activity context (visibility of readiness) plays an equally important role as the coordination itself. Recognizing that intermittent users already face high motivation fatigue, any new features should follow passive design patterns to reduce the mental learning curve and provide accountability without adding administrative burden.
+Audience & Goals
+Primary Audience
+Intermittent Strava users aged 18–34 who have genuine intent to exercise but frequently fail at execution. These users have already downloaded Strava, signaling motivation, but their workout consistency is disrupted by low-activation moments, digital distractions, and an absence of social accountability at the critical pre-activity window.
+Goals
+1.    Maximize the feeling of social accountability and peer visibility in the 15-minute preparation window before a workout begins.
+
+
+2.    Minimize the temptation to choose a sedentary digital distraction (social media, couch) over starting the activity. 
+
+
+3.    Minimize the back-and-forth communication required to coordinate workout timing with friends, removing the friction of group scheduling. 
+Non-Goals
+1.  Not a scheduling or calendar tool. This feature does not attempt to solve the long-term planning problem of fitting exercise into a busy week.
+
+
+2.  Not a gear or logistics assistant. Reducing friction around packing gear, checking weather, or equipment falls outside the scope of this feature.
+
+
+3.  Not a replacement for the Record tab. The "Lacing Up" state is a pre-activity signal layer; it does not modify or compete with Strava’s core activity recording experience.
+
+
+4.  Not for elite or highly consistent athletes. This feature targets activation energy problems. Users with rigid habit loops are not the primary beneficiary.
+
+
+Solution
+
+
+A connected 4-part social accountability loop embedded in the Record tab that meets intermittent users before the workout begins and uses real-time peer visibility and social pressure to bridge the gap between intent and action.
+
+
+1. Lacing Up Notification - When a friend toggles "Lacing Up," their connections receive a high-priority push notification inviting them off whatever they're currently doing and into Strava.
+
+
+Goal: Provide the external trigger that overcomes not being in the mood by sourcing motivation from the social graph rather than the user's own willpower.
+
+
+2. Waiting on You Ping - If the recipient does not confirm within 5 minutes of the initial notification, a second named push notification is automatically sent as part of the accountability loop.
+
+
+Goal: Apply a second, more personal layer of social pressure for users who ignored or missed the first notification, using the named "people are waiting" factor
+
+
+3. Lacing Up Toggle - Tapping either notification opens a full-screen prompt inside the app. The screen displays a large "I'm Getting Ready!" button in Strava orange and a "Not this time" dismiss option. A Group Status bar at the bottom of the screen shows friends' current states: Ready or Lacing Up so the user can see exactly who is already preparing before they commit.
+
+
+Goal: Convert vague intent into a declared public commitment before the user can be distracted again, activating the psychological cost of backing out through social visibility.
+
+
+4. Live Ready Room Module -  A persistent real-time module on the Record tab showing friends' current states with elapsed time. Updates live as friends move through the journey. 
+
+
+Goal: Provide the final push from preparation to pressing START by making peer activity visible and ambient
+
+
+Key Flows
+Link to FigJam File
+
+
+Test and Launch Plan
+Target Time
+	Milestone
+	Description
+	Exit Criteria
+	Month 1
+	Internal testing
+	Build and test the full flow internally, make sure notification trigger, 5-min escalation and live group status features work
+	No crashes or bugs for 5 days consecutively
+	Month 2
+	Small beta launch
+	Testing with select few (2-3) pilot communities, all Lacing Up flows are live
+	At Least 1 in 4 users who open the app tap the “I’m Getting Ready” prompt, Live group loads constantly
+	Month 3
+	Review & refine, A/B test
+	Expand to 10% of users on iOS and Android and test whether pings actually make a real difference
+	Positive feedback, 5% increase in reactions, increase in percentage of engaged members, No spike in users uninstalling the app or turning off notifications
+	Month 5
+	Wider rollout
+	Roll out to half of all users. Watch the full journey: does the notification lead to opening the prompt, committing, and pressing Start?
+	Intermittent users are working out 10% more frequently on average
+	Month 6
+	Launch
+	Release to all users with full Android support. Feature is considered stable and moves into ongoing monitoring.
+	All previous targets are still being met, increased rate of workouts
+	
+
+
+
+
+
+Appendix: 
+A. Value Map
+
+
+#
+	Need
+	Importance
+	Satisfaction
+	Conclusion
+	1
+	Maximize the feeling of readiness and intent to exercise during the preparation phase.
+	High
+	Low
+	Opportunity
+	2
+	Minimize the temptation or likelihood of choosing a sedentary digital distraction over starting the activity.
+	High
+	Low
+	Opportunity
+	3
+	Minimize the perceived mental effort it takes to transition from resting state to workout-ready state.
+	High
+	High
+	Competitive
+	4
+	Minimize the back-and-forth communication required to lock in a workout time with friends.
+	Medium
+	High
+	Competitive
+	5
+	Maximize the feeling of social accountability to a partner or club leading up to the activity.
+	High
+	Low
+	Opportunity
+	6
+	Maximize the visibility of peers who are also currently preparing for or starting an activity.
+	High
+	Medium
+	Some Opportunity
+	7
+	Minimize the cognitive load and time required to figure out a workout window within a busy daily schedule.
+	Low
+	Low
+	Not Worth Going After
+	8
+	Minimize the uncertainty around external factors (weather, route safety) right before heading out.
+	Low
+	Low
+	Not Worth Going After
+	9
+	Minimize the friction of gathering the necessary gear, equipment, and fuel for the specific session.
+	Low
+	Low
+	Not Worth Going After
+	
+
+B. JTBD map
+  
+
+
+
+C. User Interview Findings
+Planning and scheduling
+Most participants took a day-by-day approach to fitting in exercise, with workouts being the first thing cut during busy weeks. Most acknowledged in retrospect that time had been available. Group workouts were widely desired but rarely materialised, with the most common failure mode being mutual agreement followed by no follow-through.
+Motivation and the mental hurdle
+Skipping was typically decided well before the workout window, driven by low mood, competing priorities, or the pull of passive phone use. The one consistent override across all participants was social presence: knowing a specific friend was already getting ready, or was waiting on them, was enough to push through. This effect was stronger when the signal was named and personal rather than abstract. No participant cited app notifications or streak mechanics as meaningful motivation.
+Physical preparation and follow-through
+Once participants began physically preparing, they almost always followed through. Bad weather and friends dropping out functioned as reasons not to start, not reasons to stop mid-preparation. The decision to skip forms before any physical action is taken, making that pre-preparation window the critical intervention point.
+Summary
+The barrier is motivational, not logistical. Participants had time, equipment, and access. What pushed them to act was a named peer already in motion or actively waiting on them. Solutions that reduce logistical friction without addressing this motivational gap are unlikely to change behaviour for intermittent users.
