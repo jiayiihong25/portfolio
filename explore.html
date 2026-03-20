@@ -18,6 +18,105 @@
             width: 100%;
             height: 100%;
         }
+        #background-gradient { z-index: 0 !important; }
+        #star-canvas { z-index: 1 !important; pointer-events: none !important; }
+        #carousel-container { z-index: 2; }
+        #mountain { z-index: 3 !important; }
+
+        #carousel-container {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            overflow-y: auto;
+            overflow-x: hidden;
+            -ms-overflow-style: none; /* IE and Edge */
+            scrollbar-width: none; /* Firefox */
+        }
+        #carousel-container::-webkit-scrollbar {
+            display: none;
+        }
+        .carousel-content {
+            display: flex;
+            flex-direction: column;
+            padding-top: 50vh; /* Space to scroll from */
+            padding-bottom: 50vh; /* Space to scroll behind mountain */
+        }
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 40px;
+            max-width: 900px;
+            width: 90%;
+            margin: 0 auto;
+            row-gap: 40px; 
+            margin-bottom: 40px;
+        }
+        @media (max-width: 768px) {
+            .projects-grid {
+                gap: 20px;
+                row-gap: 20px;
+                margin-bottom: 20px;
+            }
+            .project-card img {
+                height: 150px !important;
+            }
+        }
+
+        .project-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform 0.3s ease, background 0.3s ease, border 0.3s ease, box-shadow 0.3s ease;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+            text-decoration: none;
+            display: block;
+            color: white;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+        .project-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+        }
+
+        .project-card img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            pointer-events: none;
+        }
+
+        .project-info {
+            padding: 15px;
+            font-family: "Manrope", sans-serif;
+            font-size: 14px;
+            text-align: left;
+        }
+        .project-info h3 {
+            margin: 0 0 5px 0;
+            font-size: 16px;
+            font-weight: 600;
+            color: white;
+        }
+        .project-info p {
+            margin: 0;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 13px;
+            line-height: 1.4;
+        }
+        
+        .carousel-fade-overlay {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 25vh;
+            background: linear-gradient(to bottom, #0a0a0f 0%, rgba(10, 10, 15, 0) 100%);
+            z-index: 2;
+            pointer-events: none;
+        }
     </style>
 </head>
 
@@ -30,14 +129,59 @@
             srcset="images/Mountain2.png">
         <img src="images/mountain.png" id="mountain" alt="Mountain">
     </picture>
-    <!-- Orbital Lines SVG -->
-    <svg id="orbital-lines"
-        style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1;">
-        <path class="orbital-line" d="" stroke="white" stroke-width="0.5" fill="none" />
-        <path class="orbital-line" d="" stroke="white" stroke-width="0.5" fill="none" />
-        <path class="orbital-line" d="" stroke="white" stroke-width="0.5" fill="none" />
-        <path class="orbital-line" d="" stroke="white" stroke-width="0.5" fill="none" />
-    </svg>
+    
+    <!-- Top fade so projects disappear smoothly at the horizon top -->
+    <div class="carousel-fade-overlay"></div>
+
+    <!-- Carousel Container -->
+    <div id="carousel-container">
+        <div class="carousel-content" id="scroll-content">
+            <div class="projects-grid" id="main-grid">
+                <a href="#" onclick="event.preventDefault(); triggerTransition('banxx-case-study.html')" class="project-card">
+                    <img src="images/Case Covers/BANXX.jpg" alt="BANXX">
+                    <div class="project-info">
+                        <h3>BANXX</h3>
+                        <p>Leveraging open banking to solve U.S. medical debt</p>
+                    </div>
+                </a>
+                <a href="#" onclick="event.preventDefault(); triggerTransition('1220-case-study.html')" class="project-card">
+                    <img src="images/Case Covers/FINALS 1220 (2).jpg" alt="1220">
+                    <div class="project-info">
+                        <h3>1220</h3>
+                        <p>Scaling a London local Dutch bakery through franchising</p>
+                    </div>
+                </a>
+                <a href="#" onclick="event.preventDefault(); triggerTransition('starbucks-case-study.html')" class="project-card">
+                    <img src="images/Case Covers/TCS.jpg" alt="Starbucks">
+                    <div class="project-info">
+                        <h3>Starbucks x TCS</h3>
+                        <p>Gamifying the Starbucks experience through moments</p>
+                    </div>
+                </a>
+                <a href="#" onclick="event.preventDefault(); triggerTransition('bucket-case-study.html')" class="project-card">
+                    <img src="images/Case Covers/Hero Visual.png" alt="Hero Visual">
+                    <div class="project-info">
+                        <h3>Bucket</h3>
+                        <p>Lowering the barrier to entry for genuine human interaction</p>
+                    </div>
+                </a>
+                <a href="#" onclick="event.preventDefault(); triggerTransition('wundr-case-study.html')" class="project-card">
+                    <img src="images/Case Covers/wundr.png" alt="Wundr">
+                    <div class="project-info">
+                        <h3>Wundr</h3>
+                        <p>AI game design studio for cocreation of games</p>
+                    </div>
+                </a>
+                <a href="#" onclick="event.preventDefault(); triggerTransition('graphic-design.html')" class="project-card">
+                    <img src="images/Graphics Portfolio/CSA VLOGS 5 (1).jpg" alt="Graphic Design">
+                    <div class="project-info">
+                        <h3>Graphic Design</h3>
+                        <p>A collection of my poster and visual design work</p>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
 
     <!-- Navigation -->
     <nav id="hamburger-menu">
@@ -55,12 +199,41 @@
         </div>
     </nav>
 
-    <a href="index.html" class="back-link-center" style="text-decoration: none;">← back</a>
+    <a href="index.html" class="back-link-center" style="text-decoration: none; z-index: 9999;">← back</a>
 
     <script src="script.js"></script>
     <script>
-        // Inline script to enforce explore state immediately if script.js doesn't pick it up fast enough
-        // But better to let script.js handle logic based on filename
+        // Infinite Scroll logic for the grid
+        const container = document.getElementById('carousel-container');
+        const content = document.getElementById('scroll-content');
+        const grid = document.getElementById('main-grid');
+
+        // Create clones
+        const clone1 = grid.cloneNode(true);
+        const clone2 = grid.cloneNode(true);
+        clone1.id = ''; clone2.id = '';
+        
+        content.insertBefore(clone1, grid);
+        content.appendChild(clone2);
+        
+        // Setup initial loop position
+        requestAnimationFrame(() => {
+            const gridStyle = window.getComputedStyle(grid);
+            const gridHeight = grid.getBoundingClientRect().height + parseFloat(gridStyle.marginBottom);
+            container.scrollTop = gridHeight;
+            
+            container.addEventListener('scroll', () => {
+                const currentScroll = container.scrollTop;
+                
+                // Keep scroll within the middle grid safely
+                if (currentScroll >= gridHeight * 2) {
+                    container.scrollTop = currentScroll - gridHeight;
+                } 
+                else if (currentScroll <= 0) {
+                    container.scrollTop = currentScroll + gridHeight;
+                }
+            });
+        });
     </script>
 </body>
 

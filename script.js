@@ -902,27 +902,10 @@ if (exploreButton) {
         // 2. Hide explore button
         exploreButton.style.display = 'none';
 
-        // 3. Show back button
-        if (backButton) {
-            backButton.style.display = 'block';
-        }
-
-        // 4. Start drawing orbital lines
-        showOrbitalPath = true; // start the drawing animation
-        const drawDuration = 2000; // 2 seconds to draw
-        const startTime = performance.now();
-
-        function animatePath(time) {
-            if (!showOrbitalPath) return; // Stop if interrupted
-
-            const elapsed = time - startTime;
-            orbitalPathProgress = Math.min(1, elapsed / drawDuration);
-
-            if (orbitalPathProgress < 1) {
-                requestAnimationFrame(animatePath);
-            }
-        }
-        requestAnimationFrame(animatePath);
+        // 3. Trigger transition to the new explore page layout
+        setTimeout(() => {
+            triggerTransition('explore.html');
+        }, 400);
     });
 }
 
@@ -1020,12 +1003,8 @@ canvas.addEventListener('click', (e) => {
 
 // Check if we are on explore.html and auto-trigger animation state
 if (window.location.pathname.endsWith('explore.html')) {
-    showOrbitalPath = true;
-    orbitalPathProgress = 1; // Immediate show
-    if (textContainer) textContainer.style.opacity = '0';
-    if (exploreButton) exploreButton.style.display = 'none'; // Should already be handled by HTML but good safety
-    // No backButton logic needed here as explore.html has its own hardcoded button, 
-    // but we need to ensure the animation loop knows to draw lines.
+    // We no longer draw orbital paths here, as explore.html now has a scrolling project grid
+    orbitalPathProgress = 0; 
 }
 
 // Start animation loop
