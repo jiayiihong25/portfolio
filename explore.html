@@ -38,8 +38,8 @@
         .carousel-content {
             display: flex;
             flex-direction: column;
-            padding-top: 50vh; /* Space to scroll from */
-            padding-bottom: 50vh; /* Space to scroll behind mountain */
+            padding-top: 15vh; /* Standard space on load */
+            padding-bottom: 30vh; /* Space to scroll behind mountain */
         }
         .projects-grid {
             display: grid;
@@ -140,34 +140,6 @@
     <div id="carousel-container">
         <div class="carousel-content" id="scroll-content">
             <div class="projects-grid" id="main-grid">
-                <a href="#" onclick="event.preventDefault(); triggerTransition('banxx-case-study.html')" class="project-card">
-                    <img src="images/Case Covers/BANXX.jpg" alt="BANXX">
-                    <div class="project-info">
-                        <h3>BANXX</h3>
-                        <p>Leveraging open banking to solve U.S. medical debt</p>
-                    </div>
-                </a>
-                <a href="#" onclick="event.preventDefault(); triggerTransition('1220-case-study.html')" class="project-card">
-                    <img src="images/Case Covers/FINALS 1220 (2).jpg" alt="1220">
-                    <div class="project-info">
-                        <h3>1220</h3>
-                        <p>Scaling a London local Dutch bakery through franchising</p>
-                    </div>
-                </a>
-                <a href="#" onclick="event.preventDefault(); triggerTransition('starbucks-case-study.html')" class="project-card">
-                    <img src="images/Case Covers/TCS.jpg" alt="Starbucks">
-                    <div class="project-info">
-                        <h3>Starbucks x TCS</h3>
-                        <p>Gamifying the Starbucks experience through moments</p>
-                    </div>
-                </a>
-                <a href="#" onclick="event.preventDefault(); triggerTransition('bucket-case-study.html')" class="project-card">
-                    <img src="images/Case Covers/Hero Visual.png" alt="Hero Visual">
-                    <div class="project-info">
-                        <h3>Bucket</h3>
-                        <p>Lowering the barrier to entry for genuine human interaction</p>
-                    </div>
-                </a>
                 <a href="#" onclick="event.preventDefault(); triggerTransition('strava-case-study.html')" class="project-card">
                     <img src="images/strava.jpg" alt="Strava">
                     <div class="project-info">
@@ -180,6 +152,34 @@
                     <div class="project-info">
                         <h3>Wundr</h3>
                         <p>AI game design studio for cocreation of games</p>
+                    </div>
+                </a>
+                <a href="#" onclick="event.preventDefault(); triggerTransition('bucket-case-study.html')" class="project-card">
+                    <img src="images/Case Covers/Hero Visual.png" alt="Hero Visual">
+                    <div class="project-info">
+                        <h3>Bucket</h3>
+                        <p>Lowering the barrier to entry for genuine human interaction</p>
+                    </div>
+                </a>
+                <a href="#" onclick="event.preventDefault(); triggerTransition('starbucks-case-study.html')" class="project-card">
+                    <img src="images/Case Covers/TCS.jpg" alt="Starbucks">
+                    <div class="project-info">
+                        <h3>Starbucks x TCS</h3>
+                        <p>Gamifying the Starbucks experience through moments</p>
+                    </div>
+                </a>
+                <a href="#" onclick="event.preventDefault(); triggerTransition('1220-case-study.html')" class="project-card">
+                    <img src="images/Case Covers/FINALS 1220 (2).jpg" alt="1220">
+                    <div class="project-info">
+                        <h3>1220</h3>
+                        <p>Scaling a London local Dutch bakery through franchising</p>
+                    </div>
+                </a>
+                <a href="#" onclick="event.preventDefault(); triggerTransition('banxx-case-study.html')" class="project-card">
+                    <img src="images/Case Covers/BANXX.jpg" alt="BANXX">
+                    <div class="project-info">
+                        <h3>BANXX</h3>
+                        <p>Leveraging open banking to solve U.S. medical debt</p>
                     </div>
                 </a>
                 <a href="#" onclick="event.preventDefault(); triggerTransition('graphic-design.html')" class="project-card">
@@ -212,39 +212,6 @@
     <a href="index.html" class="back-link-center" style="text-decoration: none; z-index: 9999;">← back</a>
 
     <script src="script.js"></script>
-    <script>
-        // Infinite Scroll logic for the grid
-        const container = document.getElementById('carousel-container');
-        const content = document.getElementById('scroll-content');
-        const grid = document.getElementById('main-grid');
-
-        // Create clones
-        const clone1 = grid.cloneNode(true);
-        const clone2 = grid.cloneNode(true);
-        clone1.id = ''; clone2.id = '';
-        
-        content.insertBefore(clone1, grid);
-        content.appendChild(clone2);
-        
-        // Setup initial loop position
-        requestAnimationFrame(() => {
-            const gridStyle = window.getComputedStyle(grid);
-            const gridHeight = grid.getBoundingClientRect().height + parseFloat(gridStyle.marginBottom);
-            container.scrollTop = gridHeight;
-            
-            container.addEventListener('scroll', () => {
-                const currentScroll = container.scrollTop;
-                
-                // Keep scroll within the middle grid safely
-                if (currentScroll >= gridHeight * 2) {
-                    container.scrollTop = currentScroll - gridHeight;
-                } 
-                else if (currentScroll <= 0) {
-                    container.scrollTop = currentScroll + gridHeight;
-                }
-            });
-        });
-    </script>
 </body>
 
 </html>
