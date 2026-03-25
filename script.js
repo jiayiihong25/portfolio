@@ -889,7 +889,56 @@ if (hamburgerButton && dropdownMenu) {
     });
 }
 
-// Explore button logic removed to prevent gray screen transition delay.
+// Smooth transition logic for index <-> explore
+function fadeAndNavigate(targetUrl) {
+    if (isTransitioning) return;
+    isTransitioning = true;
+    
+    // Create a black overlay that fades in
+    let fadeOverlay = document.getElementById('page-fade-overlay');
+    if (!fadeOverlay) {
+        fadeOverlay = document.createElement('div');
+        fadeOverlay.id = 'page-fade-overlay';
+        fadeOverlay.style.position = 'fixed';
+        fadeOverlay.style.top = '0';
+        fadeOverlay.style.left = '0';
+        fadeOverlay.style.width = '100vw';
+        fadeOverlay.style.height = '100vh';
+        fadeOverlay.style.backgroundColor = '#0a0a0f';
+        fadeOverlay.style.zIndex = '999999';
+        fadeOverlay.style.opacity = '0';
+        fadeOverlay.style.pointerEvents = 'auto'; // Block other clicks
+        fadeOverlay.style.transition = 'opacity 0.3s ease-in-out';
+        document.body.appendChild(fadeOverlay);
+    }
+    
+    // Trigger fade in
+    requestAnimationFrame(() => {
+        fadeOverlay.style.opacity = '1';
+        setTimeout(() => {
+            window.location.href = targetUrl;
+        }, 300);
+    });
+}
+
+
+
+if (exploreButton) {
+    exploreButton.addEventListener('click', (e) => {
+        if (exploreButton.getAttribute('href') === 'explore.html') {
+            e.preventDefault();
+            fadeAndNavigate('explore.html');
+        }
+    });
+}
+
+const exploreBackBtn = document.querySelector('a[href="index.html"].back-link-center');
+if (exploreBackBtn) {
+    exploreBackBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        fadeAndNavigate('index.html');
+    });
+}
 
 // Back button logic
 // Back button logic
@@ -1003,12 +1052,22 @@ function goBack() {
 
 // Fix BFCache issue where transition overlay stays active when navigating back
 window.addEventListener('pageshow', (event) => {
-    if (event.persisted) {
-        isTransitioning = false;
-        const overlay = document.getElementById('transition-overlay');
-        if (overlay) {
-            overlay.style.opacity = '0';
-            overlay.style.pointerEvents = 'none';
+    // Always reset transition state on page show to ensure responsiveness
+    isTransitioning = false;
+    const overlay = document.getElementById('transition-overlay');
+    if (overlay) {
+        overlay.style.opacity = '0';
+        overlay.style.pointerEvents = 'none';
+        const contentDiv = document.getElementById('transition-content');
+        if (contentDiv) {
+            contentDiv.style.pointerEvents = 'none';
         }
+    }
+    
+    // Also reset fade overlay if it exists
+    const fadeOverlay = document.getElementById('page-fade-overlay');
+    if (fadeOverlay) {
+        fadeOverlay.style.opacity = '0';
+        fadeOverlay.style.pointerEvents = 'none';
     }
 });

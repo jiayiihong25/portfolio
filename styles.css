@@ -11,6 +11,24 @@ body {
     height: 100vh;
 }
 
+body::after {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: #0a0a0f;
+    z-index: 999999;
+    pointer-events: none;
+    animation: fadeOutLoad 0.4s ease-in-out forwards;
+}
+
+@keyframes fadeOutLoad {
+    0% { opacity: 1; pointer-events: auto; }
+    100% { opacity: 0; pointer-events: none; visibility: hidden; }
+}
+
 /* Disable scrolling on mobile */
 @media (max-width: 768px) {
     body {
