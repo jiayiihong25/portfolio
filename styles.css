@@ -259,21 +259,26 @@ body {
     bottom: 40px;
     left: 50%;
     transform: translateX(-50%);
-    background: none;
-    border: none;
-    color: rgba(203, 209, 220, 0.5);
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 30px;
+    backdrop-filter: blur(8px);
+    color: rgba(203, 209, 220, 0.8);
     font-family: "Manrope", sans-serif;
     font-size: 14px;
     font-weight: 700;
     letter-spacing: 1px;
     cursor: pointer;
     padding: 12px 24px;
-    z-index: 9999;
-    transition: color 0.3s ease, transform 0.3s ease;
+    z-index: 10000;
+    transition: all 0.3s ease;
 }
 
 #explore-button:hover {
     color: #ffffff;
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.4);
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.3), 0 0 30px rgba(255, 255, 255, 0.1);
     transform: translateX(-50%) scale(1.05);
 }
 
@@ -311,27 +316,41 @@ body {
 .back-link {
     display: inline-block;
     margin-top: 20px;
-    color: rgba(203, 209, 220, 0.6);
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 30px;
+    backdrop-filter: blur(8px);
+    padding: 10px 20px;
+    color: rgba(203, 209, 220, 0.8);
     text-decoration: none;
     font-family: "Manrope", sans-serif;
     font-size: 14px;
     font-weight: 700;
     transition: all 0.3s ease;
     cursor: pointer;
+    z-index: 10000;
 }
 
 .back-link:hover {
     color: white;
-    transform: scale(1.1);
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.4);
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.3), 0 0 30px rgba(255, 255, 255, 0.1);
+    transform: scale(1.05);
     text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
 }
 
 .back-link-fixed {
     position: fixed;
-    top: 40px;
-    left: 40px;
-    z-index: 100;
-    color: rgba(203, 209, 220, 0.6);
+    top: 30px;
+    left: 30px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 30px;
+    backdrop-filter: blur(8px);
+    padding: 10px 20px;
+    z-index: 10000;
+    color: rgba(203, 209, 220, 0.8);
     text-decoration: none;
     font-family: "Manrope", sans-serif;
     font-size: 14px;
@@ -342,7 +361,10 @@ body {
 
 .back-link-fixed:hover {
     color: white;
-    transform: scale(1.1);
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.4);
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.3), 0 0 30px rgba(255, 255, 255, 0.1);
+    transform: scale(1.05);
     text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
 }
 
@@ -351,21 +373,27 @@ body {
     bottom: 40px;
     left: 50%;
     transform: translateX(-50%);
-    z-index: 9999;
-    background: none;
-    border: none;
-    color: rgba(203, 209, 220, 0.5);
+    z-index: 10000;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 30px;
+    backdrop-filter: blur(8px);
+    color: rgba(203, 209, 220, 0.8);
     font-family: "Manrope", sans-serif;
     font-size: 14px;
     font-weight: 700;
     letter-spacing: 1px;
     cursor: pointer;
     padding: 12px 24px;
-    transition: color 0.3s ease, transform 0.3s ease;
+    transition: all 0.3s ease;
+    text-decoration: none;
 }
 
 .back-link-center:hover {
     color: #ffffff;
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.4);
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.3), 0 0 30px rgba(255, 255, 255, 0.1);
     transform: translateX(-50%) scale(1.05);
 }
 
