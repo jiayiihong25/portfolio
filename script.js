@@ -889,25 +889,7 @@ if (hamburgerButton && dropdownMenu) {
     });
 }
 
-// Explore button logic
-if (exploreButton) {
-    exploreButton.addEventListener('click', (e) => {
-        e.preventDefault();
-
-        // 1. Fade out the text
-        if (textContainer) {
-            textContainer.style.opacity = '0';
-        }
-
-        // 2. Hide explore button
-        exploreButton.style.display = 'none';
-
-        // 3. Trigger transition to the new explore page layout
-        setTimeout(() => {
-            triggerTransition('explore.html');
-        }, 400);
-    });
-}
+// Explore button logic removed to prevent gray screen transition delay.
 
 // Back button logic
 // Back button logic
