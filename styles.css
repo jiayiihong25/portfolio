@@ -120,6 +120,42 @@ body {
     font-weight: 600;
     font-style: italic;
     text-shadow: 3px 3px 5px #465975;
+    text-decoration: none;
+    color: inherit;
+    display: inline-block;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    pointer-events: auto;
+    position: relative;
+}
+
+.jiayi-text::after {
+    content: "[about me]";
+    position: absolute;
+    top: 50%;
+    left: 100%;
+    transform: translateY(-50%) translateX(-10px);
+    font-family: "Manrope", sans-serif;
+    font-size: 0.22em;
+    font-style: normal;
+    font-weight: 700;
+    color: rgba(203, 209, 220, 0.9);
+    opacity: 0;
+    white-space: nowrap;
+    text-shadow: none; /* remove glow from tag */
+    pointer-events: none;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.jiayi-text:hover {
+    color: white;
+    transform: scale(1.05);
+    text-shadow: 0 0 15px rgba(255, 255, 255, 0.8), 0 0 30px rgba(255, 255, 255, 0.4);
+}
+
+.jiayi-text:hover::after {
+    opacity: 1;
+    transform: translateY(-50%) translateX(15px);
 }
 
 .line-3 {
