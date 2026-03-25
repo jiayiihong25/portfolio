@@ -1009,3 +1009,24 @@ if (window.location.pathname.endsWith('explore.html')) {
 
 // Start animation loop
 requestAnimationFrame(animate);
+
+// Safe cross-browser goBack function for case studies
+function goBack() {
+    if (window.history.length > 1 && document.referrer.includes(window.location.host)) {
+        window.history.back();
+    } else {
+        window.location.href = 'explore.html';
+    }
+}
+
+// Fix BFCache issue where transition overlay stays active when navigating back
+window.addEventListener('pageshow', (event) => {
+    if (event.persisted) {
+        isTransitioning = false;
+        const overlay = document.getElementById('transition-overlay');
+        if (overlay) {
+            overlay.style.opacity = '0';
+            overlay.style.pointerEvents = 'none';
+        }
+    }
+});
