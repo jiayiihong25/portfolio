@@ -1072,14 +1072,29 @@ window.addEventListener('pageshow', (event) => {
     }
 });
 
-// Master Case Study TOC ScrollSpy System
+// Master Case Study TOC ScrollSpy System & Reading Progress Bar
 function initCaseStudyScrollSpy() {
     const sections = document.querySelectorAll('.case-section');
     const navLinks = document.querySelectorAll('.toc-link');
 
-    if (!sections.length || !navLinks.length) return;
+    if (!sections.length && !navLinks.length) return;
+
+    // Auto inject Reading Progress Bar if not already in DOM
+    let progressBar = document.querySelector('.reading-progress-bar');
+    if (!progressBar) {
+        progressBar = document.createElement('div');
+        progressBar.className = 'reading-progress-bar';
+        document.body.appendChild(progressBar);
+    }
 
     function updateActive() {
+        // Calculate Reading Progress Percentage
+        const totalDocHeight = document.documentElement.scrollHeight - window.innerHeight;
+        if (totalDocHeight > 0 && progressBar) {
+            const scrollPercent = Math.min(100, Math.max(0, (window.scrollY / totalDocHeight) * 100));
+            progressBar.style.width = scrollPercent + '%';
+        }
+
         let activeSectionId = '';
         const scrollTrigger = window.scrollY + 220;
 
@@ -1124,4 +1139,5 @@ if (document.readyState === 'loading') {
 } else {
     initCaseStudyScrollSpy();
 }
+
 
