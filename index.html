@@ -4,58 +4,206 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jia Yi Hong</title>
+    <title>Jia Yi Hong — Product Design & Strategy</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
-        href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,600&family=Manrope:wght@500&display=swap"
+        href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,600&family=Manrope:wght@500;600;700&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
-    <style>
-        body {
-            overflow: hidden !important;
-            position: fixed !important;
-            width: 100%;
-            height: 100%;
-        }
-    </style>
 </head>
 
-<body>
-    <canvas id="star-canvas"></canvas>
-    <img src="images/background_gradient.svg" id="background-gradient" alt="Background Gradient">
-    <picture>
-        <source media="(max-width: 768px)" srcset="images/Mountain1.png">
-        <source media="(min-width: 769px) and (max-width: 1366px) and (orientation: landscape)"
-            srcset="images/Mountain2.png">
-        <img src="images/mountain.png" id="mountain" alt="Mountain">
-    </picture>
-    <svg id="orbital-lines"
-        style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1;">
-        <path class="orbital-line" d="" stroke="white" stroke-width="0.5" fill="none" />
-        <path class="orbital-line" d="" stroke="white" stroke-width="0.5" fill="none" />
-        <path class="orbital-line" d="" stroke="white" stroke-width="0.5" fill="none" />
-        <path class="orbital-line" d="" stroke="white" stroke-width="0.5" fill="none" />
-    </svg>
-    <div id="text">
-        <p class="line-1">hi,</p>
-        <p class="line-2"><span class="im-text">i'm</span> <a href="about.html" class="jiayi-text">jiayi.</a></p>
-        <p class="line-3">
-            <span class="line-3-glow">a problem solver designing clear solutions <br class="mobile-only"> to ambiguous
-                problems</span>
-            <span class="line-3-text">a problem solver designing clear solutions <br class="mobile-only"> to ambiguous
-                problems</span>
-        </p>
+<body class="hero-locked">
+    <header class="global-nav">
+        <a href="index.html" class="nav-brand">jiayi.</a>
+        <nav>
+            <ul class="nav-links">
+                <li><a href="#work" class="nav-link">work</a></li>
+                <li><a href="about.html" class="nav-link">about</a></li>
+                <li><a href="resume.pdf" target="_blank" class="nav-link nav-link-resume">resume ↗</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div id="hero-bg-layer">
+        <canvas id="star-canvas"></canvas>
+        <img src="images/background_gradient.svg" id="background-gradient" alt="Background Gradient">
+        <picture>
+            <source media="(max-width: 768px)" srcset="images/Mountain1.png">
+            <source media="(min-width: 769px) and (max-width: 1366px) and (orientation: landscape)"
+                srcset="images/Mountain2.png">
+            <img src="images/mountain.png" id="mountain" alt="Mountain">
+        </picture>
+        <svg id="orbital-lines"
+            style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1;">
+            <path class="orbital-line" d="" stroke="white" stroke-width="0.5" fill="none" />
+            <path class="orbital-line" d="" stroke="white" stroke-width="0.5" fill="none" />
+            <path class="orbital-line" d="" stroke="white" stroke-width="0.5" fill="none" />
+            <path class="orbital-line" d="" stroke="white" stroke-width="0.5" fill="none" />
+        </svg>
     </div>
-    <!--
-    <a href="about.html" id="profile-button-container" style="text-decoration: none;">
-        <span class="profile-text">about me</span>
-        <img src="images/jiayi-professional.JPG" alt="About Me" class="profile-img">
-    </a>
-    -->
-    <a href="explore.html" id="explore-button" style="text-decoration: none;">explore →</a>
-    <a id="back-button" class="back-link-center" style="display: none;">← back</a>
+
+    <!-- Hero Section -->
+    <section id="hero">
+        <div id="text">
+            <p class="line-1">hi,</p>
+            <p class="line-2"><span class="im-text">i'm</span> <a href="about.html" class="jiayi-text">jiayi.</a></p>
+            <p class="line-3">
+                <span class="line-3-glow">a problem solver designing clear solutions <br class="mobile-only"> to ambiguous
+                    problems</span>
+                <span class="line-3-text">a problem solver designing clear solutions <br class="mobile-only"> to ambiguous
+                    problems</span>
+            </p>
+        </div>
+        <button id="unlock-work-btn" class="scroll-cue">selected work ↓</button>
+    </section>
+
+    <!-- Work Section -->
+    <main id="work">
+        <div class="work-section-header"># selected work</div>
+
+        <!-- Tier 1: Featured Case Studies (2 Large Cards) -->
+        <div class="featured-grid">
+            <a href="strava-case-study.html" class="featured-card">
+                <div class="featured-card-img-wrapper">
+                    <img src="images/strava.jpg" alt="Strava Case Study Screen">
+                </div>
+                <div class="featured-card-content">
+                    <div class="card-num-meta">
+                        <span class="card-num">01</span>
+                        <span class="card-meta">Product Design · Self-directed · 2025 · 3 weeks</span>
+                    </div>
+                    <h3 class="card-title">Strava</h3>
+                    <p class="card-desc">Redefining the pre-activity experience for intermittent Strava users to overcome the mental activation barrier.</p>
+                    <div class="card-outcome">Outcome: a 1-tap start flow & live group status loop tested with 8 lapsed users</div>
+                </div>
+            </a>
+
+            <a href="wundr-case-study.html" class="featured-card">
+                <div class="featured-card-img-wrapper">
+                    <img src="images/Case Covers/wundr.png" alt="Wundr AI Game Studio">
+                </div>
+                <div class="featured-card-content">
+                    <div class="card-num-meta">
+                        <span class="card-num">02</span>
+                        <span class="card-meta">0→1 Concept · Team of 4 · 2025</span>
+                    </div>
+                    <h3 class="card-title">Wundr</h3>
+                    <p class="card-desc">An AI game design studio for parents and children to co-create educational games together.</p>
+                    <div class="card-outcome">Outcome: generative AI workflow enabling rapid prototype game generation for families</div>
+                </div>
+            </a>
+        </div>
+
+        <!-- Tier 2: Compact Editorial Work List (Rows 03-06) -->
+        <div class="compact-list">
+            <a href="banxx-case-study.html" class="compact-row">
+                <span class="compact-num">03</span>
+                <div class="compact-main">
+                    <h3>BANXX</h3>
+                    <div class="compact-meta">Strategy · Open Banking · 2024</div>
+                </div>
+                <div class="compact-details">
+                    <span class="compact-desc">Leveraging open banking to support American patients with medical debt.</span>
+                    <span class="compact-outcome">Outcome: financial management framework bridging patient care & debt relief</span>
+                </div>
+                <span class="compact-arrow">→</span>
+            </a>
+
+            <a href="bucket-case-study.html" class="compact-row">
+                <span class="compact-num">04</span>
+                <div class="compact-main">
+                    <h3>Buckets</h3>
+                    <div class="compact-meta">Product Design · Digital Interaction · 2024</div>
+                </div>
+                <div class="compact-details">
+                    <span class="compact-desc">Lowering the barrier to entry for genuine human interaction through a digital medium.</span>
+                    <span class="compact-outcome">Outcome: high-trust social discovery protocol tested across college communities</span>
+                </div>
+                <span class="compact-arrow">→</span>
+            </a>
+
+            <a href="starbucks-case-study.html" class="compact-row">
+                <span class="compact-num">05</span>
+                <div class="compact-main">
+                    <h3>Starbucks</h3>
+                    <div class="compact-meta">Product Strategy · Gamification · 2024</div>
+                </div>
+                <div class="compact-details">
+                    <span class="compact-desc">Gamifying the digital Starbucks experience to increase food attachment rates.</span>
+                    <span class="compact-outcome">Outcome: interactive moment-based reward engine driving cross-category sales</span>
+                </div>
+                <span class="compact-arrow">→</span>
+            </a>
+
+            <a href="1220-case-study.html" class="compact-row">
+                <span class="compact-num">06</span>
+                <div class="compact-main">
+                    <h3>The Fritter Shop</h3>
+                    <div class="compact-meta">Franchise Strategy · Business Growth · 2024</div>
+                </div>
+                <div class="compact-details">
+                    <span class="compact-desc">Scaling a London local Dutch bakery through franchising across Ontario.</span>
+                    <span class="compact-outcome">Outcome: scalable franchise operation model & visual brand expansion strategy</span>
+                </div>
+                <span class="compact-arrow">→</span>
+            </a>
+        </div>
+
+        <!-- Tier 3: Graphic Design Showcase -->
+        <a href="graphic-design.html" class="graphic-gallery-card">
+            <div class="graphic-info">
+                <div class="card-num-meta">
+                    <span class="card-num">07</span>
+                    <span class="card-meta">Visual Identity · Graphic Design · 2024–2026</span>
+                </div>
+                <h3>Graphic Design Portfolio</h3>
+                <p class="compact-desc">A curated collection of visual experiments, event branding, and promotional graphics.</p>
+                <div class="compact-outcome" style="margin-top: 4px;">Outcome: diverse portfolio of event branding, digital graphics, and promotional design</div>
+            </div>
+            <span class="compact-arrow" style="font-size: 22px; color: #ffffff;">View Collection →</span>
+        </a>
+    </main>
+
     <script src="script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const unlockBtn = document.getElementById('unlock-work-btn');
+            const workNav = document.querySelector('.nav-link[href="#work"]');
+            const workSection = document.getElementById('work');
+
+            let hasScrolledDown = false;
+
+            const unlockWork = (e) => {
+                if (e) e.preventDefault();
+                document.body.classList.remove('hero-locked');
+                document.body.classList.add('work-unlocked');
+                
+                requestAnimationFrame(() => {
+                    if (workSection) {
+                        workSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                });
+            };
+
+            if (unlockBtn) unlockBtn.addEventListener('click', unlockWork);
+            if (workNav) workNav.addEventListener('click', unlockWork);
+
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 80) {
+                    hasScrolledDown = true;
+                    if (!document.body.classList.contains('work-unlocked')) {
+                        document.body.classList.remove('hero-locked');
+                        document.body.classList.add('work-unlocked');
+                    }
+                } else if (window.scrollY <= 10 && hasScrolledDown) {
+                    document.body.classList.remove('work-unlocked');
+                    document.body.classList.add('hero-locked');
+                    hasScrolledDown = false;
+                }
+            }, { passive: true });
+        });
+    </script>
 </body>
 
 </html>
