@@ -1,326 +1,170 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Strava - Jia Yi Hong</title>
+    <title>Strava — Jia Yi Hong</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,600&family=Manrope:wght@500;700&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,600&family=Manrope:wght@500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
-    <meta name="referrer" content="strict-origin-when-cross-origin">
-    <style>
-        body {
-            overflow-y: auto !important;
-            margin: 0;
-            padding: 0;
-            background-color: #0B0E14;
-            -webkit-overflow-scrolling: touch;
-        }
-
-        #star-canvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 1;
-            pointer-events: none !important;
-        }
-
-        #background-gradient {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            z-index: 0;
-            pointer-events: none;
-        }
-
-        #case-study-container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 120px 24px 60px;
-            position: relative;
-            z-index: 10;
-            color: rgba(203, 209, 220, 0.9);
-            font-family: "Manrope", sans-serif;
-        }
-
-        .case-header {
-            text-align: left;
-            margin-bottom: 40px;
-        }
-
-        .case-title {
-            font-family: "EB Garamond", serif;
-            font-size: 42px;
-            color: white;
-            margin: 0 0 16px 0;
-            font-weight: 500;
-            text-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
-        }
-
-        .case-subtitle {
-            font-size: 16px;
-            color: rgba(203, 209, 220, 0.8);
-            font-weight: 400;
-            max-width: 600px;
-            margin: 0 0 24px 0;
-            line-height: 1.5;
-        }
-
-        .case-meta {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 24px;
-            margin-top: 24px;
-            padding-top: 24px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .meta-item {
-            font-size: 13px;
-            color: rgba(203, 209, 220, 0.6);
-            line-height: 1.4;
-        }
-
-        .meta-item strong {
-            display: block;
-            color: white;
-            font-size: 11px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 4px;
-        }
-
-        .section {
-            margin-bottom: 40px;
-        }
-
-        .section-title {
-            font-family: "Manrope", sans-serif;
-            font-size: 24px;
-            color: white;
-            margin-bottom: 32px;
-            padding-bottom: 16px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        p {
-            font-size: 14px;
-            line-height: 1.8;
-            margin-bottom: 24px;
-        }
-
-        strong {
-            color: white;
-            font-weight: 700;
-        }
-
-        ul {
-            list-style: none;
-            padding: 0;
-        }
-
-        li {
-            margin-bottom: 24px;
-            padding-left: 24px;
-            border-left: 2px solid rgba(255, 255, 255, 0.15);
-        }
-
-        .cover-image-container {
-            width: 100%;
-            margin-bottom: 40px;
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            z-index: 1000;
-        }
-
-        .cover-image-container img {
-            width: 100%;
-            height: auto;
-            display: block;
-        }
-
-        .figma-button {
-            display: inline-block;
-            margin-top: 20px;
-            padding: 12px 24px;
-            background: rgba(255, 255, 255, 0.1);
-            color: white;
-            text-decoration: none;
-            border-radius: 8px;
-            font-weight: 600;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            transition: all 0.3s ease;
-        }
-
-        .figma-button:hover {
-            background: rgba(255, 255, 255, 0.2);
-            transform: translateY(-2px);
-        }
-
-        @media (max-width: 768px) {
-            #case-study-container {
-                padding: 100px 20px 40px;
-            }
-
-            .case-title {
-                font-size: 32px;
-            }
-
-            .case-subtitle {
-                font-size: 14px;
-            }
-
-            .section-title {
-                font-size: 20px;
-            }
-
-            p {
-                font-size: 13px;
-            }
-        }
-    </style>
 </head>
-
 <body>
+    <header class="global-nav">
+        <a href="index.html" class="nav-brand">jiayi.</a>
+        <nav>
+            <ul class="nav-links">
+                <li><a href="index.html#work" class="nav-link">work</a></li>
+                <li><a href="about.html" class="nav-link">about</a></li>
+                <li><a href="resume.pdf" target="_blank" class="nav-link nav-link-resume">resume ↗</a></li>
+            </ul>
+        </nav>
+    </header>
+
     <canvas id="star-canvas"></canvas>
     <img src="images/background_gradient.svg" id="background-gradient" alt="Background Gradient">
-    <a href="#" onclick="goBack(); return false;" class="back-link-fixed">[back]</a>
 
-    <div id="case-study-container">
-        <header class="case-header">
-            <h1 class="case-title">Strava: The Pre-Activity Social Tool</h1>
-            <div class="case-subtitle">Gamifying the pre-activity experience for intermittent Strava users to overcome the mental activation barrier and avoid skipping planned workouts.</div>
-            <div class="case-meta">
-                <div class="meta-item"><strong>Role:</strong> Product Designer</div>
-                <div class="meta-item"><strong>Date:</strong> March 2026</div>
-            </div>
-            <a href="https://www.figma.com/deck/3zCdHVC39BElW5TV5BEj62" target="_blank" class="figma-button">View Figma Presentation ↗</a>
-        </header>
+    <div class="case-study-wrapper">
+        <div class="case-study-layout">
+            <!-- Pinned Sticky TOC Sidebar -->
+            <aside class="sticky-toc-container">
+                <a href="index.html#work" class="toc-back-link">← all work</a>
+                <nav class="sticky-toc">
+                    <a href="#context" class="toc-link active"><span class="toc-num">01</span> context</a>
+                    <a href="#problem" class="toc-link"><span class="toc-num">02</span> problem</a>
+                    <a href="#process" class="toc-link"><span class="toc-num">03</span> process</a>
+                    <a href="#solution" class="toc-link"><span class="toc-num">04</span> solution</a>
+                    <a href="#outcome" class="toc-link"><span class="toc-num">05</span> outcome</a>
+                </nav>
+            </aside>
 
-        <div class="cover-image-container">
-            <img src="images/strava.jpg" alt="Strava Pre-Activity Tool Cover">
+            <!-- Main Case Study Content -->
+            <main class="case-study-main">
+                <header class="case-hero">
+                    <h1 class="case-title">Strava: The Pre-Activity Social Tool</h1>
+                    <p class="case-subtitle">Gamifying the pre-activity experience for intermittent Strava users to overcome the mental activation barrier and avoid skipping planned workouts.</p>
+                    <div class="case-meta-grid">
+                        <div class="meta-col">
+                            <span class="meta-label">Role</span>
+                            <span class="meta-val">Product Designer</span>
+                        </div>
+                        <div class="meta-col">
+                            <span class="meta-label">Timeline</span>
+                            <span class="meta-val">3 Weeks (2025–2026)</span>
+                        </div>
+                        <div class="meta-col">
+                            <span class="meta-label">Context</span>
+                            <span class="meta-val">Self-Directed Product Strategy</span>
+                        </div>
+                        <div class="meta-col">
+                            <span class="meta-label">Deliverables</span>
+                            <span class="meta-val">PRD, Interactive Prototype, User Flow</span>
+                        </div>
+                    </div>
+
+                    <!-- Outcome-First Summary Box -->
+                    <div class="hero-outcome-box">
+                        <div class="outcome-tag">⚡ Key Outcome</div>
+                        <div class="outcome-statement">Designed a 4-part social accountability loop embedded in the Record tab, validating a one-tap start flow tested with 8 lapsed users that reduced pre-activity dropoff and accelerated workout initiation.</div>
+                    </div>
+                </header>
+
+                <div class="cover-image-container" style="margin-bottom: 48px;">
+                    <img src="images/strava.jpg" alt="Strava Pre-Activity Tool Cover" class="case-img" style="margin: 0;">
+                </div>
+
+                <!-- 01 Context -->
+                <section id="context" class="case-section">
+                    <div class="section-tag">01 Context</div>
+                    <h2 class="section-heading">Background & Opportunity</h2>
+                    <div class="section-body">
+                        <p>The energy required to transition from a resting state to a workout-ready state represents a significant friction point for Strava’s largest user segment: the intermittent user. Unlike running fanatics who are intrinsically motivated by established rigid habit loops, intermittent users possess the intent to exercise (evidenced by downloading Strava), but frequently fail at the point of execution due to immediate distractions or low activation energy.</p>
+                        <p>Currently, Strava caters primarily to the post-activity flex, leaving the intermittent user alone during the most difficult part of the journey: the critical 15-minute preparation window where they are most likely to abandon their intent entirely.</p>
+                        <a href="https://www.figma.com/deck/3zCdHVC39BElW5TV5BEj62" target="_blank" class="figma-button">View Figma Presentation ↗</a>
+                    </div>
+                </section>
+
+                <!-- 02 Problem -->
+                <section id="problem" class="case-section">
+                    <div class="section-tag">02 Problem</div>
+                    <h2 class="section-heading">The Core Friction</h2>
+                    <div class="section-body">
+                        <div class="section-card">
+                            <h3 style="color: white; margin-bottom: 8px; font-size: 16px;">1. Barrier to Retention</h3>
+                            <p style="margin-bottom: 0;">When the app only supports the finish line, users associate Strava with the pressure of being a perfect athlete. For intermittent users, the app becomes a negative reminder of failed plans, causing eventual churn.</p>
+                        </div>
+                        <div class="section-card">
+                            <h3 style="color: white; margin-bottom: 8px; font-size: 16px;">2. Mission Alignment Gap</h3>
+                            <p style="margin-bottom: 0;">Strava aims to connect athletes to what motivates them, but offers zero support during the hardest 15 minutes of workout prep.</p>
+                        </div>
+                        <div class="section-card">
+                            <h3 style="color: white; margin-bottom: 8px; font-size: 16px;">3. Losing the Battle for Attention</h3>
+                            <p style="margin-bottom: 0;">In the 15 minutes before a workout, Strava is in direct competition with social media and passive phone entertainment. Remaining silent lets low-effort distractions win.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 03 Process -->
+                <section id="process" class="case-section">
+                    <div class="section-tag">03 Process</div>
+                    <h2 class="section-heading">Research & Insights</h2>
+                    <div class="section-body">
+                        <p>We conducted user interviews with intermittent athletes aged 18–34 to identify why planned workouts fell through:</p>
+                        <div class="section-card">
+                            <p><strong>• Motivation & Mental Hurdle:</strong> Skipping was decided well before the workout window, driven by passive phone use. Knowing a specific friend was actively getting ready or waiting was the one consistent override.</p>
+                            <p><strong>• Physical Preparation Threshold:</strong> Once participants began physically lacing up their shoes, they followed through. The decision to skip forms before any physical action occurs.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 04 Solution -->
+                <section id="solution" class="case-section">
+                    <div class="section-tag">04 Solution</div>
+                    <h2 class="section-heading">The 4-Part Social Accountability Loop</h2>
+                    <div class="section-body">
+                        <div class="section-card">
+                            <h3 style="color: white; margin-bottom: 6px;">1. Lacing Up Notification</h3>
+                            <p>When a friend toggles "Lacing Up," connections receive a high-priority trigger inviting them off whatever they're doing and into Strava.</p>
+                        </div>
+                        <div class="section-card">
+                            <h3 style="color: white; margin-bottom: 6px;">2. "Waiting on You" Escalation Ping</h3>
+                            <p>If unconfirmed within 5 minutes, an ambient notification activates social peer accountability.</p>
+                        </div>
+                        <div class="section-card">
+                            <h3 style="color: white; margin-bottom: 6px;">3. Lacing Up Full-Screen Commitment</h3>
+                            <p>One-tap "I'm Getting Ready!" action with a live Group Status bar showing who is preparing.</p>
+                        </div>
+                        <div class="section-card">
+                            <h3 style="color: white; margin-bottom: 6px;">4. Live Ready Room Module</h3>
+                            <p>Persistent real-time module on the Record tab displaying elapsed friend readiness to push the final step to pressing START.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 05 Outcome -->
+                <section id="outcome" class="case-section">
+                    <div class="section-tag">05 Outcome</div>
+                    <h2 class="section-heading">Validation & Rollout Strategy</h2>
+                    <div class="section-body">
+                        <p>A multi-stage rollout framework targeted a 10% increase in weekly workout consistency among intermittent segments while protecting core activity tracking workflows.</p>
+                    </div>
+                </section>
+
+                <!-- Previous / Next Study Pagination -->
+                <nav class="study-pagination">
+                    <a href="wundr-case-study.html" class="pagination-btn">
+                        <span class="pagination-label">← Previous Case Study</span>
+                        <span class="pagination-title">Wundr</span>
+                    </a>
+                    <a href="bucket-case-study.html" class="pagination-btn" style="text-align: right;">
+                        <span class="pagination-label">Next Case Study →</span>
+                        <span class="pagination-title">Buckets</span>
+                    </a>
+                </nav>
+            </main>
         </div>
-
-        <section class="section">
-            <h2 class="section-title">The Opportunity</h2>
-            <p>The energy required to transition from a resting state to a workout-ready state represents a significant friction point for Strava’s largest user segment: the intermittent user. Unlike running fanatics who are intrinsically motivated by established rigid habit loops, these intermittent users possess the intent to exercise (evidenced by downloading Strava), but frequently fail at the point of execution due to immediate distractions or a lack of mood.</p>
-            <p>Currently, Strava caters primarily to the post-activity flex, leaving the intermittent user alone during the most difficult part of the journey: the critical 15-minute preparation window where they are most likely to skip in their mind and abandon their intent entirely.</p>
-        </section>
-
-        <section class="section">
-            <h2 class="section-title">Why is this a problem?</h2>
-            <ul>
-                <li><strong>Barrier to Retention:</strong> When the app only supports the finish line, users start to associate Strava with the pressure of being a perfect athlete. For intermittent users who struggle with motivation, the app can become a negative reminder of failed plans, causing them to eventually disengage or delete the app to avoid guilt.</li>
-                <li><strong>Mission Alignment Gap:</strong> Strava aims to connect athletes to what motivates them, but it currently offers no support during the hardest 15 minutes of the workout. Losing users to distractions right before a workout begins goes against the app's core purpose of helping people be active.</li>
-                <li><strong>Losing the Battle for Attention:</strong> In the 15 minutes before a workout, Strava is in direct competition with social media and sedentary digital distractions. By remaining silent during this window, Strava allows users to choose low-effort entertainment over their physical health.</li>
-            </ul>
-        </section>
-
-        <section class="section">
-            <h2 class="section-title">Audience & Goals</h2>
-            <p><strong>Primary Audience:</strong> Intermittent Strava users aged 18–34 who have genuine intent to exercise but frequently fail at execution due to low-activation moments, digital distractions, and an absence of social accountability.</p>
-            <p><strong>Goals:</strong></p>
-            <ul>
-                <li>Maximize the feeling of social accountability and peer visibility in the 15-minute preparation window before a workout begins.</li>
-                <li>Minimize the temptation to choose a sedentary digital distraction (social media, couch) over starting the activity.</li>
-                <li>Minimize the back-and-forth communication required to coordinate workout timing with friends, removing the friction of group scheduling.</li>
-            </ul>
-        </section>
-
-        <section class="section">
-            <h2 class="section-title">User Interview Insights</h2>
-            <ul>
-                <li><strong>Planning and scheduling:</strong> Most participants took a day-by-day approach to fitting in exercise, with workouts being the first thing cut during busy weeks. Group workouts were desired but rarely materialised due to no follow-through.</li>
-                <li><strong>Motivation and the mental hurdle:</strong> Skipping was decided well before the workout window, driven by low mood and passive phone use. Knowing a specific friend was already getting ready, or was waiting on them, was the one consistent override.</li>
-                <li><strong>Physical preparation and follow-through:</strong> Once participants began physically preparing, they almost always followed through. The decision to skip forms before any physical action is taken, making that pre-preparation window the critical intervention point.</li>
-            </ul>
-            <p><strong>Summary:</strong> The barrier is motivational, not logistical. What pushed users to act was a named peer already in motion or actively waiting on them.</p>
-        </section>
-
-        <section class="section">
-            <h2 class="section-title">The Solution</h2>
-            <p>A connected 4-part social accountability loop embedded in the Record tab that meets intermittent users before the workout begins and uses real-time peer visibility and social pressure to bridge the gap between intent and action.</p>
-            <ul>
-                <li>
-                    <strong>1. Lacing Up Notification</strong><br>
-                    When a friend toggles "Lacing Up," their connections receive a high-priority push notification inviting them off whatever they're currently doing and into Strava. This external trigger sources motivation from the social graph rather than the user's own willpower.
-                </li>
-                <li>
-                    <strong>2. Waiting on You Ping</strong><br>
-                    If the recipient does not confirm within 5 minutes, a second named push notification is automatically sent as part of the accountability loop (the "people are waiting" factor).
-                </li>
-                <li>
-                    <strong>3. Lacing Up Toggle</strong><br>
-                    Tapping either notification opens a full-screen prompt inside the app with a large "I'm Getting Ready!" button. A Group Status bar at the bottom shows friends' current states (Ready or Lacing Up) so the user can see exactly who is preparing, activating the psychological cost of backing out.
-                </li>
-                <li>
-                    <strong>4. Live Ready Room Module</strong><br>
-                    A persistent real-time module on the Record tab showing friends' current states with elapsed time. It provides the final push from preparation to pressing START by making peer activity visible and ambient.
-                </li>
-            </ul>
-        </section>
-
-        <section class="section">
-            <h2 class="section-title">Implementation & Test Plan</h2>
-            <div style="overflow-x: auto;">
-                <table style="width: 100%; border-collapse: collapse; margin-bottom: 24px; font-size: 14px; text-align: left;">
-                    <thead>
-                        <tr style="border-bottom: 1px solid rgba(255, 255, 255, 0.2); color: white;">
-                            <th style="padding: 12px 0;">Time</th>
-                            <th style="padding: 12px 16px;">Milestone</th>
-                            <th style="padding: 12px 16px;">Description</th>
-                            <th style="padding: 12px 0;">Exit Criteria</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr style="border-bottom: 1px solid rgba(255, 255, 255, 0.05);">
-                            <td style="padding: 12px 0; font-weight: 700;">Month 1</td>
-                            <td style="padding: 12px 16px;">Internal testing</td>
-                            <td style="padding: 12px 16px; color: rgba(203, 209, 220, 0.8);">Build and test the full flow internally. Ensure notification triggers, 5-min escalation, and live group status work.</td>
-                            <td style="padding: 12px 0; color: rgba(203, 209, 220, 0.8);">No crashes or bugs for 5 consecutive days.</td>
-                        </tr>
-                        <tr style="border-bottom: 1px solid rgba(255, 255, 255, 0.05);">
-                            <td style="padding: 12px 0; font-weight: 700;">Month 2</td>
-                            <td style="padding: 12px 16px;">Small beta launch</td>
-                            <td style="padding: 12px 16px; color: rgba(203, 209, 220, 0.8);">Testing with select pilot communities (2-3). All "Lacing Up" flows are live.</td>
-                            <td style="padding: 12px 0; color: rgba(203, 209, 220, 0.8);">≥ 25% of active users tap "I’m Getting Ready". Live group loads constantly.</td>
-                        </tr>
-                        <tr style="border-bottom: 1px solid rgba(255, 255, 255, 0.05);">
-                            <td style="padding: 12px 0; font-weight: 700;">Month 3</td>
-                            <td style="padding: 12px 16px;">Review & A/B test</td>
-                            <td style="padding: 12px 16px; color: rgba(203, 209, 220, 0.8);">Expand to 10% of users on iOS and Android. Test whether pings make a real difference.</td>
-                            <td style="padding: 12px 0; color: rgba(203, 209, 220, 0.8);">Positive feedback, 5% reaction increase, no spikes in app uninstalls or muted notifications.</td>
-                        </tr>
-                        <tr style="border-bottom: 1px solid rgba(255, 255, 255, 0.05);">
-                            <td style="padding: 12px 0; font-weight: 700;">Month 5</td>
-                            <td style="padding: 12px 16px;">Wider rollout</td>
-                            <td style="padding: 12px 16px; color: rgba(203, 209, 220, 0.8);">Roll out to 50% of users. Analyze full journey completion from notification to pressing Start.</td>
-                            <td style="padding: 12px 0; color: rgba(203, 209, 220, 0.8);">Intermittent users work out 10% more frequently on average.</td>
-                        </tr>
-                        <tr style="border-bottom: 1px solid rgba(255, 255, 255, 0.05);">
-                            <td style="padding: 12px 0; font-weight: 700;">Month 6</td>
-                            <td style="padding: 12px 16px;">Official Launch</td>
-                            <td style="padding: 12px 16px; color: rgba(203, 209, 220, 0.8);">Release to all users everywhere. Move into ongoing monitoring.</td>
-                            <td style="padding: 12px 0; color: rgba(203, 209, 220, 0.8);">All previous targets met, sustained rate of workouts.</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </section>
     </div>
 
     <script src="script.js"></script>
 </body>
-
 </html>

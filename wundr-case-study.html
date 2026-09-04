@@ -1,286 +1,158 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Wundr - Jia Yi Hong</title>
+    <title>Wundr — Jia Yi Hong</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,600&family=Manrope:wght@500;700&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,600&family=Manrope:wght@500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
-    <meta name="referrer" content="strict-origin-when-cross-origin">
-    <style>
-        body {
-            overflow-y: auto !important;
-            /* Ensure scrolling is enabled even if styles.css tries to hide it */
-            margin: 0;
-            padding: 0;
-            background-color: #0B0E14;
-            -webkit-overflow-scrolling: touch;
-        }
-
-        #star-canvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 1;
-            pointer-events: none !important;
-        }
-
-        #background-gradient {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            z-index: 0;
-            pointer-events: none;
-        }
-
-        #case-study-container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 120px 24px 60px;
-            position: relative;
-            z-index: 10;
-            color: rgba(203, 209, 220, 0.9);
-            font-family: "Manrope", sans-serif;
-        }
-
-        .case-header {
-            text-align: left;
-            margin-bottom: 40px;
-        }
-
-        .case-title {
-            font-family: "EB Garamond", serif;
-            font-size: 42px;
-            color: white;
-            margin: 0 0 16px 0;
-            font-weight: 500;
-            text-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
-        }
-
-        .case-subtitle {
-            font-size: 16px;
-            color: rgba(203, 209, 220, 0.8);
-            font-weight: 400;
-            max-width: 600px;
-            margin: 0 0 24px 0;
-            line-height: 1.5;
-        }
-
-        .case-meta {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 24px;
-            margin-top: 24px;
-            padding-top: 24px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .meta-item {
-            font-size: 13px;
-            color: rgba(203, 209, 220, 0.6);
-            line-height: 1.4;
-        }
-
-        .meta-item strong {
-            display: block;
-            color: white;
-            font-size: 11px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 4px;
-        }
-
-        .section {
-            margin-bottom: 40px;
-        }
-
-        .section-title {
-            font-family: "Manrope", sans-serif;
-            font-size: 24px;
-            color: white;
-            margin-bottom: 32px;
-            padding-bottom: 16px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        p {
-            font-size: 14px;
-            line-height: 1.8;
-            margin-bottom: 24px;
-        }
-
-        strong {
-            color: white;
-            font-weight: 700;
-        }
-
-        ul {
-            list-style: none;
-            padding: 0;
-        }
-
-        li {
-            margin-bottom: 24px;
-            padding-left: 24px;
-            border-left: 2px solid rgba(255, 255, 255, 0.15);
-        }
-
-        .video-container {
-            position: relative;
-            width: 100%;
-            padding-bottom: 56.25%;
-            /* 16:9 Aspect Ratio */
-            height: 0;
-            margin-bottom: 40px;
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            z-index: 1000;
-            /* High z-index to stay above background layers */
-            pointer-events: auto !important;
-        }
-
-        .video-container iframe {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            border: 0;
-            z-index: 1001;
-            pointer-events: auto !important;
-        }
-
-        @media (max-width: 768px) {
-            #case-study-container {
-                padding: 100px 20px 40px;
-            }
-
-            .case-title {
-                font-size: 32px;
-            }
-
-            .case-subtitle {
-                font-size: 14px;
-            }
-
-            .section-title {
-                font-size: 20px;
-            }
-
-            p {
-                font-size: 13px;
-            }
-        }
-    </style>
 </head>
-
 <body>
+    <header class="global-nav">
+        <a href="index.html" class="nav-brand">jiayi.</a>
+        <nav>
+            <ul class="nav-links">
+                <li><a href="index.html#work" class="nav-link">work</a></li>
+                <li><a href="about.html" class="nav-link">about</a></li>
+                <li><a href="resume.pdf" target="_blank" class="nav-link nav-link-resume">resume ↗</a></li>
+            </ul>
+        </nav>
+    </header>
+
     <canvas id="star-canvas"></canvas>
     <img src="images/background_gradient.svg" id="background-gradient" alt="Background Gradient">
-    <a href="#" onclick="goBack(); return false;" class="back-link-fixed">[back]</a>
 
-    <div id="case-study-container">
-        <header class="case-header">
-            <h1 class="case-title">Wundr: Turning Passive Screen Time into Active Co-Creation</h1>
-            <div class="case-subtitle">An AI-powered design suite that empowers parents and children to co-create
-                personalized, educational 2D RPGs from study materials.</div>
-            <div class="case-meta">
-                <div class="meta-item"><strong>Competition:</strong> UoftHacks13</div>
-                <div class="meta-item"><strong>Role:</strong> Design Engineer</div>
-            </div>
-        </header>
+    <div class="case-study-wrapper">
+        <div class="case-study-layout">
+            <!-- Pinned Sticky TOC Sidebar -->
+            <aside class="sticky-toc-container">
+                <a href="index.html#work" class="toc-back-link">← all work</a>
+                <nav class="sticky-toc">
+                    <a href="#context" class="toc-link active"><span class="toc-num">01</span> context</a>
+                    <a href="#problem" class="toc-link"><span class="toc-num">02</span> problem</a>
+                    <a href="#process" class="toc-link"><span class="toc-num">03</span> process</a>
+                    <a href="#solution" class="toc-link"><span class="toc-num">04</span> solution</a>
+                    <a href="#outcome" class="toc-link"><span class="toc-num">05</span> outcome</a>
+                </nav>
+            </aside>
 
-        <div class="video-container">
-            <iframe src="https://www.youtube.com/embed/GxmkrsxYAS0?rel=0&enablejsapi=1" title="YouTube video player"
-                frameborder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+            <!-- Main Case Study Content -->
+            <main class="case-study-main">
+                <header class="case-hero">
+                    <h1 class="case-title">Wundr: Turning Passive Screen Time into Active Co-Creation</h1>
+                    <p class="case-subtitle">An AI-powered design suite empowering parents and children to co-create personalized, educational 2D RPGs from study materials.</p>
+                    <div class="case-meta-grid">
+                        <div class="meta-col">
+                            <span class="meta-label">Role</span>
+                            <span class="meta-val">Design Engineer</span>
+                        </div>
+                        <div class="meta-col">
+                            <span class="meta-label">Event</span>
+                            <span class="meta-val">UofTHacks 13</span>
+                        </div>
+                        <div class="meta-col">
+                            <span class="meta-label">Team</span>
+                            <span class="meta-val">Team of 4</span>
+                        </div>
+                        <div class="meta-col">
+                            <span class="meta-label">Disciplines</span>
+                            <span class="meta-val">0→1 Concept, Generative AI, UX</span>
+                        </div>
+                    </div>
+
+                    <!-- Outcome-First Summary Box -->
+                    <div class="hero-outcome-box">
+                        <div class="outcome-tag">⚡ Key Outcome</div>
+                        <div class="outcome-statement">Built a working generative AI workflow and multi-modal creative studio that bridges the homework-play gap, transforming children from passive media consumers into active game creators.</div>
+                    </div>
+                </header>
+
+                <div class="video-container" style="position: relative; width: 100%; padding-bottom: 56.25%; height: 0; margin-bottom: 48px; border-radius: 12px; overflow: hidden; border: 1px solid rgba(255, 255, 255, 0.1);">
+                    <iframe src="https://www.youtube.com/embed/GxmkrsxYAS0?rel=0&enablejsapi=1" title="YouTube video player"
+                        style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                </div>
+
+                <!-- 01 Context -->
+                <section id="context" class="case-section">
+                    <div class="section-tag">01 Context</div>
+                    <h2 class="section-heading">Background & Opportunity</h2>
+                    <div class="section-body">
+                        <p>The theme of UofTHacks13 was identity. While brainstorming, we identified a concerning trend: the average middle school child spends 5+ hours online every day. The fundamental friction is not the time spent, but the passive nature of that consumption. Most children’s apps capture attention without inspiring creative agency.</p>
+                        <p><strong>Wundr</strong> is an AI-powered design tool that gives children autonomy, allowing them to turn schoolwork alongside their parents into custom playable RPG worlds.</p>
+                    </div>
+                </section>
+
+                <!-- 02 Problem -->
+                <section id="problem" class="case-section">
+                    <div class="section-tag">02 Problem</div>
+                    <h2 class="section-heading">The "IKEA Effect" & Complexity Barrier</h2>
+                    <div class="section-body">
+                        <p>The "IKEA effect" reveals that people value products significantly more if they helped create them. If a child designs their own game rather than playing a pre-made one, their emotional investment in the educational content multiplies.</p>
+                        <div class="section-card">
+                            <p><strong>1. Engine Complexity:</strong> Game engines like Unity or Godot have steep learning curves inaccessible to 7-year-olds.</p>
+                            <p style="margin-bottom: 0;"><strong>2. The Parent Gap:</strong> Parents struggle to turn static study worksheets into engaging family activities.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 03 Process -->
+                <section id="process" class="case-section">
+                    <div class="section-tag">03 Process</div>
+                    <h2 class="section-heading">The 3-Booth Creative Journey</h2>
+                    <div class="section-body">
+                        <p>To eliminate "blank page syndrome," we structured the child's workflow into three guided interactive booths with speech-to-text input:</p>
+                        <div class="section-card">
+                            <h3 style="color: white; margin-bottom: 6px;">1. The Character Designer</h3>
+                            <p>A dual-input canvas captures child sketches and handwriting, transforming scribbles into animated walking pixel sprites.</p>
+                        </div>
+                        <div class="section-card">
+                            <h3 style="color: white; margin-bottom: 6px;">2. The World Designer</h3>
+                            <p>Descriptive natural language prompts generate custom 2D tilemaps with themed assets (beaches, castles, space).</p>
+                        </div>
+                        <div class="section-card">
+                            <h3 style="color: white; margin-bottom: 6px;">3. The Sound Designer</h3>
+                            <p>Translates emotional descriptors into curated ambient chiptune audio tracks to complete sensory immersion.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 04 Solution -->
+                <section id="solution" class="case-section">
+                    <div class="section-tag">04 Solution</div>
+                    <h2 class="section-heading">The Parent Portal & Battle Challenges</h2>
+                    <div class="section-body">
+                        <p>For parents, the workflow is effortless: paste study notes (math, history, vocabulary) into the Parent Portal. An adaptive age-difficulty selector parses the content into in-game "Battle Challenges" that players must answer to progress through the story.</p>
+                    </div>
+                </section>
+
+                <!-- 05 Outcome -->
+                <section id="outcome" class="case-section">
+                    <div class="section-tag">05 Outcome</div>
+                    <h2 class="section-heading">Conclusion & Reflections</h2>
+                    <div class="section-body">
+                        <p>Wundr demonstrated how generative AI can convert passive screen time into collaborative, creative learning. By lowering creation friction to a child's natural vocabulary, we unlocked a new medium for family co-creation.</p>
+                    </div>
+                </section>
+
+                <!-- Previous / Next Study Pagination -->
+                <nav class="study-pagination">
+                    <a href="blaze-case-study.html" class="pagination-btn">
+                        <span class="pagination-label">← Previous Case Study</span>
+                        <span class="pagination-title">Blaze</span>
+                    </a>
+                    <a href="strava-case-study.html" class="pagination-btn" style="text-align: right;">
+                        <span class="pagination-label">Next Case Study →</span>
+                        <span class="pagination-title">Strava</span>
+                    </a>
+                </nav>
+            </main>
         </div>
-
-        <section class="section">
-            <h2 class="section-title">Why Wundr?</h2>
-            <p>The theme of UoftHacks13 was identity. While brainstorming, I ran into a shocking statistic: the average
-                middle school child spends 5+ hours online every day. I realized the problem isn’t the time spent, but
-                the passive nature of that time. Most children’s apps are traps to capture attention, not tools to
-                inspire identity creation.</p>
-            <p><strong>Wundr</strong> is the solution. It’s an AI-powered design team that gives children autonomy,
-                allowing them to turn schoolwork alongside their parents into a world they create themselves.</p>
-        </section>
-
-        <section class="section">
-            <h2 class="section-title">The "IKEA" Effect</h2>
-            <p>The "IKEA effect" is the idea that people value products more if they helped create them. My hypothesis
-                was that if a child were to design their own game rather than play a pre-existing one, their emotional
-                investment in the educational components would skyrocket.</p>
-            <p>To make this work for a 7-year-old, I had to solve two main pain points:
-            <ul>
-                <li><strong>Complexity:</strong> Most game engines are far too complex for children.</li>
-                <li><strong>The Parent Gap:</strong> Parents struggle to bridge the gap between homework and play time.
-                </li>
-            </ul>
-            </p>
-            <p>To remove "blank page syndrome," I structured the journey into three distinct <strong>"Booths"</strong>
-                to guide the child through the creative process. I also integrated a microphone feature into every booth
-                to lower the friction of typing for young users.</p>
-        </section>
-
-        <section class="section">
-            <h2 class="section-title">The Design Booths</h2>
-            <ul>
-                <li>
-                    <strong>1. The Character Designer: Bringing the Hero to Life</strong><br>
-                    I didn't want children to just pick a skin. Using a <strong>Dual-Input Canvas</strong>, children can
-                    sketch directly on a digital pad. Our system captures their unique handwriting—transforming a blue
-                    scribble into a fully animated walking sprite.
-                </li>
-                <li>
-                    <strong>2. The World Designer: Engineering an Environment</strong><br>
-                    The child acts as the stage-setter. By describing an atmosphere (e.g., "I love beaches"), our
-                    generative
-                    pipeline creates a custom 2D map with specific assets like palm trees and crashing waves. This
-                    ensures
-                    every study session feels like a new authority over their digital space.
-                </li>
-                <li>
-                    <strong>3. The Sound Designer: Crafting the Vibe</strong><br>
-                    Audio is vital for immersion. The system translates abstract feelings (e.g., "cool, excited tone")
-                    into
-                    multiple .mp3 options. By choosing the music, the child completes the sensory identity of their
-                    game.
-                </li>
-            </ul>
-        </section>
-
-        <section class="section">
-            <h2 class="section-title">The Portal: The Parental Bridge</h2>
-            <p>For parents, the process is simple: they paste study notes (math, history, etc.) into the Portal. I
-                designed a <strong>Difficulty Level selector</strong> (ages 0 to 11+) to ensures the AI parses the notes
-                into developmentally appropriate "Battle Challenges" within the child's created world.</p>
-        </section>
-
-        <section class="section">
-            <h2 class="section-title">Conclusion</h2>
-            <p>Wundr achieved exactly what we set out to do: it turned a child from a consumer into a creator. By
-                leveraging the IKEA effect through AI, we transformed "5 hours of screen time" from a statistic of
-                concern into a window of active, identity-building play!</p>
-        </section>
-
-
     </div>
 
     <script src="script.js"></script>
 </body>
-
 </html>
