@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 
-<body>
+<body class="hero-locked">
     <header class="global-nav">
         <a href="index.html" class="nav-brand">jiayi.</a>
         <nav>
@@ -25,21 +25,23 @@
         </nav>
     </header>
 
-    <canvas id="star-canvas"></canvas>
-    <img src="images/background_gradient.svg" id="background-gradient" alt="Background Gradient">
-    <picture>
-        <source media="(max-width: 768px)" srcset="images/Mountain1.png">
-        <source media="(min-width: 769px) and (max-width: 1366px) and (orientation: landscape)"
-            srcset="images/Mountain2.png">
-        <img src="images/mountain.png" id="mountain" alt="Mountain">
-    </picture>
-    <svg id="orbital-lines"
-        style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1;">
-        <path class="orbital-line" d="" stroke="white" stroke-width="0.5" fill="none" />
-        <path class="orbital-line" d="" stroke="white" stroke-width="0.5" fill="none" />
-        <path class="orbital-line" d="" stroke="white" stroke-width="0.5" fill="none" />
-        <path class="orbital-line" d="" stroke="white" stroke-width="0.5" fill="none" />
-    </svg>
+    <div id="hero-bg-layer">
+        <canvas id="star-canvas"></canvas>
+        <img src="images/background_gradient.svg" id="background-gradient" alt="Background Gradient">
+        <picture>
+            <source media="(max-width: 768px)" srcset="images/Mountain1.png">
+            <source media="(min-width: 769px) and (max-width: 1366px) and (orientation: landscape)"
+                srcset="images/Mountain2.png">
+            <img src="images/mountain.png" id="mountain" alt="Mountain">
+        </picture>
+        <svg id="orbital-lines"
+            style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1;">
+            <path class="orbital-line" d="" stroke="white" stroke-width="0.5" fill="none" />
+            <path class="orbital-line" d="" stroke="white" stroke-width="0.5" fill="none" />
+            <path class="orbital-line" d="" stroke="white" stroke-width="0.5" fill="none" />
+            <path class="orbital-line" d="" stroke="white" stroke-width="0.5" fill="none" />
+        </svg>
+    </div>
 
     <!-- Hero Section -->
     <section id="hero">
@@ -53,7 +55,7 @@
                     problems</span>
             </p>
         </div>
-        <a href="#work" class="scroll-cue">↓ selected work</a>
+        <button id="unlock-work-btn" class="scroll-cue">selected work ↓</button>
     </section>
 
     <!-- Work Section -->
@@ -164,6 +166,44 @@
     </main>
 
     <script src="script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const unlockBtn = document.getElementById('unlock-work-btn');
+            const workNav = document.querySelector('.nav-link[href="#work"]');
+            const workSection = document.getElementById('work');
+
+            let hasScrolledDown = false;
+
+            const unlockWork = (e) => {
+                if (e) e.preventDefault();
+                document.body.classList.remove('hero-locked');
+                document.body.classList.add('work-unlocked');
+                
+                requestAnimationFrame(() => {
+                    if (workSection) {
+                        workSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                });
+            };
+
+            if (unlockBtn) unlockBtn.addEventListener('click', unlockWork);
+            if (workNav) workNav.addEventListener('click', unlockWork);
+
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 80) {
+                    hasScrolledDown = true;
+                    if (!document.body.classList.contains('work-unlocked')) {
+                        document.body.classList.remove('hero-locked');
+                        document.body.classList.add('work-unlocked');
+                    }
+                } else if (window.scrollY <= 10 && hasScrolledDown) {
+                    document.body.classList.remove('work-unlocked');
+                    document.body.classList.add('hero-locked');
+                    hasScrolledDown = false;
+                }
+            }, { passive: true });
+        });
+    </script>
 </body>
 
 </html>
