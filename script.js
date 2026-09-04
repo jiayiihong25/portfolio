@@ -1077,7 +1077,7 @@ function initCaseStudyScrollSpy() {
     const sections = document.querySelectorAll('.case-section');
     const navLinks = document.querySelectorAll('.toc-link');
 
-    if (!sections.length && !navLinks.length) return;
+    if (!sections.length || !navLinks.length) return;
 
     // Auto inject Reading Progress Bar if not already in DOM
     let progressBar = document.querySelector('.reading-progress-bar');
@@ -1087,6 +1087,48 @@ function initCaseStudyScrollSpy() {
         document.body.appendChild(progressBar);
     }
 
+    let isClickScrolling = false;
+    let clickTimeout = null;
+
+    function setActiveLink(targetId) {
+        navLinks.forEach(link => {
+            const href = link.getAttribute('href');
+            if (href === '#' + targetId) {
+                link.classList.add('active');
+            } else {
+                link.classList.remove('active');
+            }
+        });
+    }
+
+    // Direct click handler for instant UI update + smooth jump
+    navLinks.forEach(link => {
+        link.addEventListener('click', (e) => {
+            const href = link.getAttribute('href');
+            if (href && href.startsWith('#')) {
+                const targetId = href.substring(1);
+                const targetSection = document.getElementById(targetId);
+                if (targetSection) {
+                    e.preventDefault();
+                    isClickScrolling = true;
+                    if (clickTimeout) clearTimeout(clickTimeout);
+
+                    // Instantly illuminate clicked section in TOC
+                    setActiveLink(targetId);
+
+                    // Smooth scroll to target section
+                    targetSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+                    // Release click lock after smooth scroll settles
+                    clickTimeout = setTimeout(() => {
+                        isClickScrolling = false;
+                        updateActive();
+                    }, 800);
+                }
+            }
+        });
+    });
+
     function updateActive() {
         // Calculate Reading Progress Percentage
         const totalDocHeight = document.documentElement.scrollHeight - window.innerHeight;
@@ -1095,36 +1137,27 @@ function initCaseStudyScrollSpy() {
             progressBar.style.width = scrollPercent + '%';
         }
 
-        let activeSectionId = '';
-        const scrollTrigger = window.scrollY + 220;
+        if (isClickScrolling) return;
+
+        let activeSectionId = sections[0].getAttribute('id');
+        const triggerThreshold = 260; // Distance from viewport top to trigger active state
 
         sections.forEach(section => {
             const rect = section.getBoundingClientRect();
-            const top = window.scrollY + rect.top;
-            const bottom = top + section.offsetHeight;
-
-            if (scrollTrigger >= top && scrollTrigger <= bottom) {
+            // As soon as section top scrolls past threshold, mark it active
+            if (rect.top <= triggerThreshold) {
                 activeSectionId = section.getAttribute('id');
             }
         });
 
         // Bottom of page edge case: activate last section if scrolled near page bottom
-        const isNearBottom = (window.innerHeight + window.scrollY) >= (document.documentElement.scrollHeight - 60);
+        const isNearBottom = (window.innerHeight + window.scrollY) >= (document.documentElement.scrollHeight - 80);
         if (isNearBottom && sections.length > 0) {
             activeSectionId = sections[sections.length - 1].getAttribute('id');
-        } else if (!activeSectionId && sections.length > 0 && window.scrollY < 400) {
-            activeSectionId = sections[0].getAttribute('id');
         }
 
         if (activeSectionId) {
-            navLinks.forEach(link => {
-                const href = link.getAttribute('href');
-                if (href === '#' + activeSectionId) {
-                    link.classList.add('active');
-                } else {
-                    link.classList.remove('active');
-                }
-            });
+            setActiveLink(activeSectionId);
         }
     }
 
@@ -1139,5 +1172,6 @@ if (document.readyState === 'loading') {
 } else {
     initCaseStudyScrollSpy();
 }
+
 
 
