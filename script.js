@@ -1101,7 +1101,7 @@ function initCaseStudyScrollSpy() {
         });
     }
 
-    // Direct click handler for instant UI update + smooth jump
+    // Direct click handler for instant UI update + smooth scroll
     navLinks.forEach(link => {
         link.addEventListener('click', (e) => {
             const href = link.getAttribute('href');
@@ -1116,8 +1116,10 @@ function initCaseStudyScrollSpy() {
                     // Instantly illuminate clicked section in TOC
                     setActiveLink(targetId);
 
-                    // Smooth scroll to target section
-                    targetSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    // Smooth scroll to target section with offset for fixed nav
+                    const yOffset = -90;
+                    const y = targetSection.getBoundingClientRect().top + window.pageYOffset + yOffset;
+                    window.scrollTo({ top: y, behavior: 'smooth' });
 
                     // Release click lock after smooth scroll settles
                     clickTimeout = setTimeout(() => {
@@ -1140,18 +1142,35 @@ function initCaseStudyScrollSpy() {
         if (isClickScrolling) return;
 
         let activeSectionId = sections[0].getAttribute('id');
-        const triggerThreshold = 260; // Distance from viewport top to trigger active state
+        const focalPoint = window.innerHeight * 0.35; // 35% from the top of viewport
+        let bestMatch = null;
+        let minDistance = Infinity;
 
         sections.forEach(section => {
             const rect = section.getBoundingClientRect();
-            // As soon as section top scrolls past threshold, mark it active
-            if (rect.top <= triggerThreshold) {
+            // Check if section contains the focal line
+            if (rect.top <= focalPoint && rect.bottom >= focalPoint) {
+                bestMatch = section.getAttribute('id');
+            }
+            // Or find section whose top is closest to the focal point
+            const dist = Math.abs(rect.top - focalPoint);
+            if (dist < minDistance) {
+                minDistance = dist;
                 activeSectionId = section.getAttribute('id');
             }
         });
 
+        if (bestMatch) {
+            activeSectionId = bestMatch;
+        }
+
+        // Top of page edge case: if user is scrolled near top, select first section
+        if (window.scrollY < 200 && sections.length > 0) {
+            activeSectionId = sections[0].getAttribute('id');
+        }
+
         // Bottom of page edge case: activate last section if scrolled near page bottom
-        const isNearBottom = (window.innerHeight + window.scrollY) >= (document.documentElement.scrollHeight - 80);
+        const isNearBottom = (window.innerHeight + window.scrollY) >= (document.documentElement.scrollHeight - 60);
         if (isNearBottom && sections.length > 0) {
             activeSectionId = sections[sections.length - 1].getAttribute('id');
         }
@@ -1172,6 +1191,7 @@ if (document.readyState === 'loading') {
 } else {
     initCaseStudyScrollSpy();
 }
+
 
 
 
