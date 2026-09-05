@@ -26,6 +26,15 @@ function getResponsiveValues() {
 
 let responsiveVars = getResponsiveValues();
 
+// Global animation & star tracking state
+let trackedStar1 = null;
+let trackedStar2 = null;
+let showOrbitalPath = false;
+let orbitalPathProgress = 0;
+let isTransitioning = false;
+let isTabVisible = true;
+let lastTime = performance.now();
+
 // Interactive node properties
 const orbitalNode = {
     angle: Math.PI * 1.5, // Start at top
@@ -467,15 +476,6 @@ if (mountain && mountain.complete) {
     // Mountain not found, initialize with fallback center
     initializeStars();
 }
-
-// Animation variables
-let lastTime = performance.now();
-let isTabVisible = true;
-let showOrbitalPath = false; // Flag to show orbital path line when explore button is clicked
-let trackedStar1 = null; // Star closest to center that we'll track (orbital-line-1)
-let trackedStar2 = null; // Star slightly further out that we'll track (orbital-line-2)
-let orbitalPathProgress = 0; // Drawing progress of the orbital path lines (0 to 1)
-let isTransitioning = false; // Flag to track if the transition overlay is active
 
 // Handle tab visibility changes
 document.addEventListener('visibilitychange', () => {
