@@ -180,6 +180,16 @@
 </head>
 
 <body>
+    <header class="global-nav">
+        <a href="index.html" class="nav-brand">jiayi.</a>
+        <nav>
+            <ul class="nav-links">
+                <li><a href="index.html#work" class="nav-link">work</a></li>
+                <li><a href="about.html" class="nav-link" style="color: #ffffff;">about</a></li>
+                <li><a href="resume.pdf" target="_blank" class="nav-link nav-link-resume">resume ↗</a></li>
+            </ul>
+        </nav>
+    </header>
     <canvas id="star-canvas"></canvas>
     <img src="images/background_gradient.svg" id="background-gradient" alt="Background Gradient">
 
@@ -197,17 +207,17 @@
 
             I love solving ambiguous problems; either visually through design or through stories backed by data & analysis
 
-            Outside of work I'm a addicted to concerts & food. I'm also a pretty fast typist!
+            Outside of work I'm addicted to concerts & food. I'm also a pretty fast typist!
 
             I'm always looking to meet new people, feel free to reach out :)
-            <div style="margin-top: 20px; display: flex; align-items: center;">
+            <div style="margin-top: 20px; display: flex; align-items: center; flex-wrap: wrap; gap: 8px;">
+                <a href="mailto:jiayihong52@gmail.com" id="copy-email" class="about-btn">[jiayihong52@gmail.com]</a>
                 <a href="https://www.linkedin.com/in/jiayiihong/" target="_blank" class="about-btn">[Linkedin]</a>
-                <span id="copy-email" class="about-btn">[Email]</span>
                 <a href="https://x.com/jiayiihong" target="_blank" class="about-btn">[X]</a>
                 <a href="https://github.com/jiayiihong25" target="_blank" class="about-btn">[GitHub]</a>
             </div>
             <br>
-            <a href="explore.html" class="back-link">[check out my work]</a>
+            <a href="explore.html" class="back-link">[explore my work →]</a>
         </div>
     </div>
 
@@ -218,21 +228,19 @@
         if (casual && professional) {
             const bringToFront = (el, other) => { el.style.zIndex = '3'; other.style.zIndex = '1'; };
             casual.addEventListener('mouseenter', () => bringToFront(casual, professional));
-            professional.addEventListener('mouseenter', () => bringToFront(professional, professional)); // Keep professional back if hovering casual? No, logic was swap
-            // Original logic:
-            // casual.addEventListener('mouseenter', () => bringToFront(casual, professional));
-            // professional.addEventListener('mouseenter', () => bringToFront(professional, casual));
             professional.addEventListener('mouseenter', () => bringToFront(professional, casual));
         }
 
-        document.getElementById('copy-email').onclick = (e) => {
-            e.stopPropagation();
-            navigator.clipboard.writeText('jiayihong52@gmail.com').then(() => {
-                const originalText = e.target.innerText;
-                e.target.innerText = '[Copied!]';
-                setTimeout(() => { e.target.innerText = originalText; }, 2000);
-            });
-        };
+        const emailBtn = document.getElementById('copy-email');
+        if (emailBtn) {
+            emailBtn.onclick = (e) => {
+                navigator.clipboard.writeText('jiayihong52@gmail.com').then(() => {
+                    const originalText = emailBtn.innerText;
+                    emailBtn.innerText = '[Copied to Clipboard!]';
+                    setTimeout(() => { emailBtn.innerText = originalText; }, 2000);
+                });
+            };
+        }
     </script>
     <script src="script.js"></script>
 </body>
