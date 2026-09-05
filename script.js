@@ -26,6 +26,15 @@ function getResponsiveValues() {
 
 let responsiveVars = getResponsiveValues();
 
+// Global animation & star tracking state
+let trackedStar1 = null;
+let trackedStar2 = null;
+let showOrbitalPath = false;
+let orbitalPathProgress = 0;
+let isTransitioning = false;
+let isTabVisible = true;
+let lastTime = performance.now();
+
 // Interactive node properties
 const orbitalNode = {
     angle: Math.PI * 1.5, // Start at top
@@ -467,15 +476,6 @@ if (mountain && mountain.complete) {
     // Mountain not found, initialize with fallback center
     initializeStars();
 }
-
-// Animation variables
-let lastTime = performance.now();
-let isTabVisible = true;
-let showOrbitalPath = false; // Flag to show orbital path line when explore button is clicked
-let trackedStar1 = null; // Star closest to center that we'll track (orbital-line-1)
-let trackedStar2 = null; // Star slightly further out that we'll track (orbital-line-2)
-let orbitalPathProgress = 0; // Drawing progress of the orbital path lines (0 to 1)
-let isTransitioning = false; // Flag to track if the transition overlay is active
 
 // Handle tab visibility changes
 document.addEventListener('visibilitychange', () => {
@@ -1071,3 +1071,127 @@ window.addEventListener('pageshow', (event) => {
         fadeOverlay.style.pointerEvents = 'none';
     }
 });
+
+// Master Case Study TOC ScrollSpy System & Reading Progress Bar
+function initCaseStudyScrollSpy() {
+    const sections = document.querySelectorAll('.case-section');
+    const navLinks = document.querySelectorAll('.toc-link');
+
+    if (!sections.length || !navLinks.length) return;
+
+    // Auto inject Reading Progress Bar if not already in DOM
+    let progressBar = document.querySelector('.reading-progress-bar');
+    if (!progressBar) {
+        progressBar = document.createElement('div');
+        progressBar.className = 'reading-progress-bar';
+        document.body.appendChild(progressBar);
+    }
+
+    let isClickScrolling = false;
+    let clickTimeout = null;
+
+    function setActiveLink(targetId) {
+        navLinks.forEach(link => {
+            const href = link.getAttribute('href');
+            if (href === '#' + targetId) {
+                link.classList.add('active');
+            } else {
+                link.classList.remove('active');
+            }
+        });
+    }
+
+    // Direct click handler for instant UI update + smooth scroll
+    navLinks.forEach(link => {
+        link.addEventListener('click', (e) => {
+            const href = link.getAttribute('href');
+            if (href && href.startsWith('#')) {
+                const targetId = href.substring(1);
+                const targetSection = document.getElementById(targetId);
+                if (targetSection) {
+                    e.preventDefault();
+                    isClickScrolling = true;
+                    if (clickTimeout) clearTimeout(clickTimeout);
+
+                    // Instantly illuminate clicked section in TOC
+                    setActiveLink(targetId);
+
+                    // Smooth scroll to target section with offset for fixed nav
+                    const yOffset = -90;
+                    const y = targetSection.getBoundingClientRect().top + window.pageYOffset + yOffset;
+                    window.scrollTo({ top: y, behavior: 'smooth' });
+
+                    // Release click lock after smooth scroll settles
+                    clickTimeout = setTimeout(() => {
+                        isClickScrolling = false;
+                        updateActive();
+                    }, 800);
+                }
+            }
+        });
+    });
+
+    function updateActive() {
+        // Calculate Reading Progress Percentage
+        const totalDocHeight = document.documentElement.scrollHeight - window.innerHeight;
+        if (totalDocHeight > 0 && progressBar) {
+            const scrollPercent = Math.min(100, Math.max(0, (window.scrollY / totalDocHeight) * 100));
+            progressBar.style.width = scrollPercent + '%';
+        }
+
+        if (isClickScrolling) return;
+
+        let activeSectionId = sections[0].getAttribute('id');
+        const focalPoint = window.innerHeight * 0.35; // 35% from the top of viewport
+        let bestMatch = null;
+        let minDistance = Infinity;
+
+        sections.forEach(section => {
+            const rect = section.getBoundingClientRect();
+            // Check if section contains the focal line
+            if (rect.top <= focalPoint && rect.bottom >= focalPoint) {
+                bestMatch = section.getAttribute('id');
+            }
+            // Or find section whose top is closest to the focal point
+            const dist = Math.abs(rect.top - focalPoint);
+            if (dist < minDistance) {
+                minDistance = dist;
+                activeSectionId = section.getAttribute('id');
+            }
+        });
+
+        if (bestMatch) {
+            activeSectionId = bestMatch;
+        }
+
+        // Top of page edge case: if user is scrolled near top, select first section
+        if (window.scrollY < 200 && sections.length > 0) {
+            activeSectionId = sections[0].getAttribute('id');
+        }
+
+        // Bottom of page edge case: activate last section if scrolled near page bottom
+        const isNearBottom = (window.innerHeight + window.scrollY) >= (document.documentElement.scrollHeight - 60);
+        if (isNearBottom && sections.length > 0) {
+            activeSectionId = sections[sections.length - 1].getAttribute('id');
+        }
+
+        if (activeSectionId) {
+            setActiveLink(activeSectionId);
+        }
+    }
+
+    window.addEventListener('scroll', updateActive, { passive: true });
+    window.addEventListener('resize', updateActive, { passive: true });
+    // Initial calculation on load
+    updateActive();
+}
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initCaseStudyScrollSpy);
+} else {
+    initCaseStudyScrollSpy();
+}
+
+
+
+

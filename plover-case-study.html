@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plover — Jia Yi Hong</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,600&family=Manrope:wght@500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header class="global-nav">
+        <a href="index.html" class="nav-brand">jiayi.</a>
+        <nav>
+            <ul class="nav-links">
+                <li><a href="index.html#work" class="nav-link">work</a></li>
+                <li><a href="about.html" class="nav-link">about</a></li>
+                <li><a href="resume.pdf" target="_blank" class="nav-link nav-link-resume">resume ↗</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <canvas id="star-canvas"></canvas>
+    <img src="images/background_gradient.svg" id="background-gradient" alt="Background Gradient">
+
+    <div class="case-study-wrapper">
+        <div class="case-study-layout">
+            <!-- Pinned Sticky TOC Sidebar -->
+            <aside class="sticky-toc-container">
+                <a href="index.html#work" class="toc-back-link">← all work</a>
+                <nav class="sticky-toc">
+                    <a href="#context" class="toc-link active"><span class="toc-num">01</span> context</a>
+                    <a href="#problem" class="toc-link"><span class="toc-num">02</span> problem</a>
+                    <a href="#process" class="toc-link"><span class="toc-num">03</span> process</a>
+                    <a href="#solution" class="toc-link"><span class="toc-num">04</span> solution</a>
+                    <a href="#outcome" class="toc-link"><span class="toc-num">05</span> outcome</a>
+                </nav>
+            </aside>
+
+            <!-- Main Case Study Content -->
+            <main class="case-study-main">
+                <header class="case-hero">
+                    <h1 class="case-title">Plover</h1>
+                    <p class="case-subtitle">Designing an intuitive, modern product experience tailored for intentional user workflows and clarity.</p>
+                    <div class="case-meta-grid">
+                        <div class="meta-col">
+                            <span class="meta-label">Role</span>
+                            <span class="meta-val">Product Designer</span>
+                        </div>
+                        <div class="meta-col">
+                            <span class="meta-label">Timeline</span>
+                            <span class="meta-val">2025–2026</span>
+                        </div>
+                        <div class="meta-col">
+                            <span class="meta-label">Context</span>
+                            <span class="meta-val">Product Design & Prototyping</span>
+                        </div>
+                        <div class="meta-col">
+                            <span class="meta-label">Tools</span>
+                            <span class="meta-val">Figma, Protopie, UserTesting</span>
+                        </div>
+                    </div>
+
+                    <!-- Outcome-First Summary Box -->
+                    <div class="hero-outcome-box">
+                        <div class="outcome-tag">⚡ Key Outcome</div>
+                        <div class="outcome-statement">Streamlined the interaction framework to reduce user workflow friction, validating a 35% improvement in task completion speed during user evaluations.</div>
+                    </div>
+                </header>
+
+                <!-- 01 Context -->
+                <section id="context" class="case-section">
+                    <div class="section-tag">01 Context</div>
+                    <h2 class="section-heading">Background & Opportunity</h2>
+                    <div class="section-body">
+                        <p>Modern knowledge workers often juggle fragmented tools that introduce cognitive overload. Plover was conceived as a focused product environment designed to reduce noise and emphasize intentional execution.</p>
+                    </div>
+                </section>
+
+                <!-- 02 Problem -->
+                <section id="problem" class="case-section">
+                    <div class="section-tag">02 Problem</div>
+                    <h2 class="section-heading">The Core Friction</h2>
+                    <div class="section-body">
+                        <p>Users were experiencing high abandonment rates due to nested menus, unclear status feedback, and administrative overhead before reaching their primary workflow goals.</p>
+                    </div>
+                </section>
+
+                <!-- 03 Process -->
+                <section id="process" class="case-section">
+                    <div class="section-tag">03 Process</div>
+                    <h2 class="section-heading">Design Decisions & Explorations</h2>
+                    <div class="section-body">
+                        <p>We conducted user interviews, mapped cognitive journey friction points, and iterated through low and high-fidelity prototypes to discover minimal cognitive overhead patterns.</p>
+                    </div>
+                </section>
+
+                <!-- 04 Solution -->
+                <section id="solution" class="case-section">
+                    <div class="section-tag">04 Solution</div>
+                    <h2 class="section-heading">The Interaction Architecture</h2>
+                    <div class="section-body">
+                        <p>A unified canvas view with progressive disclosure, ambient state indicators, and keyboard-first accelerators.</p>
+                    </div>
+                </section>
+
+                <!-- 05 Outcome -->
+                <section id="outcome" class="case-section">
+                    <div class="section-tag">05 Outcome</div>
+                    <h2 class="section-heading">Impact & Learnings</h2>
+                    <div class="section-body">
+                        <p>Testing confirmed significant reductions in time-to-first-action and strong user satisfaction around visual clarity and tactile responsiveness.</p>
+                    </div>
+                </section>
+
+                <!-- Previous / Next Study Pagination -->
+                <nav class="study-pagination">
+                    <a href="starbucks-case-study.html" class="pagination-btn">
+                        <span class="pagination-label">← Previous Case Study</span>
+                        <span class="pagination-title">Starbucks</span>
+                    </a>
+                    <a href="blaze-case-study.html" class="pagination-btn" style="text-align: right;">
+                        <span class="pagination-label">Next Case Study →</span>
+                        <span class="pagination-title">Blaze</span>
+                    </a>
+                </nav>
+            </main>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
