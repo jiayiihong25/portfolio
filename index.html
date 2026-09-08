@@ -213,6 +213,7 @@
                 if (e) e.preventDefault();
                 document.body.classList.remove('hero-locked');
                 document.body.classList.add('work-unlocked');
+                hasScrolledDown = true;
                 
                 requestAnimationFrame(() => {
                     if (workSection) {
@@ -223,6 +224,24 @@
 
             if (unlockBtn) unlockBtn.addEventListener('click', unlockWork);
             if (workNav) workNav.addEventListener('click', unlockWork);
+
+            // Check if loaded with #work hash (e.g. from back-to-work link on case studies)
+            if (window.location.hash === '#work') {
+                document.body.classList.remove('hero-locked');
+                document.body.classList.add('work-unlocked');
+                hasScrolledDown = true;
+                setTimeout(() => {
+                    if (workSection) {
+                        workSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                }, 100);
+            }
+
+            window.addEventListener('hashchange', () => {
+                if (window.location.hash === '#work') {
+                    unlockWork();
+                }
+            });
 
             window.addEventListener('scroll', () => {
                 if (window.scrollY > 80) {
