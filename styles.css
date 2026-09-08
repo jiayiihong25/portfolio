@@ -700,3 +700,410 @@ body::after {
         right: 33px;
     }
 }
+
+/* Global Persistent Header Navigation */
+.global-nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 16px 5vw;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    z-index: 10000;
+    background: rgba(10, 10, 15, 0.65);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    transition: background 0.3s ease, border-color 0.3s ease;
+}
+
+.nav-brand {
+    font-family: "EB Garamond", serif;
+    font-style: italic;
+    font-weight: 600;
+    font-size: 22px;
+    color: #ffffff;
+    text-decoration: none;
+    letter-spacing: -0.02em;
+    transition: opacity 0.2s ease, text-shadow 0.2s ease;
+}
+
+.nav-brand:hover {
+    opacity: 0.85;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+}
+
+.nav-links {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    list-style: none;
+}
+
+.nav-link {
+    font-family: "Manrope", sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    color: rgba(203, 209, 220, 0.75);
+    text-decoration: none;
+    transition: color 0.2s ease, text-shadow 0.2s ease;
+    cursor: pointer;
+}
+
+.nav-link:hover {
+    color: #ffffff;
+    text-shadow: 0 0 8px rgba(255, 255, 255, 0.4);
+}
+
+.nav-link-resume {
+    color: #ffffff;
+    padding: 5px 14px;
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    transition: all 0.2s ease;
+}
+
+.nav-link-resume:hover {
+    background: rgba(255, 255, 255, 0.18);
+    border-color: rgba(255, 255, 255, 0.35);
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+}
+
+@media (max-width: 768px) {
+    .global-nav {
+        padding: 12px 18px;
+    }
+    .nav-brand {
+        font-size: 19px;
+    }
+    .nav-links {
+        gap: 16px;
+    }
+    .nav-link {
+        font-size: 13px;
+    }
+    .nav-link-resume {
+        padding: 4px 10px;
+    }
+}
+
+/* Single Scroll Homepage & Hero Adjustments */
+#hero {
+    position: relative;
+    width: 100%;
+    min-height: 72vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding-top: 80px;
+}
+
+.scroll-cue {
+    position: absolute;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: "Manrope", sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    color: rgba(203, 209, 220, 0.7);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    z-index: 10;
+    transition: color 0.3s ease, transform 0.3s ease;
+    animation: bounceCue 2s infinite ease-in-out;
+}
+
+.scroll-cue:hover {
+    color: #ffffff;
+    transform: translateX(-50%) translateY(3px);
+}
+
+@keyframes bounceCue {
+    0%, 100% { transform: translateX(-50%) translateY(0); }
+    50% { transform: translateX(-50%) translateY(6px); }
+}
+
+/* Work Section Layout */
+#work {
+    position: relative;
+    z-index: 10;
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 0 100px;
+}
+
+.work-section-header {
+    font-family: "Manrope", sans-serif;
+    font-size: 14px;
+    font-style: italic;
+    color: rgba(203, 209, 220, 0.6);
+    margin-bottom: 28px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.work-section-header::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, rgba(255, 255, 255, 0.15), transparent);
+}
+
+/* 01 Featured Work Grid (2 Large Cards) */
+.featured-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 32px;
+    margin-bottom: 48px;
+}
+
+.featured-card {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
+    overflow: hidden;
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.3s ease, background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+    backdrop-filter: blur(8px);
+}
+
+.featured-card:hover {
+    transform: translateY(-6px);
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(255, 255, 255, 0.25);
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.4);
+}
+
+.featured-card-img-wrapper {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: #000;
+}
+
+.featured-card-img-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+}
+
+.featured-card:hover .featured-card-img-wrapper img {
+    transform: scale(1.04);
+}
+
+.featured-card-content {
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.card-num-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+    font-family: "Manrope", sans-serif;
+}
+
+.card-num {
+    font-size: 13px;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.4);
+}
+
+.card-meta {
+    font-size: 12px;
+    font-weight: 500;
+    color: rgba(203, 209, 220, 0.65);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.card-title {
+    font-family: "EB Garamond", serif;
+    font-size: 28px;
+    font-weight: 600;
+    color: #ffffff;
+    margin-bottom: 8px;
+    line-height: 1.2;
+}
+
+.card-desc {
+    font-family: "Manrope", sans-serif;
+    font-size: 14px;
+    color: rgba(203, 209, 220, 0.8);
+    line-height: 1.5;
+    margin-bottom: 16px;
+    flex: 1;
+}
+
+.card-outcome {
+    font-family: "Manrope", sans-serif;
+    font-size: 13px;
+    font-style: italic;
+    color: #cbd5e1;
+    line-height: 1.4;
+    padding-top: 14px;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* 02 Compact List (Editorial Rows 03-06) */
+.compact-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-bottom: 48px;
+}
+
+.compact-row {
+    background: rgba(255, 255, 255, 0.025);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-radius: 14px;
+    padding: 20px 24px;
+    text-decoration: none;
+    display: grid;
+    grid-template-columns: 40px 180px 1fr auto;
+    align-items: center;
+    gap: 20px;
+    transition: transform 0.3s ease, background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+    backdrop-filter: blur(6px);
+}
+
+.compact-row:hover {
+    transform: translateX(4px);
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+}
+
+.compact-num {
+    font-family: "Manrope", sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.4);
+}
+
+.compact-main h3 {
+    font-family: "EB Garamond", serif;
+    font-size: 22px;
+    font-weight: 600;
+    color: #ffffff;
+    margin-bottom: 4px;
+}
+
+.compact-meta {
+    font-family: "Manrope", sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    color: rgba(203, 209, 220, 0.6);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.compact-details {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.compact-desc {
+    font-family: "Manrope", sans-serif;
+    font-size: 13px;
+    color: rgba(203, 209, 220, 0.85);
+    line-height: 1.4;
+}
+
+.compact-outcome {
+    font-family: "Manrope", sans-serif;
+    font-size: 12px;
+    font-style: italic;
+    color: #94a3b8;
+}
+
+.compact-arrow {
+    font-family: "Manrope", sans-serif;
+    font-size: 18px;
+    color: rgba(255, 255, 255, 0.4);
+    transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.compact-row:hover .compact-arrow {
+    transform: translateX(4px);
+    color: #ffffff;
+}
+
+/* 03 Graphic Design Showcase Section */
+.graphic-gallery-card {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0.01) 100%);
+    border: 1px dashed rgba(255, 255, 255, 0.15);
+    border-radius: 16px;
+    padding: 28px 32px;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: all 0.3s ease;
+}
+
+.graphic-gallery-card:hover {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.07) 0%, rgba(255, 255, 255, 0.03) 100%);
+    border-color: rgba(255, 255, 255, 0.35);
+    transform: translateY(-2px);
+}
+
+.graphic-info h3 {
+    font-family: "EB Garamond", serif;
+    font-size: 26px;
+    font-weight: 600;
+    color: #ffffff;
+    margin-bottom: 6px;
+}
+
+/* Responsive Scaling for Work Section */
+@media (max-width: 900px) {
+    .featured-grid {
+        grid-template-columns: 1fr;
+    }
+    .compact-row {
+        grid-template-columns: 30px 1fr auto;
+    }
+    .compact-meta {
+        margin-top: 2px;
+    }
+    .compact-details {
+        grid-column: 2 / span 2;
+    }
+}
+
+@media (max-width: 600px) {
+    #work {
+        width: 92%;
+        padding: 20px 0 60px;
+    }
+    .compact-row {
+        grid-template-columns: 1fr;
+        gap: 8px;
+    }
+    .compact-arrow {
+        display: none;
+    }
+    .graphic-gallery-card {
+        padding: 20px;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+}
