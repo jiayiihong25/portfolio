@@ -1071,3 +1071,57 @@ window.addEventListener('pageshow', (event) => {
         fadeOverlay.style.pointerEvents = 'none';
     }
 });
+
+// Master Case Study TOC ScrollSpy System
+function initCaseStudyScrollSpy() {
+    const sections = document.querySelectorAll('.case-section');
+    const navLinks = document.querySelectorAll('.toc-link');
+
+    if (!sections.length || !navLinks.length) return;
+
+    function updateActive() {
+        let activeSectionId = '';
+        const scrollTrigger = window.scrollY + 220;
+
+        sections.forEach(section => {
+            const rect = section.getBoundingClientRect();
+            const top = window.scrollY + rect.top;
+            const bottom = top + section.offsetHeight;
+
+            if (scrollTrigger >= top && scrollTrigger <= bottom) {
+                activeSectionId = section.getAttribute('id');
+            }
+        });
+
+        // Bottom of page edge case: activate last section if scrolled near page bottom
+        const isNearBottom = (window.innerHeight + window.scrollY) >= (document.documentElement.scrollHeight - 60);
+        if (isNearBottom && sections.length > 0) {
+            activeSectionId = sections[sections.length - 1].getAttribute('id');
+        } else if (!activeSectionId && sections.length > 0 && window.scrollY < 400) {
+            activeSectionId = sections[0].getAttribute('id');
+        }
+
+        if (activeSectionId) {
+            navLinks.forEach(link => {
+                const href = link.getAttribute('href');
+                if (href === '#' + activeSectionId) {
+                    link.classList.add('active');
+                } else {
+                    link.classList.remove('active');
+                }
+            });
+        }
+    }
+
+    window.addEventListener('scroll', updateActive, { passive: true });
+    window.addEventListener('resize', updateActive, { passive: true });
+    // Initial calculation on load
+    updateActive();
+}
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initCaseStudyScrollSpy);
+} else {
+    initCaseStudyScrollSpy();
+}
+
