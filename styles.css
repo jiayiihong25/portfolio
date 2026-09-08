@@ -951,6 +951,32 @@ body.work-unlocked #text {
     box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.6), 0 0 25px -5px rgba(96, 165, 250, 0.25);
 }
 
+.featured-card.is-locked {
+    cursor: default;
+    user-select: none;
+    opacity: 0.85;
+}
+
+.featured-card.is-locked:hover {
+    transform: translateY(-3px);
+    background: rgba(255, 255, 255, 0.035);
+    border-color: rgba(255, 255, 255, 0.15);
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.4);
+}
+
+.featured-card.is-locked:hover .card-num {
+    color: rgba(255, 255, 255, 0.4);
+}
+
+.featured-card.is-locked:hover .card-title {
+    text-shadow: none;
+}
+
+.featured-card.is-locked:hover .featured-card-img-wrapper img {
+    transform: none;
+    filter: none;
+}
+
 .featured-card-img-wrapper {
     width: 100%;
     aspect-ratio: 16 / 9;
