@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 
-<body class="hero-locked">
+<body>
     <header class="global-nav">
         <a href="index.html" class="nav-brand">jiayi.</a>
         <nav>
@@ -209,29 +209,20 @@
             const workNav = document.querySelector('.nav-link[href="#work"]');
             const workSection = document.getElementById('work');
 
-            let hasScrolledDown = false;
-
-            const unlockWork = (e) => {
+            const scrollToWork = (e) => {
                 if (e) e.preventDefault();
-                document.body.classList.remove('hero-locked');
                 document.body.classList.add('work-unlocked');
-                hasScrolledDown = true;
-                
-                requestAnimationFrame(() => {
-                    if (workSection) {
-                        workSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                    }
-                });
+                if (workSection) {
+                    workSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
             };
 
-            if (unlockBtn) unlockBtn.addEventListener('click', unlockWork);
-            if (workNav) workNav.addEventListener('click', unlockWork);
+            if (unlockBtn) unlockBtn.addEventListener('click', scrollToWork);
+            if (workNav) workNav.addEventListener('click', scrollToWork);
 
             // Check if loaded with #work hash (e.g. from back-to-work link on case studies)
             if (window.location.hash === '#work') {
-                document.body.classList.remove('hero-locked');
                 document.body.classList.add('work-unlocked');
-                hasScrolledDown = true;
                 setTimeout(() => {
                     if (workSection) {
                         workSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -241,23 +232,21 @@
 
             window.addEventListener('hashchange', () => {
                 if (window.location.hash === '#work') {
-                    unlockWork();
+                    scrollToWork();
                 }
             });
 
-            window.addEventListener('scroll', () => {
-                if (window.scrollY > 80) {
-                    hasScrolledDown = true;
-                    if (!document.body.classList.contains('work-unlocked')) {
-                        document.body.classList.remove('hero-locked');
-                        document.body.classList.add('work-unlocked');
-                    }
-                } else if (window.scrollY <= 10 && hasScrolledDown) {
+            // Smooth natural continuous bidirectional scroll listener
+            const updateScrollEffects = () => {
+                if (window.scrollY > 40) {
+                    document.body.classList.add('work-unlocked');
+                } else {
                     document.body.classList.remove('work-unlocked');
-                    document.body.classList.add('hero-locked');
-                    hasScrolledDown = false;
                 }
-            }, { passive: true });
+            };
+
+            window.addEventListener('scroll', updateScrollEffects, { passive: true });
+            updateScrollEffects();
         });
     </script>
 </body>

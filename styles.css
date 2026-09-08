@@ -810,16 +810,9 @@ body::after {
     }
 }
 
-/* Single Scroll Homepage & Hero Adjustments */
-body.hero-locked {
-    overflow: hidden !important;
-    height: 100vh !important;
-}
-
-body.work-unlocked {
-    overflow-y: auto !important;
-    height: auto !important;
-    min-height: 100vh;
+/* Single Scroll Homepage & Dynamic Blur Dissolve */
+body {
+    overflow-y: auto;
 }
 
 #star-canvas,
@@ -879,6 +872,10 @@ body.work-unlocked #orbital-lines {
 body.work-unlocked .scroll-cue {
     opacity: 0 !important;
     pointer-events: none !important;
+}
+
+#text {
+    transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 body.work-unlocked #text {
