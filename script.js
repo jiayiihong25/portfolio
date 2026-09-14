@@ -1267,7 +1267,7 @@ function initCustomCursor() {
         }
     });
 
-    const workSelector = '.featured-card:not(.is-locked), .compact-row, .graphic-gallery-card, .pagination-btn, .case-photo, [data-cursor-work], [data-cursor-text]';
+    const workSelector = '.featured-card:not(.is-locked), [data-cursor-work]';
 
     document.addEventListener('pointerover', (e) => {
         const workTarget = e.target.closest(workSelector);

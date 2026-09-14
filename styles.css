@@ -952,7 +952,7 @@ body.work-unlocked #text {
     position: absolute;
     inset: 0;
     border-radius: inherit;
-    background: rgba(15, 23, 42, 0.35);
+    background: rgba(0, 0, 0, 0.4);
     opacity: 0;
     pointer-events: none;
     transition: opacity 0.35s ease;
@@ -964,7 +964,7 @@ body.work-unlocked #text {
 }
 
 .featured-card:hover {
-    background: rgba(255, 255, 255, 0.045);
+    background: rgba(0, 0, 0, 0.3);
     border-color: rgba(255, 255, 255, 0.16);
 }
 
@@ -999,7 +999,7 @@ body.work-unlocked #text {
 }
 
 .featured-card:not(.is-locked):hover .featured-card-img-wrapper img {
-    filter: brightness(0.92);
+    filter: brightness(0.85);
 }
 
 .featured-card-content {
@@ -1097,7 +1097,7 @@ body.work-unlocked #text {
     position: absolute;
     inset: 0;
     border-radius: inherit;
-    background: rgba(255, 255, 255, 0.035);
+    background: rgba(0, 0, 0, 0.4);
     opacity: 0;
     pointer-events: none;
     transition: opacity 0.35s ease;
@@ -1109,7 +1109,7 @@ body.work-unlocked #text {
 }
 
 .compact-row:hover {
-    background: rgba(255, 255, 255, 0.045);
+    background: rgba(0, 0, 0, 0.3);
     border-color: rgba(255, 255, 255, 0.16);
 }
 
@@ -1195,7 +1195,7 @@ body.work-unlocked #text {
     position: absolute;
     inset: 0;
     border-radius: inherit;
-    background: rgba(255, 255, 255, 0.035);
+    background: rgba(0, 0, 0, 0.4);
     opacity: 0;
     pointer-events: none;
     transition: opacity 0.35s ease;
@@ -1207,7 +1207,7 @@ body.work-unlocked #text {
 }
 
 .graphic-gallery-card:hover {
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0.02) 100%);
+    background: rgba(0, 0, 0, 0.3);
     border-color: rgba(255, 255, 255, 0.25);
     border-style: solid;
 }
