@@ -4,6 +4,11 @@
     box-sizing: border-box;
 }
 
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
 html {
     scroll-behavior: smooth;
     background-color: #0a0a0f;
@@ -933,6 +938,7 @@ body.work-unlocked #text {
     border-radius: 16px;
     overflow: hidden;
     text-decoration: none;
+    color: inherit;
     display: flex;
     flex-direction: column;
     transition: background 0.35s ease, 
@@ -946,7 +952,7 @@ body.work-unlocked #text {
     position: absolute;
     inset: 0;
     border-radius: inherit;
-    background: rgba(15, 23, 42, 0.3);
+    background: rgba(15, 23, 42, 0.35);
     opacity: 0;
     pointer-events: none;
     transition: opacity 0.35s ease;
@@ -1075,6 +1081,7 @@ body.work-unlocked #text {
     border-radius: 14px;
     padding: 20px 24px;
     text-decoration: none;
+    color: inherit;
     display: grid;
     grid-template-columns: 40px 180px 1fr auto;
     align-items: center;
@@ -1174,6 +1181,7 @@ body.work-unlocked #text {
     border-radius: 16px;
     padding: 28px 32px;
     text-decoration: none;
+    color: inherit;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -1204,6 +1212,10 @@ body.work-unlocked #text {
     border-style: solid;
 }
 
+.graphic-info {
+    color: inherit;
+}
+
 .graphic-info h3 {
     font-family: "EB Garamond", serif;
     font-size: 26px;
@@ -1212,8 +1224,20 @@ body.work-unlocked #text {
     margin-bottom: 6px;
 }
 
-.graphic-gallery-card:hover .graphic-info h3 {
-    text-shadow: 0 0 14px rgba(255, 255, 255, 0.4);
+.graphic-info .card-num {
+    color: rgba(255, 255, 255, 0.4);
+}
+
+.graphic-info .card-meta {
+    color: rgba(203, 209, 220, 0.65);
+}
+
+.graphic-info .compact-desc {
+    color: rgba(203, 209, 220, 0.85);
+}
+
+.graphic-info .compact-outcome {
+    color: #cbd5e1;
 }
 
 /* Responsive Scaling for Work Section */

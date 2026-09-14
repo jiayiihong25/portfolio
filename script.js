@@ -73,7 +73,7 @@ let mouseY = 0;
 
 // Get canvas and context
 const canvas = document.getElementById('star-canvas');
-const ctx = canvas.getContext('2d');
+const ctx = canvas ? canvas.getContext('2d') : null;
 
 // Pre-rendered glow sprite for star glow effect.
 // Using a cached sprite + drawImage is drastically cheaper than calling
@@ -95,6 +95,7 @@ glowSprite.height = GLOW_SPRITE_SIZE;
 
 // Set canvas size to match window
 function resizeCanvas() {
+    if (!canvas) return;
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 
@@ -116,8 +117,10 @@ function resizeCanvas() {
         orbitalNode4.hoverRadius = responsiveVars.node4Radius * 1.2;
     }
 }
-resizeCanvas(); // Initial call
-window.addEventListener('resize', resizeCanvas);
+if (canvas) {
+    resizeCanvas(); // Initial call
+    window.addEventListener('resize', resizeCanvas);
+}
 
 // Calculate orbital center (middle of the mountain)
 function getOrbitalCenter() {
@@ -131,10 +134,12 @@ function getOrbitalCenter() {
             y: (rect.top + rect.height / 2) - mobileYShift
         };
     }
+    const width = canvas ? canvas.width : window.innerWidth;
+    const height = canvas ? canvas.height : window.innerHeight;
     // Fallback to center bottom if mountain not found (shifted up for mobile)
     return {
-        x: canvas.width / 2,
-        y: canvas.height * (responsiveVars.isMobile ? 0.6 : 0.85)
+        x: width / 2,
+        y: height * (responsiveVars.isMobile ? 0.6 : 0.85)
     };
 }
 
@@ -505,6 +510,7 @@ document.addEventListener('visibilitychange', () => {
 
 // Animation loop
 function animate(currentTime) {
+    if (!canvas || !ctx) return;
     const deltaTime = currentTime - lastTime;
 
     // Cap deltaTime to prevent huge jumps when tab becomes visible again
