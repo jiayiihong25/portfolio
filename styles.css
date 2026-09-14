@@ -1692,3 +1692,111 @@ body.work-unlocked #text {
         flex-direction: column;
     }
 }
+
+/* ==========================================================================
+   Custom Cursor Follower & Morphing "view work" Badge
+   ========================================================================== */
+
+.custom-cursor-follower {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: rgba(165, 180, 252, 0.95);
+    box-shadow: 0 0 10px rgba(165, 180, 252, 0.6), 0 0 3px rgba(255, 255, 255, 0.8);
+    pointer-events: none;
+    z-index: 99999;
+    will-change: transform, width, height, border-radius, background, box-shadow;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    padding: 0;
+    opacity: 0;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    transition: width 0.32s cubic-bezier(0.16, 1, 0.3, 1),
+                height 0.32s cubic-bezier(0.16, 1, 0.3, 1),
+                border-radius 0.32s cubic-bezier(0.16, 1, 0.3, 1),
+                background 0.32s ease,
+                border-color 0.32s ease,
+                box-shadow 0.32s cubic-bezier(0.16, 1, 0.3, 1),
+                padding 0.32s cubic-bezier(0.16, 1, 0.3, 1),
+                opacity 0.25s ease;
+    transform: translate3d(-100px, -100px, 0) translate(-50%, -50%);
+}
+
+.custom-cursor-follower.is-visible {
+    opacity: 1;
+}
+
+.custom-cursor-follower.is-hidden {
+    opacity: 0 !important;
+}
+
+/* Link hover state (subtle dot enlargement) */
+.custom-cursor-follower.is-hovering-link:not(.is-expanded) {
+    width: 14px;
+    height: 14px;
+    background: rgba(199, 210, 254, 0.95);
+    box-shadow: 0 0 14px rgba(165, 180, 252, 0.8);
+}
+
+/* Expanded Badge State (over portfolio work) */
+.custom-cursor-follower.is-expanded {
+    width: auto;
+    height: 36px;
+    padding: 0 16px;
+    border-radius: 9999px;
+    background: rgba(142, 148, 204, 0.88);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    box-shadow: 0 12px 30px -4px rgba(0, 0, 0, 0.5), 
+                0 0 20px -2px rgba(142, 148, 204, 0.45);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+}
+
+.cursor-badge-inner {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    opacity: 0;
+    transform: scale(0.65);
+    white-space: nowrap;
+    transition: opacity 0.22s ease 0.05s, transform 0.25s cubic-bezier(0.16, 1, 0.3, 1) 0.05s;
+    user-select: none;
+}
+
+.custom-cursor-follower.is-expanded .cursor-badge-inner {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.cursor-badge-icon {
+    width: 16px;
+    height: 16px;
+    stroke: #ffffff;
+    stroke-width: 2.2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    fill: none;
+    display: block;
+    flex-shrink: 0;
+}
+
+.cursor-badge-text {
+    font-family: "Manrope", sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    color: #ffffff;
+    letter-spacing: 0.03em;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+/* Touch and small screens: hide custom cursor follower completely */
+@media (max-width: 768px), (pointer: coarse) {
+    .custom-cursor-follower {
+        display: none !important;
+    }
+}

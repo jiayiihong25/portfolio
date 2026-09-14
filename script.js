@@ -923,22 +923,6 @@ function fadeAndNavigate(targetUrl) {
 
 
 
-if (exploreButton) {
-    exploreButton.addEventListener('click', (e) => {
-        if (exploreButton.getAttribute('href') === 'explore.html') {
-            e.preventDefault();
-            fadeAndNavigate('explore.html');
-        }
-    });
-}
-
-const exploreBackBtn = document.querySelector('a[href="index.html"].back-link-center');
-if (exploreBackBtn) {
-    exploreBackBtn.addEventListener('click', (e) => {
-        e.preventDefault();
-        fadeAndNavigate('index.html');
-    });
-}
 
 // Back button logic
 // Back button logic
@@ -1032,12 +1016,6 @@ canvas.addEventListener('click', (e) => {
     }
 });
 
-// Check if we are on explore.html and auto-trigger animation state
-if (window.location.pathname.endsWith('explore.html')) {
-    // We no longer draw orbital paths here, as explore.html now has a scrolling project grid
-    orbitalPathProgress = 0; 
-}
-
 // Start animation loop
 requestAnimationFrame(animate);
 
@@ -1046,7 +1024,7 @@ function goBack() {
     if (window.history.length > 1 && document.referrer.includes(window.location.host)) {
         window.history.back();
     } else {
-        window.location.href = 'explore.html';
+        window.location.href = 'index.html#work';
     }
 }
 
@@ -1191,6 +1169,135 @@ if (document.readyState === 'loading') {
 } else {
     initCaseStudyScrollSpy();
 }
+
+/* ==========================================================================
+   Custom Cursor Follower & Morphing "view work" Badge
+   ========================================================================== */
+
+function initCustomCursor() {
+    // Only enable on desktop pointer devices
+    if (window.matchMedia('(max-width: 768px)').matches || window.matchMedia('(pointer: coarse)').matches) {
+        return;
+    }
+
+    let follower = document.getElementById('custom-cursor-follower');
+    if (!follower) {
+        follower = document.createElement('div');
+        follower.id = 'custom-cursor-follower';
+        follower.className = 'custom-cursor-follower';
+        follower.setAttribute('aria-hidden', 'true');
+        follower.innerHTML = `
+            <div class="cursor-badge-inner">
+                <svg class="cursor-badge-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/>
+                    <circle cx="12" cy="12" r="3"/>
+                </svg>
+                <span class="cursor-badge-text">view work</span>
+            </div>
+        `;
+        document.body.appendChild(follower);
+    }
+
+    const textEl = follower.querySelector('.cursor-badge-text');
+
+    let mouseX = -100;
+    let mouseY = -100;
+    let cursorX = -100;
+    let cursorY = -100;
+    let isInitialized = false;
+    let isExpanded = false;
+    let isHoveringLink = false;
+    let rafId = null;
+
+    function render() {
+        if (isInitialized) {
+            // Smooth lerp interpolation
+            const ease = isExpanded ? 0.22 : 0.28;
+            cursorX += (mouseX - cursorX) * ease;
+            cursorY += (mouseY - cursorY) * ease;
+
+            follower.style.transform = `translate3d(${cursorX}px, ${cursorY}px, 0) translate(-50%, -50%)`;
+        }
+        rafId = requestAnimationFrame(render);
+    }
+
+    window.addEventListener('mousemove', (e) => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+
+        if (!isInitialized) {
+            cursorX = mouseX;
+            cursorY = mouseY;
+            isInitialized = true;
+            follower.classList.add('is-visible');
+            follower.style.transform = `translate3d(${cursorX}px, ${cursorY}px, 0) translate(-50%, -50%)`;
+        }
+        follower.classList.remove('is-hidden');
+    }, { passive: true });
+
+    document.addEventListener('mouseleave', () => {
+        follower.classList.add('is-hidden');
+    });
+
+    document.addEventListener('mouseenter', () => {
+        if (isInitialized) {
+            follower.classList.remove('is-hidden');
+        }
+    });
+
+    const workSelector = '.featured-card:not(.is-locked), .compact-row, .graphic-gallery-card, .pagination-btn, .case-photo, [data-cursor-work], [data-cursor-text]';
+
+    document.addEventListener('pointerover', (e) => {
+        const workTarget = e.target.closest(workSelector);
+        if (workTarget) {
+            isExpanded = true;
+            follower.classList.add('is-expanded');
+            follower.classList.remove('is-hovering-link');
+            const customText = workTarget.getAttribute('data-cursor-text') || 'view work';
+            if (textEl) textEl.textContent = customText;
+            return;
+        }
+
+        const linkTarget = e.target.closest('a, button, .case-text, .jiayi-text');
+        if (linkTarget && !isExpanded) {
+            isHoveringLink = true;
+            follower.classList.add('is-hovering-link');
+        }
+    });
+
+    document.addEventListener('pointerout', (e) => {
+        const workTarget = e.target.closest(workSelector);
+        if (workTarget) {
+            const nextWorkTarget = e.relatedTarget ? e.relatedTarget.closest(workSelector) : null;
+            if (!nextWorkTarget) {
+                isExpanded = false;
+                follower.classList.remove('is-expanded');
+                if (textEl) textEl.textContent = 'view work';
+            } else {
+                const customText = nextWorkTarget.getAttribute('data-cursor-text') || 'view work';
+                if (textEl) textEl.textContent = customText;
+            }
+        }
+
+        const linkTarget = e.target.closest('a, button, .case-text, .jiayi-text');
+        if (linkTarget) {
+            const nextLinkTarget = e.relatedTarget ? e.relatedTarget.closest('a, button, .case-text, .jiayi-text') : null;
+            if (!nextLinkTarget) {
+                isHoveringLink = false;
+                follower.classList.remove('is-hovering-link');
+            }
+        }
+    });
+
+    rafId = requestAnimationFrame(render);
+}
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initCustomCursor);
+} else {
+    initCustomCursor();
+}
+
 
 
 
