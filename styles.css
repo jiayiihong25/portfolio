@@ -927,6 +927,7 @@ body.work-unlocked #text {
 }
 
 .featured-card {
+    position: relative;
     background: rgba(255, 255, 255, 0.03);
     border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 16px;
@@ -934,18 +935,31 @@ body.work-unlocked #text {
     text-decoration: none;
     display: flex;
     flex-direction: column;
-    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), 
-                background 0.4s ease, 
-                border-color 0.4s ease, 
-                box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: background 0.35s ease, 
+                border-color 0.35s ease;
     backdrop-filter: blur(8px);
 }
 
+/* Transparent overlay layer on hover */
+.featured-card::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: rgba(15, 23, 42, 0.3);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.35s ease;
+    z-index: 2;
+}
+
+.featured-card:not(.is-locked):hover::after {
+    opacity: 1;
+}
+
 .featured-card:hover {
-    transform: translateY(-8px);
-    background: rgba(255, 255, 255, 0.055);
-    border-color: rgba(96, 165, 250, 0.4);
-    box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.6), 0 0 25px -5px rgba(96, 165, 250, 0.25);
+    background: rgba(255, 255, 255, 0.045);
+    border-color: rgba(255, 255, 255, 0.16);
 }
 
 .featured-card.is-locked {
@@ -955,23 +969,12 @@ body.work-unlocked #text {
 }
 
 .featured-card.is-locked:hover {
-    transform: translateY(-3px);
-    background: rgba(255, 255, 255, 0.035);
-    border-color: rgba(255, 255, 255, 0.15);
-    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.4);
+    background: rgba(255, 255, 255, 0.03);
+    border-color: rgba(255, 255, 255, 0.08);
 }
 
 .featured-card.is-locked:hover .card-num {
     color: rgba(255, 255, 255, 0.4);
-}
-
-.featured-card.is-locked:hover .card-title {
-    text-shadow: none;
-}
-
-.featured-card.is-locked:hover .featured-card-img-wrapper img {
-    transform: none;
-    filter: none;
 }
 
 .featured-card-img-wrapper {
@@ -979,18 +982,18 @@ body.work-unlocked #text {
     aspect-ratio: 16 / 9;
     overflow: hidden;
     background: #000;
+    position: relative;
 }
 
 .featured-card-img-wrapper img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), filter 0.5s ease;
+    transition: filter 0.35s ease;
 }
 
-.featured-card:hover .featured-card-img-wrapper img {
-    transform: scale(1.05);
-    filter: brightness(1.06);
+.featured-card:not(.is-locked):hover .featured-card-img-wrapper img {
+    filter: brightness(0.92);
 }
 
 .featured-card-content {
@@ -998,6 +1001,8 @@ body.work-unlocked #text {
     display: flex;
     flex-direction: column;
     flex: 1;
+    position: relative;
+    z-index: 1;
 }
 
 .card-num-meta {
@@ -1016,7 +1021,7 @@ body.work-unlocked #text {
 }
 
 .featured-card:hover .card-num {
-    color: #60a5fa;
+    color: rgba(255, 255, 255, 0.7);
 }
 
 .card-meta {
@@ -1034,11 +1039,6 @@ body.work-unlocked #text {
     color: #ffffff;
     margin-bottom: 8px;
     line-height: 1.2;
-    transition: text-shadow 0.3s ease;
-}
-
-.featured-card:hover .card-title {
-    text-shadow: 0 0 16px rgba(255, 255, 255, 0.4);
 }
 
 .card-desc {
@@ -1079,37 +1079,31 @@ body.work-unlocked #text {
     grid-template-columns: 40px 180px 1fr auto;
     align-items: center;
     gap: 20px;
-    transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), 
-                background 0.35s ease, 
-                border-color 0.35s ease, 
-                box-shadow 0.35s ease;
+    transition: background 0.35s ease, 
+                border-color 0.35s ease;
     backdrop-filter: blur(6px);
     overflow: hidden;
 }
 
-.compact-row::before {
+.compact-row::after {
     content: "";
     position: absolute;
-    left: 0;
-    top: 0;
-    width: 3px;
-    height: 100%;
-    background: #60a5fa;
+    inset: 0;
+    border-radius: inherit;
+    background: rgba(255, 255, 255, 0.035);
     opacity: 0;
-    transform: scaleY(0);
-    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
+    pointer-events: none;
+    transition: opacity 0.35s ease;
+    z-index: 2;
 }
 
-.compact-row:hover::before {
+.compact-row:hover::after {
     opacity: 1;
-    transform: scaleY(1);
 }
 
 .compact-row:hover {
-    transform: translateX(8px);
-    background: linear-gradient(90deg, rgba(96, 165, 250, 0.08) 0%, rgba(255, 255, 255, 0.04) 100%);
-    border-color: rgba(96, 165, 250, 0.3);
-    box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.4), 0 0 18px -4px rgba(96, 165, 250, 0.2);
+    background: rgba(255, 255, 255, 0.045);
+    border-color: rgba(255, 255, 255, 0.16);
 }
 
 .compact-num {
@@ -1121,7 +1115,7 @@ body.work-unlocked #text {
 }
 
 .compact-row:hover .compact-num {
-    color: #60a5fa;
+    color: rgba(255, 255, 255, 0.7);
 }
 
 .compact-main h3 {
@@ -1130,11 +1124,6 @@ body.work-unlocked #text {
     font-weight: 600;
     color: #ffffff;
     margin-bottom: 4px;
-    transition: text-shadow 0.3s ease;
-}
-
-.compact-row:hover .compact-main h3 {
-    text-shadow: 0 0 12px rgba(255, 255, 255, 0.4);
 }
 
 .compact-meta {
@@ -1170,17 +1159,16 @@ body.work-unlocked #text {
     font-family: "Manrope", sans-serif;
     font-size: 18px;
     color: rgba(255, 255, 255, 0.4);
-    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), color 0.3s ease, text-shadow 0.3s ease;
+    transition: color 0.3s ease;
 }
 
 .compact-row:hover .compact-arrow {
-    transform: translateX(6px);
-    color: #60a5fa;
-    text-shadow: 0 0 8px #60a5fa;
+    color: rgba(255, 255, 255, 0.7);
 }
 
 /* 03 Graphic Design Showcase Section */
 .graphic-gallery-card {
+    position: relative;
     background: linear-gradient(135deg, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0.01) 100%);
     border: 1px dashed rgba(255, 255, 255, 0.15);
     border-radius: 16px;
@@ -1189,18 +1177,31 @@ body.work-unlocked #text {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), 
-                background 0.4s ease, 
-                border-color 0.4s ease, 
-                box-shadow 0.4s ease;
+    transition: background 0.35s ease, 
+                border-color 0.35s ease;
+    overflow: hidden;
+}
+
+.graphic-gallery-card::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: rgba(255, 255, 255, 0.035);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.35s ease;
+    z-index: 2;
+}
+
+.graphic-gallery-card:hover::after {
+    opacity: 1;
 }
 
 .graphic-gallery-card:hover {
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.07) 0%, rgba(96, 165, 250, 0.05) 100%);
-    border-color: rgba(96, 165, 250, 0.4);
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0.02) 100%);
+    border-color: rgba(255, 255, 255, 0.25);
     border-style: solid;
-    transform: translateY(-4px);
-    box-shadow: 0 15px 35px -8px rgba(0, 0, 0, 0.5), 0 0 20px -4px rgba(96, 165, 250, 0.2);
 }
 
 .graphic-info h3 {
@@ -1209,7 +1210,6 @@ body.work-unlocked #text {
     font-weight: 600;
     color: #ffffff;
     margin-bottom: 6px;
-    transition: text-shadow 0.3s ease;
 }
 
 .graphic-gallery-card:hover .graphic-info h3 {
@@ -1648,9 +1648,8 @@ body.work-unlocked #text {
 }
 
 .pagination-btn:hover {
-    background: rgba(255, 255, 255, 0.07);
-    border-color: rgba(255, 255, 255, 0.25);
-    transform: translateY(-3px);
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.2);
 }
 
 .pagination-label {
