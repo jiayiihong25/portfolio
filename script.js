@@ -1298,10 +1298,35 @@ function initCustomCursor() {
     rafId = requestAnimationFrame(render);
 }
 
+function initCoverVideos() {
+    const videos = document.querySelectorAll('.featured-card-img-wrapper video');
+    videos.forEach(video => {
+        video.muted = true;
+        const playPromise = video.play();
+        if (playPromise !== undefined) {
+            playPromise.catch(() => {
+                const triggerPlay = () => {
+                    video.play();
+                    window.removeEventListener('touchstart', triggerPlay);
+                    window.removeEventListener('click', triggerPlay);
+                    window.removeEventListener('scroll', triggerPlay);
+                };
+                window.addEventListener('touchstart', triggerPlay, { passive: true });
+                window.addEventListener('click', triggerPlay, { passive: true });
+                window.addEventListener('scroll', triggerPlay, { passive: true });
+            });
+        }
+    });
+}
+
 if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initCustomCursor);
+    document.addEventListener('DOMContentLoaded', () => {
+        initCustomCursor();
+        initCoverVideos();
+    });
 } else {
     initCustomCursor();
+    initCoverVideos();
 }
 
 

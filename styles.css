@@ -991,14 +991,18 @@ body.work-unlocked #text {
     position: relative;
 }
 
-.featured-card-img-wrapper img {
+.featured-card-img-wrapper img,
+.featured-card-img-wrapper video {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    display: block;
+    pointer-events: none;
     transition: filter 0.35s ease;
 }
 
-.featured-card:not(.is-locked):hover .featured-card-img-wrapper img {
+.featured-card:not(.is-locked):hover .featured-card-img-wrapper img,
+.featured-card:not(.is-locked):hover .featured-card-img-wrapper video {
     filter: brightness(0.85);
 }
 
