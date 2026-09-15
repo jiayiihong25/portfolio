@@ -182,20 +182,20 @@ class Star {
         this.y = center.y + Math.sin(this.orbitalAngle) * this.orbitalRadius;
     }
 
-    update(deltaTime) {
+    update(deltaTime, center) {
         this.timeElapsed += deltaTime;
 
         // Wait for delay before starting to blink
         if (this.timeElapsed < this.blinkDelay) {
             // Still update position even if not blinking yet
-            this.updatePosition(deltaTime);
+            this.updatePosition(deltaTime, center);
             return;
         }
 
         // Check if we're in a pause period between blink cycles
         if (this.pauseBetweenBlinks > 0) {
             this.pauseBetweenBlinks -= deltaTime;
-            this.updatePosition(deltaTime);
+            this.updatePosition(deltaTime, center);
             return;
         }
 
@@ -223,13 +223,10 @@ class Star {
         }
 
         // Update position for subtle movement
-        this.updatePosition(deltaTime);
+        this.updatePosition(deltaTime, center);
     }
 
-    updatePosition(deltaTime) {
-        // Get the current orbital center (in case window was resized)
-        const center = getOrbitalCenter();
-
+    updatePosition(deltaTime, center) {
         // Update orbital angle
         this.orbitalAngle += this.orbitalSpeed * deltaTime;
 
@@ -523,8 +520,9 @@ function animate(currentTime) {
 
     // Update and draw all stars (only if initialized)
     if (stars.length > 0) {
+        const starCenter = getOrbitalCenter();
         stars.forEach(star => {
-            star.update(clampedDeltaTime);
+            star.update(clampedDeltaTime, starCenter);
             star.draw();
         });
 
