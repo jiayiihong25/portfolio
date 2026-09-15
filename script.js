@@ -75,6 +75,24 @@ let mouseY = 0;
 const canvas = document.getElementById('star-canvas');
 const ctx = canvas.getContext('2d');
 
+// Pre-rendered glow sprite for star glow effect.
+// Using a cached sprite + drawImage is drastically cheaper than calling
+// ctx.shadowBlur per-star, per-frame (shadowBlur forces an expensive blur
+// recompute on every draw call it touches).
+const glowSprite = document.createElement('canvas');
+const GLOW_SPRITE_SIZE = 32; // px, drawn at unit scale and scaled per-star
+glowSprite.width = GLOW_SPRITE_SIZE;
+glowSprite.height = GLOW_SPRITE_SIZE;
+(function drawGlowSprite() {
+    const glowCtx = glowSprite.getContext('2d');
+    const center = GLOW_SPRITE_SIZE / 2;
+    const gradient = glowCtx.createRadialGradient(center, center, 0, center, center, center);
+    gradient.addColorStop(0, 'rgba(255, 255, 255, 1)');
+    gradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
+    glowCtx.fillStyle = gradient;
+    glowCtx.fillRect(0, 0, GLOW_SPRITE_SIZE, GLOW_SPRITE_SIZE);
+})();
+
 // Set canvas size to match window
 function resizeCanvas() {
     canvas.width = window.innerWidth;
@@ -237,10 +255,10 @@ class Star {
 
         // Add a subtle glow for larger stars (adjusted threshold for further reduced size)
         if (this.size > 0.9) {
-            ctx.shadowBlur = this.size * 2;
-            ctx.shadowColor = `rgba(255, 255, 255, ${opacity * 0.5})`;
-            ctx.fill();
-            ctx.shadowBlur = 0;
+            const glowSize = this.size * 6; // roughly matches the old shadowBlur spread
+            ctx.globalAlpha = opacity * 0.5;
+            ctx.drawImage(glowSprite, this.x - glowSize / 2, this.y - glowSize / 2, glowSize, glowSize);
+            ctx.globalAlpha = 1;
         }
     }
 }
