@@ -1732,8 +1732,8 @@ body.work-unlocked #text {
     width: 8px;
     height: 8px;
     border-radius: 50%;
-    background: rgba(165, 180, 252, 0.95);
-    box-shadow: 0 0 10px rgba(165, 180, 252, 0.6), 0 0 3px rgba(255, 255, 255, 0.8);
+    background: rgba(148, 163, 184, 0.95);
+    box-shadow: 0 0 10px rgba(148, 163, 184, 0.5), 0 0 3px rgba(255, 255, 255, 0.7);
     pointer-events: none;
     z-index: 99999;
     will-change: transform, width, height, border-radius, background, box-shadow;
@@ -1767,8 +1767,8 @@ body.work-unlocked #text {
 .custom-cursor-follower.is-hovering-link:not(.is-expanded) {
     width: 14px;
     height: 14px;
-    background: rgba(199, 210, 254, 0.95);
-    box-shadow: 0 0 14px rgba(165, 180, 252, 0.8);
+    background: rgba(186, 198, 213, 0.95);
+    box-shadow: 0 0 14px rgba(148, 163, 184, 0.7);
 }
 
 /* Expanded Badge State (over portfolio work) */
@@ -1777,10 +1777,10 @@ body.work-unlocked #text {
     height: 36px;
     padding: 0 16px;
     border-radius: 9999px;
-    background: rgba(142, 148, 204, 0.88);
-    border: 1px solid rgba(255, 255, 255, 0.4);
+    background: rgba(100, 116, 139, 0.85);
+    border: 1px solid rgba(255, 255, 255, 0.25);
     box-shadow: 0 12px 30px -4px rgba(0, 0, 0, 0.5), 
-                0 0 20px -2px rgba(142, 148, 204, 0.45);
+                0 0 20px -2px rgba(100, 116, 139, 0.4);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
 }
