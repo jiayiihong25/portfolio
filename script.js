@@ -355,7 +355,7 @@ const METEOR_DURATION = 5000; // 5 seconds shower
 
 // Create stars array
 const stars = [];
-const numStars = 1500; // Adjust this number for more/fewer stars
+const numStars = 250; // Adjust this number for more/fewer stars
 let starsInitialized = false;
 
 // Function to initialize stars after mountain image is loaded
@@ -371,8 +371,8 @@ function initializeStars() {
         stars.push(new Star(center));
     }
 
-    // Add 150 more small stars
-    for (let i = 0; i < 150; i++) {
+    // Add more small stars
+    for (let i = 0; i < 25; i++) {
         const smallStar = new Star(center);
         // Force small size for these additional stars
         smallStar.size = (Math.random() * 1.5 + 0.5) * 0.6; // Small stars (0.3-1.2px)
