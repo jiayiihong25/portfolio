@@ -75,6 +75,24 @@ let mouseY = 0;
 const canvas = document.getElementById('star-canvas');
 const ctx = canvas ? canvas.getContext('2d') : null;
 
+// Pre-rendered glow sprite for star glow effect.
+// Using a cached sprite + drawImage is drastically cheaper than calling
+// ctx.shadowBlur per-star, per-frame (shadowBlur forces an expensive blur
+// recompute on every draw call it touches).
+const glowSprite = document.createElement('canvas');
+const GLOW_SPRITE_SIZE = 32; // px, drawn at unit scale and scaled per-star
+glowSprite.width = GLOW_SPRITE_SIZE;
+glowSprite.height = GLOW_SPRITE_SIZE;
+(function drawGlowSprite() {
+    const glowCtx = glowSprite.getContext('2d');
+    const center = GLOW_SPRITE_SIZE / 2;
+    const gradient = glowCtx.createRadialGradient(center, center, 0, center, center, center);
+    gradient.addColorStop(0, 'rgba(255, 255, 255, 1)');
+    gradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
+    glowCtx.fillStyle = gradient;
+    glowCtx.fillRect(0, 0, GLOW_SPRITE_SIZE, GLOW_SPRITE_SIZE);
+})();
+
 // Set canvas size to match window
 function resizeCanvas() {
     if (!canvas) return;
@@ -169,20 +187,20 @@ class Star {
         this.y = center.y + Math.sin(this.orbitalAngle) * this.orbitalRadius;
     }
 
-    update(deltaTime) {
+    update(deltaTime, center) {
         this.timeElapsed += deltaTime;
 
         // Wait for delay before starting to blink
         if (this.timeElapsed < this.blinkDelay) {
             // Still update position even if not blinking yet
-            this.updatePosition(deltaTime);
+            this.updatePosition(deltaTime, center);
             return;
         }
 
         // Check if we're in a pause period between blink cycles
         if (this.pauseBetweenBlinks > 0) {
             this.pauseBetweenBlinks -= deltaTime;
-            this.updatePosition(deltaTime);
+            this.updatePosition(deltaTime, center);
             return;
         }
 
@@ -210,13 +228,10 @@ class Star {
         }
 
         // Update position for subtle movement
-        this.updatePosition(deltaTime);
+        this.updatePosition(deltaTime, center);
     }
 
-    updatePosition(deltaTime) {
-        // Get the current orbital center (in case window was resized)
-        const center = getOrbitalCenter();
-
+    updatePosition(deltaTime, center) {
         // Update orbital angle
         this.orbitalAngle += this.orbitalSpeed * deltaTime;
 
@@ -242,10 +257,10 @@ class Star {
 
         // Add a subtle glow for larger stars (adjusted threshold for further reduced size)
         if (this.size > 0.9) {
-            ctx.shadowBlur = this.size * 2;
-            ctx.shadowColor = `rgba(255, 255, 255, ${opacity * 0.5})`;
-            ctx.fill();
-            ctx.shadowBlur = 0;
+            const glowSize = this.size * 6; // roughly matches the old shadowBlur spread
+            ctx.globalAlpha = opacity * 0.5;
+            ctx.drawImage(glowSprite, this.x - glowSize / 2, this.y - glowSize / 2, glowSize, glowSize);
+            ctx.globalAlpha = 1;
         }
     }
 }
@@ -342,7 +357,7 @@ const METEOR_DURATION = 5000; // 5 seconds shower
 
 // Create stars array
 const stars = [];
-const numStars = 1500; // Adjust this number for more/fewer stars
+const numStars = 250; // Adjust this number for more/fewer stars
 let starsInitialized = false;
 
 // Function to initialize stars after mountain image is loaded
@@ -358,8 +373,8 @@ function initializeStars() {
         stars.push(new Star(center));
     }
 
-    // Add 150 more small stars
-    for (let i = 0; i < 150; i++) {
+    // Add more small stars
+    for (let i = 0; i < 25; i++) {
         const smallStar = new Star(center);
         // Force small size for these additional stars
         smallStar.size = (Math.random() * 1.5 + 0.5) * 0.6; // Small stars (0.3-1.2px)
@@ -511,8 +526,9 @@ function animate(currentTime) {
 
     // Update and draw all stars (only if initialized)
     if (stars.length > 0) {
+        const starCenter = getOrbitalCenter();
         stars.forEach(star => {
-            star.update(clampedDeltaTime);
+            star.update(clampedDeltaTime, starCenter);
             star.draw();
         });
 
