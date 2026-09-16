@@ -5,8 +5,7 @@
     <script>
         // Must run before the browser restores scroll position (which happens
         // very early, before body scripts run) — otherwise a plain reload, or
-        // hitting back, can land straight in the deep-scrolled constellation
-        // view instead of the hero, and it looks permanently "stuck" there.
+        // hitting back, can land mid-page instead of the hero.
         if ('scrollRestoration' in history) {
             history.scrollRestoration = 'manual';
         }
@@ -32,7 +31,7 @@
     <link
         href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,600&family=Manrope:wght@500;600;700&display=swap"
         rel="stylesheet">
-    <link rel="stylesheet" href="styles.css?v=20260915_final4">
+    <link rel="stylesheet" href="styles.css?v=20260915_final9">
 </head>
 
 <body>
@@ -62,69 +61,6 @@
             <path class="orbital-line" d="" stroke="white" stroke-width="0.5" fill="none" />
             <path class="orbital-line" d="" stroke="white" stroke-width="0.5" fill="none" />
         </svg>
-
-        <!-- Stage 3: Constellation Navigation -->
-        <div id="constellations">
-            <!-- Header lives here (not in the normal work list) so it fades in
-                 and out together with the constellation instead of sitting
-                 statically at the bottom of the selected-work list with an
-                 empty gap before the sky actually appears. -->
-            <a href="graphic-design.html" class="work-section-header" id="graphic-design-header"
-               style="position: absolute; top: 76px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 1200px; text-decoration: none; cursor: pointer;"># graphic design</a>
-
-            <!-- Graphic Design Constellation — arranged as Pisces (two fish + cord),
-                 12 stars, one per piece in the graphic design collection. -->
-            <!-- Sized in vw/vh (like #text in the hero) rather than a percentage
-                 with a px max-width cap, so it scales fluidly with the window
-                 instead of hitting a ceiling on large screens. -->
-            <div class="constellation-group" id="constellation-graphic"
-                 style="left: 50%; top: 7vh; width: 96vw; height: 88vh; transform: translateX(-50%);">
-                <div class="constellation-float-wrap">
-                    <svg class="constellation-svg" id="constellation-svg-graphic" viewBox="0 0 260 320" style="width: 100%; height: 100%; overflow: visible;">
-                        <!-- Cord + fish outlines. x1/y1/x2/y2 here are just the
-                             resting-position fallback before JS takes over each
-                             frame to keep every line locked to its two stars,
-                             which drift independently via data-a/data-b. -->
-                        <line class="constellation-line" data-a="0" data-b="1" x1="150" y1="55" x2="108" y2="78" />
-                        <line class="constellation-line" data-a="1" data-b="2" x1="108" y1="78" x2="140" y2="100" />
-                        <line class="constellation-line" data-a="2" data-b="0" x1="140" y1="100" x2="150" y2="55" />
-                        <line class="constellation-line" data-a="2" data-b="3" x1="140" y1="100" x2="118" y2="128" />
-                        <line class="constellation-line" data-a="3" data-b="4" x1="118" y1="128" x2="108" y2="155" />
-                        <line class="constellation-line" data-a="4" data-b="5" x1="108" y1="155" x2="85" y2="182" />
-                        <line class="constellation-line" data-a="5" data-b="6" x1="85" y1="182" x2="60" y2="208" />
-                        <line class="constellation-line" data-a="6" data-b="7" x1="60" y1="208" x2="100" y2="200" />
-                        <line class="constellation-line" data-a="7" data-b="8" x1="100" y1="200" x2="170" y2="193" />
-                        <line class="constellation-line" data-a="8" data-b="9" x1="170" y1="193" x2="205" y2="188" />
-                        <line class="constellation-line" data-a="9" data-b="10" x1="205" y1="188" x2="228" y2="205" />
-                        <line class="constellation-line" data-a="10" data-b="11" x1="228" y1="205" x2="215" y2="225" />
-                        <line class="constellation-line" data-a="11" data-b="9" x1="215" y1="225" x2="205" y2="188" />
-
-                        <!-- Stars — one per graphic design piece, sizes/brightness varied.
-                             Each drifts independently (see initConstellationDrift in
-                             script.js), which also redraws the lines above every frame
-                             so they never separate from the stars they connect. -->
-                        <circle class="constellation-star twinkle-a" data-idx="0" data-img="CSA VLOGS 5 (1).webp" cx="150" cy="55" r="2.8" style="--star-o:0.95" />
-                        <circle class="constellation-star twinkle-b" data-idx="1" data-img="bar night.webp" cx="108" cy="78" r="1.8" style="--star-o:0.55" />
-                        <circle class="constellation-star twinkle-c" data-idx="2" data-img="CSA WV AUDITION.webp" cx="140" cy="100" r="2.5" style="--star-o:0.85" />
-                        <circle class="constellation-star twinkle-d" data-idx="3" data-img="wv ap.webp" cx="118" cy="128" r="1.5" style="--star-o:0.5" />
-                        <circle class="constellation-star twinkle-a" data-idx="4" data-img="bobaboardgames.webp" cx="108" cy="155" r="2" style="--star-o:0.7" />
-                        <circle class="constellation-star twinkle-b" data-idx="5" data-img="CSA VLOGS- PROD (1).webp" cx="85" cy="182" r="1.8" style="--star-o:0.6" />
-                        <circle class="constellation-star twinkle-c" data-idx="6" data-img="IMG_6596.webp" cx="60" cy="208" r="3.4" style="--star-o:1" />
-                        <circle class="constellation-star twinkle-d" data-idx="7" data-img="IMG_6616 (1).webp" cx="100" cy="200" r="1.4" style="--star-o:0.45" />
-                        <circle class="constellation-star twinkle-a" data-idx="8" data-img="IMG_6635 (1).webp" cx="170" cy="193" r="1.7" style="--star-o:0.5" />
-                        <circle class="constellation-star twinkle-b" data-idx="9" data-img="IMG_6755 (1).webp" cx="205" cy="188" r="2.3" style="--star-o:0.75" />
-                        <circle class="constellation-star twinkle-c" data-idx="10" data-img="IMG_7823 (1).webp" cx="228" cy="205" r="2.8" style="--star-o:0.9" />
-                        <circle class="constellation-star twinkle-d" data-idx="11" data-img="IMG_7935 (1).webp" cx="215" cy="225" r="1.8" style="--star-o:0.6" />
-                    </svg>
-                </div>
-            </div>
-        </div>
-
-        <!-- Floating image preview for the graphic design constellation:
-             hover a star to preview, click to lock it in place. -->
-        <div id="graphic-preview-panel" class="graphic-preview-panel">
-            <img id="graphic-preview-img" src="" alt="">
-        </div>
     </div>
 
     <!-- Hero Section -->
@@ -231,14 +167,61 @@
                 <span class="compact-arrow">→</span>
             </a>
         </div>
-        <!-- Sentinel for Stage 3 trigger (stays in DOM even when content is hidden) -->
-        <div id="deep-scroll-sentinel" style="height: 1px; width: 100%; pointer-events: none;"></div>
+        <!-- Tier 3: Graphic Design (3-column masonry gallery) -->
+        <a href="graphic-design.html" class="work-section-header"># graphic design</a>
+        <div class="graphic-masonry">
+            <a href="graphic-design.html" class="graphic-masonry-item">
+                <img src="images/Graphics Portfolio/csa vlogs - summer 2025.webp" alt="CSA VLOGS" loading="lazy">
+            </a>
+            <a href="graphic-design.html" class="graphic-masonry-item">
+                <img src="images/Graphics Portfolio/bar night.webp" alt="Bar Night" loading="lazy">
+            </a>
+            <a href="graphic-design.html" class="graphic-masonry-item">
+                <img src="images/Graphics Portfolio/Western Voice - Fall 2024.webp" alt="Western Voice - Fall 2024" loading="lazy">
+            </a>
+            <a href="graphic-design.html" class="graphic-masonry-item">
+                <img src="images/Graphics Portfolio/wv ap.webp" alt="WV AP" loading="lazy">
+            </a>
+            <a href="graphic-design.html" class="graphic-masonry-item">
+                <img src="images/Graphics Portfolio/bobaboardgames.webp" alt="Boba Board Games" loading="lazy">
+            </a>
+            <a href="graphic-design.html" class="graphic-masonry-item">
+                <img src="images/Graphics Portfolio/csa vlogs.webp" alt="CSA VLOGS - Summer 2025" loading="lazy">
+            </a>
+            <a href="graphic-design.html" class="graphic-masonry-item">
+                <img src="images/Graphics Portfolio/IMG_6596.webp" alt="Graphic design piece" loading="lazy">
+            </a>
+            <a href="graphic-design.html" class="graphic-masonry-item">
+                <img src="images/Graphics Portfolio/IMG_6616 (1).webp" alt="Graphic design piece" loading="lazy">
+            </a>
+            <a href="graphic-design.html" class="graphic-masonry-item">
+                <img src="images/Graphics Portfolio/IMG_6635 (1).webp" alt="Graphic design piece" loading="lazy">
+            </a>
+            <a href="graphic-design.html" class="graphic-masonry-item">
+                <img src="images/Graphics Portfolio/IMG_6755 (1).webp" alt="Graphic design piece" loading="lazy">
+            </a>
+            <a href="graphic-design.html" class="graphic-masonry-item">
+                <img src="images/Graphics Portfolio/IMG_7823 (1).webp" alt="Graphic design piece" loading="lazy">
+            </a>
+            <a href="graphic-design.html" class="graphic-masonry-item">
+                <img src="images/Graphics Portfolio/IMG_7935 (1).webp" alt="Graphic design piece" loading="lazy">
+            </a>
+            <a href="graphic-design.html" class="graphic-masonry-item">
+                <img src="images/Graphics Portfolio/FINANCE_1.jpg" alt="Finance" loading="lazy">
+            </a>
+            <a href="graphic-design.html" class="graphic-masonry-item">
+                <img src="images/Graphics Portfolio/CSA_MERCH_FINAL.jpg" alt="Merch 2025-2026" loading="lazy">
+            </a>
+            <a href="graphic-design.html" class="graphic-masonry-item">
+                <img src="images/Graphics Portfolio/purplecrown_copy4.jpg" alt="Purple Crown" loading="lazy">
+            </a>
+        </div>
 
         <!-- Strategy work is hidden for now — see git history to restore the
              "# strategy" compact-list (BANXX / Fritter Shop / Starbucks) here. -->
     </main>
 
-    <script src="script.js?v=20260915_final"></script>
+    <script src="script.js?v=20260915_final3"></script>
     <script>
         (function() {
             const initScrollEffects = () => {
@@ -274,24 +257,12 @@
                 });
 
                 // Smooth natural continuous bidirectional scroll listener
-                const deepScrollSentinel = document.getElementById('deep-scroll-sentinel');
                 const updateScrollEffects = () => {
                     const scrollY = window.scrollY || window.pageYOffset || 0;
                     if (scrollY > 40) {
                         document.body.classList.add('work-unlocked');
                     } else {
                         document.body.classList.remove('work-unlocked');
-                    }
-
-                    // Stage 3: Check if sentinel has entered upper portion of viewport
-                    if (deepScrollSentinel) {
-                        const sentinelRect = deepScrollSentinel.getBoundingClientRect();
-                        const threshold = window.innerHeight * 0.05;
-                        if (sentinelRect.top < threshold) {
-                            document.body.classList.add('deep-scroll');
-                        } else {
-                            document.body.classList.remove('deep-scroll');
-                        }
                     }
                 };
 
