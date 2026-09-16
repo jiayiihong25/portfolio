@@ -546,8 +546,9 @@ function animate(currentTime) {
 
         // Spawn meteors
         if (meteorShowerActive) {
-            // Spawn less frequently: random interval 800-1200ms
-            if (currentTime - lastMeteorTime > Math.random() * 400 + 800) {
+            // Spawn interval 1000-1500ms (was 800-1200ms) — 20% lower spawn
+            // rate, since rate scales as 1/interval and 1/1.25 = 0.8.
+            if (currentTime - lastMeteorTime > Math.random() * 500 + 1000) {
                 meteors.push(new Meteor());
                 lastMeteorTime = currentTime;
             }
