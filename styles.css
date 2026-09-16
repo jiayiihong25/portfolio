@@ -1097,7 +1097,7 @@ body.work-unlocked #text {
        enough scroll room, on any screen height, for Buckets to fully scroll
        out of view before the constellation trigger fires, and then enough
        room afterwards to actually look at/hover the constellation. */
-    padding: 40px 0 85vh;
+    padding: 40px 0 100vh;
 }
 
 .work-section-header {

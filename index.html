@@ -32,7 +32,7 @@
     <link
         href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,600&family=Manrope:wght@500;600;700&display=swap"
         rel="stylesheet">
-    <link rel="stylesheet" href="styles.css?v=20260915_final3">
+    <link rel="stylesheet" href="styles.css?v=20260915_final4">
 </head>
 
 <body>
@@ -65,6 +65,13 @@
 
         <!-- Stage 3: Constellation Navigation -->
         <div id="constellations">
+            <!-- Header lives here (not in the normal work list) so it fades in
+                 and out together with the constellation instead of sitting
+                 statically at the bottom of the selected-work list with an
+                 empty gap before the sky actually appears. -->
+            <a href="graphic-design.html" class="work-section-header" id="graphic-design-header"
+               style="position: absolute; top: 76px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 1200px; text-decoration: none; cursor: pointer;"># graphic design</a>
+
             <!-- Graphic Design Constellation — arranged as Pisces (two fish + cord),
                  12 stars, one per piece in the graphic design collection. -->
             <!-- Sized in vw/vh (like #text in the hero) rather than a percentage
@@ -229,13 +236,6 @@
 
         <!-- Strategy work is hidden for now — see git history to restore the
              "# strategy" compact-list (BANXX / Fritter Shop / Starbucks) here. -->
-
-        <!-- Tier 4: Graphic Design — just the header now, acting as the split
-             point between the normal list above and the night sky below.
-             Stays visible through the deep-scroll transition (not wrapped in
-             deep-scroll-content), unlike the old card + constellation label,
-             which were removed as redundant with this. -->
-        <a href="graphic-design.html" class="work-section-header" id="graphic-design-header" style="margin-top: 48px; text-decoration: none; cursor: pointer;"># graphic design</a>
     </main>
 
     <script src="script.js?v=20260915_final"></script>
