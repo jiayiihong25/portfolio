@@ -1556,6 +1556,28 @@ body.work-unlocked #text {
     transform: translateY(-2px);
 }
 
+.figma-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #60a5fa;
+    color: #0b0e14;
+    font-family: "Manrope", sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    padding: 10px 20px;
+    border-radius: 10px;
+    text-decoration: none;
+    transition: all 0.25s ease;
+    box-shadow: 0 4px 15px rgba(96, 165, 250, 0.3);
+}
+
+.figma-button:hover {
+    background: #93c5fd;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(96, 165, 250, 0.45);
+}
+
 /* Section Blocks */
 .case-section {
     margin-bottom: 56px;
