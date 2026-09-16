@@ -838,6 +838,197 @@ body.work-unlocked #orbital-lines {
     opacity: 0.15;
 }
 
+/* =============================================
+   Stage 3: Deep-Scroll Constellation State
+   ============================================= */
+
+body.deep-scroll #mountain {
+    opacity: 0 !important;
+    filter: blur(20px) brightness(0) !important;
+    transform: translateY(4vw) !important;
+    pointer-events: none !important;
+}
+
+/* Restore the exact hero look — stage 2's dimming assumes cards cover most
+   of the screen, but stage 3 is the night sky itself with nothing in front,
+   so cancel that dimming entirely rather than just reducing it. */
+body.deep-scroll #star-canvas,
+body.deep-scroll #background-gradient {
+    filter: none !important;
+}
+
+body.deep-scroll #orbital-lines {
+    filter: none !important;
+    opacity: 1 !important;
+}
+
+/* =============================================
+   Constellation Container & Elements
+   ============================================= */
+
+#constellations {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 6;
+    opacity: 0;
+    transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+body.deep-scroll #constellations {
+    opacity: 1 !important;
+    pointer-events: auto !important;
+    z-index: 25 !important;
+}
+
+.constellation-group {
+    position: absolute;
+}
+
+.constellation-float-wrap {
+    width: 100%;
+    height: 100%;
+    animation: constellation-float 10s ease-in-out infinite;
+}
+
+@keyframes constellation-float {
+    0%, 100% { transform: translate(0, 0) rotate(0deg); }
+    50% { transform: translate(0, -14px) rotate(0.4deg); }
+}
+
+/* Individual star position drift is handled in JS (initConstellationDrift in
+   script.js) instead of CSS: it moves each star on its own path/phase AND
+   redraws the connected <line> endpoints every frame from the same numbers,
+   so the lines can never separate from the stars they connect — which a
+   CSS-only per-star transform can't guarantee against static line coords.
+   A light opacity twinkle stays here since it doesn't move anything. */
+.constellation-star.twinkle-a { animation: star-twinkle-a 3.6s ease-in-out infinite; }
+.constellation-star.twinkle-b { animation: star-twinkle-b 4.4s ease-in-out infinite; }
+.constellation-star.twinkle-c { animation: star-twinkle-c 3.1s ease-in-out infinite; }
+.constellation-star.twinkle-d { animation: star-twinkle-d 5s ease-in-out infinite; }
+
+@keyframes star-twinkle-a {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.6; }
+}
+@keyframes star-twinkle-b {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+}
+@keyframes star-twinkle-c {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.65; }
+}
+@keyframes star-twinkle-d {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.75; }
+}
+
+/* SVG stars and lines */
+.constellation-svg {
+    overflow: visible;
+}
+
+.constellation-star {
+    fill: #ffffff;
+    fill-opacity: var(--star-o, 0.6);
+    stroke: transparent;
+    stroke-width: 22;
+    paint-order: stroke fill;
+    transform-box: fill-box;
+    transform-origin: center;
+    transition: fill-opacity 0.35s ease,
+                transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+                filter 0.35s ease;
+    cursor: pointer;
+}
+
+.constellation-line {
+    stroke: rgba(255, 255, 255, 0.22);
+    stroke-width: 0.8;
+    fill: none;
+}
+
+/* Hover / locked star: brighten + grow, independent of its neighbors */
+.constellation-star:hover,
+.constellation-star.is-locked {
+    fill-opacity: 1;
+    filter: drop-shadow(0 0 9px rgba(147, 197, 253, 0.85));
+    transform: scale(1.7);
+}
+
+/* =============================================
+   Graphic Design Preview Panel
+   ============================================= */
+
+/* Positioned dynamically per-star by JS (left/top set inline to land right
+   beside whichever star is active), the same way the about-me photos and
+   the cases-page thumbnails pop in at a slight, fixed tilt rather than
+   sitting dead straight. --tilt is set per star (some lean left, some
+   right) and stays applied while shown, it doesn't straighten on hover. */
+.graphic-preview-panel {
+    position: fixed;
+    width: min(260px, 24vw);
+    opacity: 0;
+    pointer-events: none;
+    --tilt: -4deg;
+    transform: scale(0.85) rotate(var(--tilt));
+    transition: opacity 0.35s ease, transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    z-index: 30;
+}
+
+.graphic-preview-panel.is-visible {
+    opacity: 1;
+    transform: scale(1) rotate(var(--tilt));
+}
+
+.graphic-preview-panel img {
+    width: 100%;
+    display: block;
+    border-radius: 8px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+/* =============================================
+   Constellation Mobile Responsive
+   ============================================= */
+
+@media (max-width: 768px) {
+    /* Smaller, vertically-centered boxes so the shape and its label sit close
+       together instead of leaving a large gap down to a label near the
+       bottom of a tall phone viewport. */
+    #constellation-graphic {
+        width: 88vw !important;
+        height: 52vh !important;
+        top: 14vh !important;
+    }
+
+    /* The star radii in the markup were divided down to offset the desktop
+       container growing larger (same viewBox, bigger box == bigger dots
+       unless compensated). Mobile's box didn't grow by the same factor
+       (no room), so restore the original per-star radii here via the CSS
+       `r` property, which overrides the SVG attribute. */
+    .constellation-star[data-idx="0"] { r: 3.6px; }
+    .constellation-star[data-idx="1"] { r: 2.4px; }
+    .constellation-star[data-idx="2"] { r: 3.2px; }
+    .constellation-star[data-idx="3"] { r: 2px; }
+    .constellation-star[data-idx="4"] { r: 2.6px; }
+    .constellation-star[data-idx="5"] { r: 2.4px; }
+    .constellation-star[data-idx="6"] { r: 4.4px; }
+    .constellation-star[data-idx="7"] { r: 1.8px; }
+    .constellation-star[data-idx="8"] { r: 2.2px; }
+    .constellation-star[data-idx="9"] { r: 3px; }
+    .constellation-star[data-idx="10"] { r: 3.6px; }
+    .constellation-star[data-idx="11"] { r: 2.4px; }
+
+    .graphic-preview-panel {
+        width: min(200px, 62vw);
+    }
+}
+
 #hero {
     position: relative;
     width: 100%;
@@ -902,7 +1093,11 @@ body.work-unlocked #text {
     width: 90%;
     max-width: 1200px;
     margin: 0 auto;
-    padding: 40px 0 100px;
+    /* padding-bottom is viewport-relative (not a fixed px) so there's always
+       enough scroll room, on any screen height, for Buckets to fully scroll
+       out of view before the constellation trigger fires, and then enough
+       room afterwards to actually look at/hover the constellation. */
+    padding: 40px 0 85vh;
 }
 
 .work-section-header {
@@ -921,6 +1116,13 @@ body.work-unlocked #text {
     flex: 1;
     height: 1px;
     background: linear-gradient(90deg, rgba(255, 255, 255, 0.15), transparent);
+}
+
+/* The graphic-design header doubles as the link into the full collection
+   (replacing the removed card + constellation label), so give it a hover
+   cue other section headers don't need. */
+a.work-section-header:hover {
+    color: rgba(203, 209, 220, 0.95);
 }
 
 /* 01 Featured Work Grid (2 Large Cards) */
@@ -1263,7 +1465,10 @@ body.work-unlocked #text {
 @media (max-width: 600px) {
     #work {
         width: 92%;
-        padding: 20px 0 60px;
+        /* Stacked single-column cards push the constellation trigger much
+           further down the document on narrow screens, so this needs more
+           bottom buffer than desktop, not less. */
+        padding: 20px 0 160vh;
     }
     .compact-row {
         grid-template-columns: 1fr;
