@@ -82,6 +82,55 @@
             text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
         }
 
+        .fast-typist-trigger {
+            position: relative;
+            color: rgba(235, 240, 255, 0.9);
+            font-weight: 700;
+            text-decoration: underline dotted rgba(203, 209, 220, 0.6);
+            text-underline-offset: 3px;
+            cursor: pointer;
+            display: inline-block;
+            transition: all 0.3s ease;
+        }
+
+        .fast-typist-trigger:hover {
+            color: #ffffff;
+            transform: scale(1.03);
+            text-shadow: 0 0 12px rgba(255, 255, 255, 0.8), 0 0 24px rgba(255, 255, 255, 0.4);
+        }
+
+        .typist-preview {
+            position: absolute;
+            bottom: calc(100% + 12px);
+            left: 50%;
+            transform: translateX(-50%) translateY(10px) scale(0.95) rotate(0deg);
+            opacity: 0;
+            pointer-events: none;
+            z-index: 1000;
+            transition: all 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            background: rgba(15, 20, 30, 0.85);
+            padding: 6px;
+            border-radius: 10px;
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.7), 0 0 15px rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            width: 260px;
+            max-width: 80vw;
+            transform-origin: center bottom;
+        }
+
+        .typist-preview img {
+            width: 100%;
+            height: auto;
+            display: block;
+            border-radius: 6px;
+        }
+
+        .fast-typist-trigger:hover .typist-preview {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0) scale(1) rotate(4deg);
+        }
+
         .photo-container {
             width: 300px;
             height: 400px;
@@ -195,8 +244,8 @@
 
     <div class="page-container">
         <div class="photo-container">
-            <img src="images/jiayi-casual.JPG" id="photo-casual" class="about-photo" alt="Jiayi Casual">
-            <img src="images/jiayi-professional.JPG" id="photo-professional" class="about-photo"
+            <img src="images/jiayi-casual.webp" id="photo-casual" class="about-photo" alt="Jiayi Casual">
+            <img src="images/jiayi-professional.webp" id="photo-professional" class="about-photo"
                 alt="Jiayi Professional">
         </div>
         <div class="about-text">
@@ -206,7 +255,7 @@
 
             I love solving ambiguous problems; either visually through design or through stories backed by data & analysis
 
-            Outside of work I'm addicted to concerts & food. I'm also a pretty fast typist!
+            Outside of work I'm addicted to concerts & food. I'm also a pretty <span class="fast-typist-trigger">fast typist!<span class="typist-preview"><img src="images/typing.png" alt="Typing speed screenshot"></span></span>
 
             I'm always looking to meet new people, feel free to reach out :)
             <div style="margin-top: 20px; display: flex; align-items: center; flex-wrap: wrap; gap: 8px;">

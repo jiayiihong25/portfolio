@@ -183,17 +183,17 @@
 
     <script>
         const allImages = [
-            'CSA VLOGS 5 (1).jpg', 'bar night.jpg', 'CSA WV AUDITION.jpg',
-            'wv ap.jpg', 'bobaboardgames.jpg', 'CSA VLOGS- PROD (1).jpg',
-            'IMG_6596.JPG', 'IMG_6616 (1).JPG', 'IMG_6635 (1).JPG',
-            'IMG_6755 (1).JPG', 'IMG_7823 (1).JPG', 'IMG_7935 (1).JPG'
+            'CSA VLOGS 5 (1).webp', 'bar night.webp', 'CSA WV AUDITION.webp',
+            'wv ap.webp', 'bobaboardgames.webp', 'CSA VLOGS- PROD (1).webp',
+            'IMG_6596.webp', 'IMG_6616 (1).webp', 'IMG_6635 (1).webp',
+            'IMG_6755 (1).webp', 'IMG_7823 (1).webp', 'IMG_7935 (1).webp'
         ];
         // Duplicate for infinite effect
         const infiniteImages = [...allImages, ...allImages, ...allImages];
 
         const track = document.getElementById('infinite-scroll-track');
         track.innerHTML = infiniteImages.map(img =>
-            `<img src="images/Graphics Portfolio/${img}" class="graphics-img">`
+            `<img src="images/Graphics Portfolio/${img}" class="graphics-img" loading="lazy">`
         ).join('');
 
         // Infinite scroll logic
