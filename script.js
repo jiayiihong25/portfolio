@@ -15,10 +15,8 @@ function getResponsiveValues() {
     return {
         offset1: orbitGap,
         offset2: orbitGap * 1.8,
-        offset3: orbitGap * 2.6,
         node1Radius: (isMobile ? 6 : (isLargeScreen ? 12 : 10)) * scale,
         node2Radius: (isMobile ? 8 : 14) * scale,
-        node3Radius: (isMobile ? 11 : 20) * scale,
         node4Radius: (isMobile ? 15 : 24) * scale,
         isMobile: isMobile
     };
@@ -51,14 +49,6 @@ const orbitalNode2 = {
     currentRadius: responsiveVars.node2Radius,
     isHovered: false,
     text: 'projects'
-};
-const orbitalNode3 = {
-    angle: Math.PI * 1.5,
-    radius: responsiveVars.node3Radius,
-    hoverRadius: responsiveVars.node3Radius * 1.2,
-    currentRadius: responsiveVars.node3Radius,
-    isHovered: false,
-    text: 'graphic design'
 };
 const orbitalNode4 = {
     angle: Math.PI * 1.5,
@@ -109,9 +99,6 @@ function resizeCanvas() {
 
         orbitalNode2.radius = responsiveVars.node2Radius;
         orbitalNode2.hoverRadius = responsiveVars.node2Radius * 1.2;
-
-        orbitalNode3.radius = responsiveVars.node3Radius;
-        orbitalNode3.hoverRadius = responsiveVars.node3Radius * 1.2;
 
         orbitalNode4.radius = responsiveVars.node4Radius;
         orbitalNode4.hoverRadius = responsiveVars.node4Radius * 1.2;
@@ -459,9 +446,6 @@ function resetOrbitalNodes() {
         orbitalNode.angle = (startAngle1 + 0.2);
         orbitalNode2.angle = (startAngle2 + 0.6); // Simplified
 
-        // Ball 3 (designathons) starts at 12:00 position
-        orbitalNode3.angle = Math.PI * 1.5;
-
         // Ball 4 (cases) starts at 10:00 position (PI + PI/6)
         orbitalNode4.angle = (7 / 6) * Math.PI;
     }
@@ -546,8 +530,9 @@ function animate(currentTime) {
 
         // Spawn meteors
         if (meteorShowerActive) {
-            // Spawn less frequently: random interval 800-1200ms
-            if (currentTime - lastMeteorTime > Math.random() * 400 + 800) {
+            // Spawn interval 1000-1500ms (was 800-1200ms) — 20% lower spawn
+            // rate, since rate scales as 1/interval and 1/1.25 = 0.8.
+            if (currentTime - lastMeteorTime > Math.random() * 500 + 1000) {
                 meteors.push(new Meteor());
                 lastMeteorTime = currentTime;
             }
@@ -600,8 +585,7 @@ function animate(currentTime) {
         const nodes = [
             { node: orbitalNode, radius: trackedStar1.clusterRadius || trackedStar1.orbitalRadius },
             { node: orbitalNode2, radius: (trackedStar1.clusterRadius || trackedStar1.orbitalRadius) + responsiveVars.offset1 },
-            { node: orbitalNode3, radius: (trackedStar1.clusterRadius || trackedStar1.orbitalRadius) + responsiveVars.offset2 },
-            { node: orbitalNode4, radius: (trackedStar1.clusterRadius || trackedStar1.orbitalRadius) + responsiveVars.offset3 }
+            { node: orbitalNode4, radius: (trackedStar1.clusterRadius || trackedStar1.orbitalRadius) + responsiveVars.offset2 }
         ];
 
         let anyHovered = false;
@@ -775,31 +759,6 @@ function animate(currentTime) {
         ctx.filter = 'none';
         ctx.beginPath();
         ctx.arc(center.x, center.y, line3Radius, startAngle, endAngle);
-        ctx.strokeStyle = `rgba(255, 255, 255, ${Math.min(1, orbitalPathProgress * 2)})`;
-        ctx.lineWidth = 0.5;
-        ctx.stroke();
-
-        ctx.restore();
-    }
-
-    // Draw orbital-line-4
-    if (trackedStar1 && trackedStar1.orbitalRadius && trackedStar1.orbitalRadius > 0 && orbitalPathProgress > 0) {
-        const center = getOrbitalCenter();
-        const line4Radius = trackedStar1.orbitalRadius + responsiveVars.offset3;
-        const startAngle = Math.PI / 2; // 6 o'clock
-        const endAngle = startAngle + Math.PI * 2 * orbitalPathProgress;
-
-        ctx.save();
-        ctx.filter = 'blur(2px)';
-        ctx.beginPath();
-        ctx.arc(center.x, center.y, line4Radius, startAngle, endAngle);
-        ctx.strokeStyle = `rgba(255, 255, 255, ${Math.min(1, orbitalPathProgress * 2) * 0.5})`;
-        ctx.lineWidth = 1.5;
-        ctx.stroke();
-
-        ctx.filter = 'none';
-        ctx.beginPath();
-        ctx.arc(center.x, center.y, line4Radius, startAngle, endAngle);
         ctx.strokeStyle = `rgba(255, 255, 255, ${Math.min(1, orbitalPathProgress * 2)})`;
         ctx.lineWidth = 0.5;
         ctx.stroke();
@@ -1016,8 +975,7 @@ canvas.addEventListener('click', (e) => {
 
     const center = getOrbitalCenter();
     const nodes = [
-        { node: orbitalNode4, radius: (trackedStar1.clusterRadius || trackedStar1.orbitalRadius) + responsiveVars.offset3, url: 'cases.html' },
-        { node: orbitalNode3, radius: (trackedStar1.clusterRadius || trackedStar1.orbitalRadius) + responsiveVars.offset2, url: 'graphic-design.html' },
+        { node: orbitalNode4, radius: (trackedStar1.clusterRadius || trackedStar1.orbitalRadius) + responsiveVars.offset2, url: 'cases.html' },
         { node: orbitalNode2, radius: (trackedStar1.clusterRadius || trackedStar1.orbitalRadius) + responsiveVars.offset1, url: 'projects.html' },
         { node: orbitalNode, radius: trackedStar1.clusterRadius || trackedStar1.orbitalRadius, url: 'about.html' }
     ];
@@ -1344,8 +1302,3 @@ if (document.readyState === 'loading') {
     initCustomCursor();
     initCoverVideos();
 }
-
-
-
-
-

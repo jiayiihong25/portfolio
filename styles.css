@@ -1177,71 +1177,25 @@ body.work-unlocked #text {
     color: rgba(255, 255, 255, 0.7);
 }
 
-/* 03 Graphic Design Showcase Section */
-.graphic-gallery-card {
-    position: relative;
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0.01) 100%);
-    border: 1px dashed rgba(255, 255, 255, 0.15);
-    border-radius: 16px;
-    padding: 28px 32px;
-    text-decoration: none;
-    color: inherit;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    transition: background 0.35s ease, 
-                border-color 0.35s ease;
-    overflow: hidden;
+/* 03 Graphic Design Showcase Section — 3-column masonry gallery, images at
+   their natural aspect ratio so column heights fall out of alternating
+   naturally instead of being forced to a fixed grid cell. */
+.graphic-masonry {
+    column-count: 3;
+    column-gap: 24px;
 }
 
-.graphic-gallery-card::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    border-radius: inherit;
-    background: rgba(0, 0, 0, 0.4);
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.35s ease;
-    z-index: 2;
+.graphic-masonry-item {
+    display: block;
+    break-inside: avoid;
+    margin-bottom: 24px;
+    line-height: 0;
 }
 
-.graphic-gallery-card:hover::after {
-    opacity: 1;
-}
-
-.graphic-gallery-card:hover {
-    background: rgba(0, 0, 0, 0.3);
-    border-color: rgba(255, 255, 255, 0.25);
-    border-style: solid;
-}
-
-.graphic-info {
-    color: inherit;
-}
-
-.graphic-info h3 {
-    font-family: "EB Garamond", serif;
-    font-size: 26px;
-    font-weight: 600;
-    color: #ffffff;
-    margin-bottom: 6px;
-}
-
-.graphic-info .card-num {
-    color: rgba(255, 255, 255, 0.4);
-}
-
-.graphic-info .card-meta {
-    color: rgba(203, 209, 220, 0.65);
-}
-
-.graphic-info .compact-desc {
-    color: rgba(203, 209, 220, 0.85);
-}
-
-.graphic-info .compact-outcome {
-    color: #cbd5e1;
+.graphic-masonry-item img {
+    width: 100%;
+    height: auto;
+    display: block;
 }
 
 /* Responsive Scaling for Work Section */
@@ -1258,12 +1212,15 @@ body.work-unlocked #text {
     .compact-details {
         grid-column: 2 / span 2;
     }
+    .graphic-masonry {
+        column-count: 2;
+    }
 }
 
 @media (max-width: 600px) {
     #work {
         width: 92%;
-        padding: 20px 0 60px;
+        padding: 20px 0 80px;
     }
     .compact-row {
         grid-template-columns: 1fr;
@@ -1272,11 +1229,8 @@ body.work-unlocked #text {
     .compact-arrow {
         display: none;
     }
-    .graphic-gallery-card {
-        padding: 20px;
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 12px;
+    .graphic-masonry {
+        column-count: 1;
     }
 }
 
@@ -1600,6 +1554,28 @@ body.work-unlocked #text {
     color: #ffffff;
     border-color: rgba(255, 255, 255, 0.25);
     transform: translateY(-2px);
+}
+
+.figma-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #60a5fa;
+    color: #0b0e14;
+    font-family: "Manrope", sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    padding: 10px 20px;
+    border-radius: 10px;
+    text-decoration: none;
+    transition: all 0.25s ease;
+    box-shadow: 0 4px 15px rgba(96, 165, 250, 0.3);
+}
+
+.figma-button:hover {
+    background: #93c5fd;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(96, 165, 250, 0.45);
 }
 
 /* Section Blocks */
