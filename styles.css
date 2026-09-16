@@ -923,12 +923,6 @@ body.work-unlocked #text {
     background: linear-gradient(90deg, rgba(255, 255, 255, 0.15), transparent);
 }
 
-/* The graphic-design header doubles as the link into the full collection,
-   so give it a hover cue other section headers don't need. */
-a.work-section-header:hover {
-    color: rgba(203, 209, 220, 0.95);
-}
-
 /* 01 Featured Work Grid (2 Large Cards) */
 .featured-grid {
     display: grid;
@@ -1202,11 +1196,6 @@ a.work-section-header:hover {
     width: 100%;
     height: auto;
     display: block;
-    transition: opacity 0.3s ease;
-}
-
-.graphic-masonry-item:hover img {
-    opacity: 0.85;
 }
 
 /* Responsive Scaling for Work Section */
