@@ -131,6 +131,43 @@
             transform: translateX(-50%) translateY(0) scale(1) rotate(4deg);
         }
 
+        .github-trigger {
+            position: relative;
+        }
+
+        .github-preview {
+            position: absolute;
+            bottom: calc(100% + 14px);
+            left: 50%;
+            transform: translateX(-50%) translateY(10px) scale(0.95) rotate(0deg);
+            opacity: 0;
+            pointer-events: none;
+            z-index: 1000;
+            transition: all 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            background: #0d1117;
+            padding: 14px 16px 12px 16px;
+            border-radius: 8px;
+            box-shadow: 0 16px 36px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 255, 255, 0.12);
+            border: 1px solid #30363d;
+            width: 330px;
+            max-width: 90vw;
+            transform-origin: center bottom;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica, Arial, sans-serif;
+            text-align: left;
+            color: #e6edf3;
+        }
+
+        .github-preview svg {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .github-trigger:hover .github-preview {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0) scale(1) rotate(-2deg);
+        }
+
         .photo-container {
             width: 300px;
             height: 400px;
@@ -249,20 +286,223 @@
                 alt="Jiayi Professional">
         </div>
         <div class="about-text">
-            <i># About me</i>
+            <i># about me</i>
 
-            Hi! I'm Jiayi, a designer & business student @ Western University
+            hi! I'm jiayi
 
-            I love solving ambiguous problems; either visually through design or through stories backed by data & analysis
+            i love working with consumer software!
+            (whether im designing it or growing it or anything in between) 
 
-            Outside of work I'm addicted to concerts & food. I'm also a pretty <span class="fast-typist-trigger">fast typist!<span class="typist-preview"><img src="images/typing.png" alt="Typing speed screenshot"></span></span>
+            outside of work i'm addicted to trying new food (add me on beli!). i'm also a pretty <span class="fast-typist-trigger">fast typist!<span class="typist-preview"><img src="images/typing.png" alt="Typing speed screenshot"></span></span>
 
-            I'm always looking to meet new people, feel free to reach out :)
+            always love to meet new people, feel free to reach out :) 
             <div style="margin-top: 20px; display: flex; align-items: center; flex-wrap: wrap; gap: 8px;">
                 <a href="mailto:jiayihong52@gmail.com" id="copy-email" class="about-btn">[jiayihong52@gmail.com]</a>
                 <a href="https://www.linkedin.com/in/jiayiihong/" target="_blank" class="about-btn">[Linkedin]</a>
                 <a href="https://x.com/jiayiihong" target="_blank" class="about-btn">[X]</a>
-                <a href="https://github.com/jiayiihong25" target="_blank" class="about-btn">[GitHub]</a>
+                <a href="https://github.com/jiayiihong25" target="_blank" class="about-btn github-trigger">[GitHub]<span class="github-preview">
+                    <svg viewBox="0 0 320 144" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <text x="2" y="13" fill="#e6edf3" font-size="12" font-weight="600" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">661 contributions in 2026</text>
+                        <text x="318" y="13" fill="#7d8590" font-size="9" text-anchor="end" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">@jiayiihong25</text>
+                        
+                        <!-- Heatmap Container Box -->
+                        <rect x="1" y="22" width="318" height="96" rx="6" fill="#0d1117" stroke="#30363d" stroke-width="1"/>
+                        
+                        <!-- Month Labels -->
+                        <text x="40" y="35" fill="#7d8590" font-size="8.5" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">May</text>
+                        <text x="104" y="35" fill="#7d8590" font-size="8.5" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">Jun</text>
+                        <text x="168" y="35" fill="#7d8590" font-size="8.5" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">Jul</text>
+                        <text x="222" y="35" fill="#7d8590" font-size="8.5" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">Aug</text>
+                        <text x="274" y="35" fill="#7d8590" font-size="8.5" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">Sep</text>
+                        
+                        <!-- Day Labels -->
+                        <text x="10" y="59" fill="#7d8590" font-size="8" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">Mon</text>
+                        <text x="10" y="81" fill="#7d8590" font-size="8" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">Wed</text>
+                        <text x="10" y="103" fill="#7d8590" font-size="8" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">Fri</text>
+                        
+                        <!-- Heatmap Grid Squares (May -> Sep) -->
+                        <g transform="translate(38, 41)">
+                            <!-- Wk 1 (May) -->
+                            <rect x="0" y="0" width="9.5" height="9.5" rx="2" fill="#161b22"/>
+                            <rect x="0" y="11" width="9.5" height="9.5" rx="2" fill="#006d32"/>
+                            <rect x="0" y="22" width="9.5" height="9.5" rx="2" fill="#0e4429"/>
+                            <rect x="0" y="33" width="9.5" height="9.5" rx="2" fill="#161b22"/>
+                            <rect x="0" y="44" width="9.5" height="9.5" rx="2" fill="#161b22"/>
+                            <rect x="0" y="55" width="9.5" height="9.5" rx="2" fill="#161b22"/>
+                            <rect x="0" y="66" width="9.5" height="9.5" rx="2" fill="#161b22"/>
+                            <!-- Wk 2 -->
+                            <rect x="13" y="0" width="9.5" height="9.5" rx="2" fill="#161b22"/>
+                            <rect x="13" y="11" width="9.5" height="9.5" rx="2" fill="#0e4429"/>
+                            <rect x="13" y="22" width="9.5" height="9.5" rx="2" fill="#161b22"/>
+                            <rect x="13" y="33" width="9.5" height="9.5" rx="2" fill="#161b22"/>
+                            <rect x="13" y="44" width="9.5" height="9.5" rx="2" fill="#161b22"/>
+                            <rect x="13" y="55" width="9.5" height="9.5" rx="2" fill="#161b22"/>
+                            <rect x="13" y="66" width="9.5" height="9.5" rx="2" fill="#161b22"/>
+                            <!-- Wk 3 -->
+                            <rect x="26" y="0" width="9.5" height="9.5" rx="2" fill="#161b22"/>
+                            <rect x="26" y="11" width="9.5" height="9.5" rx="2" fill="#161b22"/>
+                            <rect x="26" y="22" width="9.5" height="9.5" rx="2" fill="#161b22"/>
+                            <rect x="26" y="33" width="9.5" height="9.5" rx="2" fill="#161b22"/>
+                            <rect x="26" y="44" width="9.5" height="9.5" rx="2" fill="#161b22"/>
+                            <rect x="26" y="55" width="9.5" height="9.5" rx="2" fill="#161b22"/>
+                            <rect x="26" y="66" width="9.5" height="9.5" rx="2" fill="#161b22"/>
+                            <!-- Wk 4 -->
+                            <rect x="39" y="0" width="9.5" height="9.5" rx="2" fill="#161b22"/>
+                            <rect x="39" y="11" width="9.5" height="9.5" rx="2" fill="#161b22"/>
+                            <rect x="39" y="22" width="9.5" height="9.5" rx="2" fill="#161b22"/>
+                            <rect x="39" y="33" width="9.5" height="9.5" rx="2" fill="#0e4429"/>
+                            <rect x="39" y="44" width="9.5" height="9.5" rx="2" fill="#161b22"/>
+                            <rect x="39" y="55" width="9.5" height="9.5" rx="2" fill="#161b22"/>
+                            <rect x="39" y="66" width="9.5" height="9.5" rx="2" fill="#161b22"/>
+                            <!-- Wk 5 -->
+                            <rect x="52" y="0" width="9.5" height="9.5" rx="2" fill="#161b22"/>
+                            <rect x="52" y="11" width="9.5" height="9.5" rx="2" fill="#161b22"/>
+                            <rect x="52" y="22" width="9.5" height="9.5" rx="2" fill="#161b22"/>
+                            <rect x="52" y="33" width="9.5" height="9.5" rx="2" fill="#161b22"/>
+                            <rect x="52" y="44" width="9.5" height="9.5" rx="2" fill="#161b22"/>
+                            <rect x="52" y="55" width="9.5" height="9.5" rx="2" fill="#161b22"/>
+                            <rect x="52" y="66" width="9.5" height="9.5" rx="2" fill="#0e4429"/>
+                            <!-- Wk 6 (Jun) -->
+                            <rect x="65" y="0" width="9.5" height="9.5" rx="2" fill="#161b22"/>
+                            <rect x="65" y="11" width="9.5" height="9.5" rx="2" fill="#26a641"/>
+                            <rect x="65" y="22" width="9.5" height="9.5" rx="2" fill="#0e4429"/>
+                            <rect x="65" y="33" width="9.5" height="9.5" rx="2" fill="#0e4429"/>
+                            <rect x="65" y="44" width="9.5" height="9.5" rx="2" fill="#0e4429"/>
+                            <rect x="65" y="55" width="9.5" height="9.5" rx="2" fill="#0e4429"/>
+                            <rect x="65" y="66" width="9.5" height="9.5" rx="2" fill="#0e4429"/>
+                            <!-- Wk 7 -->
+                            <rect x="78" y="0" width="9.5" height="9.5" rx="2" fill="#161b22"/>
+                            <rect x="78" y="11" width="9.5" height="9.5" rx="2" fill="#0e4429"/>
+                            <rect x="78" y="22" width="9.5" height="9.5" rx="2" fill="#0e4429"/>
+                            <rect x="78" y="33" width="9.5" height="9.5" rx="2" fill="#0e4429"/>
+                            <rect x="78" y="44" width="9.5" height="9.5" rx="2" fill="#0e4429"/>
+                            <rect x="78" y="55" width="9.5" height="9.5" rx="2" fill="#161b22"/>
+                            <rect x="78" y="66" width="9.5" height="9.5" rx="2" fill="#0e4429"/>
+                            <!-- Wk 8 -->
+                            <rect x="91" y="0" width="9.5" height="9.5" rx="2" fill="#161b22"/>
+                            <rect x="91" y="11" width="9.5" height="9.5" rx="2" fill="#0e4429"/>
+                            <rect x="91" y="22" width="9.5" height="9.5" rx="2" fill="#0e4429"/>
+                            <rect x="91" y="33" width="9.5" height="9.5" rx="2" fill="#0e4429"/>
+                            <rect x="91" y="44" width="9.5" height="9.5" rx="2" fill="#0e4429"/>
+                            <rect x="91" y="55" width="9.5" height="9.5" rx="2" fill="#161b22"/>
+                            <rect x="91" y="66" width="9.5" height="9.5" rx="2" fill="#161b22"/>
+                            <!-- Wk 9 -->
+                            <rect x="104" y="0" width="9.5" height="9.5" rx="2" fill="#161b22"/>
+                            <rect x="104" y="11" width="9.5" height="9.5" rx="2" fill="#0e4429"/>
+                            <rect x="104" y="22" width="9.5" height="9.5" rx="2" fill="#0e4429"/>
+                            <rect x="104" y="33" width="9.5" height="9.5" rx="2" fill="#0e4429"/>
+                            <rect x="104" y="44" width="9.5" height="9.5" rx="2" fill="#0e4429"/>
+                            <rect x="104" y="55" width="9.5" height="9.5" rx="2" fill="#0e4429"/>
+                            <rect x="104" y="66" width="9.5" height="9.5" rx="2" fill="#0e4429"/>
+                            <!-- Wk 10 (Jul) -->
+                            <rect x="117" y="0" width="9.5" height="9.5" rx="2" fill="#161b22"/>
+                            <rect x="117" y="11" width="9.5" height="9.5" rx="2" fill="#0e4429"/>
+                            <rect x="117" y="22" width="9.5" height="9.5" rx="2" fill="#161b22"/>
+                            <rect x="117" y="33" width="9.5" height="9.5" rx="2" fill="#161b22"/>
+                            <rect x="117" y="44" width="9.5" height="9.5" rx="2" fill="#006d32"/>
+                            <rect x="117" y="55" width="9.5" height="9.5" rx="2" fill="#26a641"/>
+                            <rect x="117" y="66" width="9.5" height="9.5" rx="2" fill="#26a641"/>
+                            <!-- Wk 11 -->
+                            <rect x="130" y="0" width="9.5" height="9.5" rx="2" fill="#161b22"/>
+                            <rect x="130" y="11" width="9.5" height="9.5" rx="2" fill="#161b22"/>
+                            <rect x="130" y="22" width="9.5" height="9.5" rx="2" fill="#006d32"/>
+                            <rect x="130" y="33" width="9.5" height="9.5" rx="2" fill="#006d32"/>
+                            <rect x="130" y="44" width="9.5" height="9.5" rx="2" fill="#26a641"/>
+                            <rect x="130" y="55" width="9.5" height="9.5" rx="2" fill="#161b22"/>
+                            <rect x="130" y="66" width="9.5" height="9.5" rx="2" fill="#161b22"/>
+                            <!-- Wk 12 -->
+                            <rect x="143" y="0" width="9.5" height="9.5" rx="2" fill="#161b22"/>
+                            <rect x="143" y="11" width="9.5" height="9.5" rx="2" fill="#26a641"/>
+                            <rect x="143" y="22" width="9.5" height="9.5" rx="2" fill="#006d32"/>
+                            <rect x="143" y="33" width="9.5" height="9.5" rx="2" fill="#0e4429"/>
+                            <rect x="143" y="44" width="9.5" height="9.5" rx="2" fill="#161b22"/>
+                            <rect x="143" y="55" width="9.5" height="9.5" rx="2" fill="#0e4429"/>
+                            <rect x="143" y="66" width="9.5" height="9.5" rx="2" fill="#0e4429"/>
+                            <!-- Wk 13 -->
+                            <rect x="156" y="0" width="9.5" height="9.5" rx="2" fill="#161b22"/>
+                            <rect x="156" y="11" width="9.5" height="9.5" rx="2" fill="#0e4429"/>
+                            <rect x="156" y="22" width="9.5" height="9.5" rx="2" fill="#0e4429"/>
+                            <rect x="156" y="33" width="9.5" height="9.5" rx="2" fill="#006d32"/>
+                            <rect x="156" y="44" width="9.5" height="9.5" rx="2" fill="#161b22"/>
+                            <rect x="156" y="55" width="9.5" height="9.5" rx="2" fill="#006d32"/>
+                            <rect x="156" y="66" width="9.5" height="9.5" rx="2" fill="#161b22"/>
+                            <!-- Wk 14 (Aug) -->
+                            <rect x="169" y="0" width="9.5" height="9.5" rx="2" fill="#161b22"/>
+                            <rect x="169" y="11" width="9.5" height="9.5" rx="2" fill="#0e4429"/>
+                            <rect x="169" y="22" width="9.5" height="9.5" rx="2" fill="#0e4429"/>
+                            <rect x="169" y="33" width="9.5" height="9.5" rx="2" fill="#161b22"/>
+                            <rect x="169" y="44" width="9.5" height="9.5" rx="2" fill="#161b22"/>
+                            <rect x="169" y="55" width="9.5" height="9.5" rx="2" fill="#161b22"/>
+                            <rect x="169" y="66" width="9.5" height="9.5" rx="2" fill="#0e4429"/>
+                            <!-- Wk 15 -->
+                            <rect x="182" y="0" width="9.5" height="9.5" rx="2" fill="#161b22"/>
+                            <rect x="182" y="11" width="9.5" height="9.5" rx="2" fill="#161b22"/>
+                            <rect x="182" y="22" width="9.5" height="9.5" rx="2" fill="#0e4429"/>
+                            <rect x="182" y="33" width="9.5" height="9.5" rx="2" fill="#0e4429"/>
+                            <rect x="182" y="44" width="9.5" height="9.5" rx="2" fill="#161b22"/>
+                            <rect x="182" y="55" width="9.5" height="9.5" rx="2" fill="#0e4429"/>
+                            <rect x="182" y="66" width="9.5" height="9.5" rx="2" fill="#0e4429"/>
+                            <!-- Wk 16 -->
+                            <rect x="195" y="0" width="9.5" height="9.5" rx="2" fill="#161b22"/>
+                            <rect x="195" y="11" width="9.5" height="9.5" rx="2" fill="#0e4429"/>
+                            <rect x="195" y="22" width="9.5" height="9.5" rx="2" fill="#161b22"/>
+                            <rect x="195" y="33" width="9.5" height="9.5" rx="2" fill="#006d32"/>
+                            <rect x="195" y="44" width="9.5" height="9.5" rx="2" fill="#161b22"/>
+                            <rect x="195" y="55" width="9.5" height="9.5" rx="2" fill="#161b22"/>
+                            <rect x="195" y="66" width="9.5" height="9.5" rx="2" fill="#0e4429"/>
+                            <!-- Wk 17 -->
+                            <rect x="208" y="0" width="9.5" height="9.5" rx="2" fill="#161b22"/>
+                            <rect x="208" y="11" width="9.5" height="9.5" rx="2" fill="#0e4429"/>
+                            <rect x="208" y="22" width="9.5" height="9.5" rx="2" fill="#0e4429"/>
+                            <rect x="208" y="33" width="9.5" height="9.5" rx="2" fill="#161b22"/>
+                            <rect x="208" y="44" width="9.5" height="9.5" rx="2" fill="#161b22"/>
+                            <rect x="208" y="55" width="9.5" height="9.5" rx="2" fill="#161b22"/>
+                            <rect x="208" y="66" width="9.5" height="9.5" rx="2" fill="#0e4429"/>
+                            <!-- Wk 18 -->
+                            <rect x="221" y="0" width="9.5" height="9.5" rx="2" fill="#161b22"/>
+                            <rect x="221" y="11" width="9.5" height="9.5" rx="2" fill="#161b22"/>
+                            <rect x="221" y="22" width="9.5" height="9.5" rx="2" fill="#0e4429"/>
+                            <rect x="221" y="33" width="9.5" height="9.5" rx="2" fill="#006d32"/>
+                            <rect x="221" y="44" width="9.5" height="9.5" rx="2" fill="#161b22"/>
+                            <rect x="221" y="55" width="9.5" height="9.5" rx="2" fill="#161b22"/>
+                            <rect x="221" y="66" width="9.5" height="9.5" rx="2" fill="#0e4429"/>
+                            <!-- Wk 19 (Sep) -->
+                            <rect x="234" y="0" width="9.5" height="9.5" rx="2" fill="#161b22"/>
+                            <rect x="234" y="11" width="9.5" height="9.5" rx="2" fill="#26a641"/>
+                            <rect x="234" y="22" width="9.5" height="9.5" rx="2" fill="#0e4429"/>
+                            <rect x="234" y="33" width="9.5" height="9.5" rx="2" fill="#006d32"/>
+                            <rect x="234" y="44" width="9.5" height="9.5" rx="2" fill="#006d32"/>
+                            <rect x="234" y="55" width="9.5" height="9.5" rx="2" fill="#39d353"/>
+                            <rect x="234" y="66" width="9.5" height="9.5" rx="2" fill="#0e4429"/>
+                            <!-- Wk 20 -->
+                            <rect x="247" y="0" width="9.5" height="9.5" rx="2" fill="#161b22"/>
+                            <rect x="247" y="11" width="9.5" height="9.5" rx="2" fill="#0e4429"/>
+                            <rect x="247" y="22" width="9.5" height="9.5" rx="2" fill="#26a641"/>
+                            <rect x="247" y="33" width="9.5" height="9.5" rx="2" fill="#006d32"/>
+                            <rect x="247" y="44" width="9.5" height="9.5" rx="2" fill="#161b22"/>
+                            <rect x="247" y="55" width="9.5" height="9.5" rx="2" fill="#006d32"/>
+                            <rect x="247" y="66" width="9.5" height="9.5" rx="2" fill="#161b22"/>
+                            <!-- Wk 21 -->
+                            <rect x="260" y="0" width="9.5" height="9.5" rx="2" fill="#161b22"/>
+                            <rect x="260" y="11" width="9.5" height="9.5" rx="2" fill="#0e4429"/>
+                            <rect x="260" y="22" width="9.5" height="9.5" rx="2" fill="#26a641"/>
+                            <rect x="260" y="33" width="9.5" height="9.5" rx="2" fill="#0e4429"/>
+                            <rect x="260" y="44" width="9.5" height="9.5" rx="2" fill="#006d32"/>
+                            <rect x="260" y="55" width="9.5" height="9.5" rx="2" fill="#0e4429"/>
+                            <rect x="260" y="66" width="9.5" height="9.5" rx="2" fill="#161b22"/>
+                        </g>
+
+                        <!-- Footer -->
+                        <text x="6" y="133" fill="#7d8590" font-size="8" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">Learn how we count contributions</text>
+                        <text x="238" y="133" fill="#7d8590" font-size="8" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">Less</text>
+                        <rect x="256" y="125" width="8" height="8" rx="1.5" fill="#161b22"/>
+                        <rect x="266" y="125" width="8" height="8" rx="1.5" fill="#0e4429"/>
+                        <rect x="276" y="125" width="8" height="8" rx="1.5" fill="#006d32"/>
+                        <rect x="286" y="125" width="8" height="8" rx="1.5" fill="#26a641"/>
+                        <rect x="296" y="125" width="8" height="8" rx="1.5" fill="#39d353"/>
+                        <text x="318" y="133" fill="#7d8590" font-size="8" text-anchor="end" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">More</text>
+                    </svg>
+                </span></a>
             </div>
             <br>
             <a href="index.html#work" class="back-link">[explore my work →]</a>
