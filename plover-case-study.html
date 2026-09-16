@@ -40,12 +40,12 @@
             <!-- Main Case Study Content -->
             <main class="case-study-main">
                 <header class="case-hero">
-                    <h1 class="case-title">Plover: A Progress Bar for Work That Doesn't Have One</h1>
-                    <p class="case-subtitle">Designing an ambient, single-player desktop companion that breaks daunting projects into actionable steps and fills a real-time progress bar as the work actually moves.</p>
+                    <h1 class="case-title">Plover: The Progress Bar That Works</h1>
+                    <p class="case-subtitle">A local-first desktop agent that turns a vague goal into a structured plan and shows the same kind of live, closing-the-ring progress a Fitbit shows a runner — applied to work that's mentally, not physically, demanding.</p>
                     <div class="case-meta-grid">
                         <div class="meta-col">
                             <span class="meta-label">Role</span>
-                            <span class="meta-val">Lead Product Designer & Prototyper</span>
+                            <span class="meta-val">Product Designer & Builder</span>
                         </div>
                         <div class="meta-col">
                             <span class="meta-label">Timeline</span>
@@ -57,14 +57,14 @@
                         </div>
                         <div class="meta-col">
                             <span class="meta-label">Stack</span>
-                            <span class="meta-val">Figma, Protopie, Gemini Vision, macOS</span>
+                            <span class="meta-val">Electron, React, TypeScript, SQLite</span>
                         </div>
                     </div>
 
                     <!-- Outcome-First Summary Box -->
                     <div class="hero-outcome-box">
                         <div class="outcome-tag">⚡ Key Outcome</div>
-                        <div class="outcome-statement">Engineered a zero-overhead ambient interaction model combining Gemini step decomposition with a floating "Dynamic Island" progress pill. Validated in user evaluations with a 38% reduction in task activation inertia, 0 context switching during deep work, and 92% user trust driven by single-window transient privacy.</div>
+                        <div class="outcome-statement">Built Plover from a pure Planner function to a shipped desktop app: onboarding that teaches the product's mental model before the empty state, a permissioned window-read pipeline with nothing persisted to disk, and a floating overlay whose fill bar borrows the exact psychological loop that gets someone to close their Fitbit rings — pointed at a thesis draft instead of a run.</div>
                     </div>
 
                     <div style="margin-bottom: 32px;">
@@ -84,14 +84,14 @@
                 <!-- 01 Context -->
                 <section id="context" class="case-section">
                     <div class="section-tag">01 Context</div>
-                    <h2 class="section-heading">Background & The "Clock vs. Work" Paradox</h2>
+                    <h2 class="section-heading">Fitness trackers solved this for the body. Nothing solved it for the desk.</h2>
                     <div class="section-body">
-                        <p>Most productivity tools measure <strong>inputs</strong> rather than <strong>outputs</strong>. A Pomodoro timer tracks how long you sat in front of your display; a desktop time tracker logs which application window was foremost. Neither knows whether your thesis methods section actually advanced or if you stared blankly at a blinking cursor for 45 minutes.</p>
-                        <p>For students tackling thesis chapters, researchers synthesizing literature, and writers wrestling with draft revisions, the greatest friction is <em>task paralysis</em>. Staring down an amorphous, high-stakes objective introduces cognitive overwhelm that stifles initiation.</p>
-                        
+                        <p>A ring, a streak, a percentage closing in real time as you move — fitness trackers solved motivation for physical effort years ago. Knowledge work has no equivalent. "Finish the methods section" or "ship this feature" has no obvious next physical action, no ambient feedback loop, and no visible signal that you're 65% of the way there instead of 15%.</p>
+                        <p>Plover's core bet: if you can build a system that reads what someone is actually doing and reflects it back as a filling bar, you can borrow the exact mechanism that gets someone to close their rings — and point it at a thesis draft or a slide deck instead of a run.</p>
+
                         <div class="section-card">
-                            <h3 style="color: white; margin-bottom: 8px; font-size: 16px;">The Plover Premise: Track the Work, Not the Clock</h3>
-                            <p style="margin-bottom: 0;">What if your workspace had an ambient progress bar for open-ended knowledge work? Plover sits unobtrusively alongside your target document, breaks intimidating goals down into concrete micro-milestones via Gemini, and silently increments a progress bar as the real work takes shape on your screen.</p>
+                            <h3 style="color: white; margin-bottom: 8px; font-size: 16px;">The literal pitch, first screen, before any setup</h3>
+                            <p style="margin-bottom: 0;">"The Progress Bar That Works." Plover is a small overlay that sits beside whatever window you're working in, breaks a goal into concrete steps, and quietly fills as the real work gets done.</p>
                         </div>
                     </div>
                 </section>
@@ -99,23 +99,23 @@
                 <!-- 02 Problem -->
                 <section id="problem" class="case-section">
                     <div class="section-tag">02 Problem</div>
-                    <h2 class="section-heading">Deconstructing Task Paralysis & Context Creep</h2>
+                    <h2 class="section-heading">Onboarding has to teach a mental model before it can sell a feature</h2>
                     <div class="section-body">
-                        <p>Through foundational user interviews with students, researchers, and ADHD-diagnosed knowledge workers, three critical friction points emerged:</p>
-                        
+                        <p>The hard design problem wasn't the overlay itself — it was getting someone from "never heard of this" to "I trust a piece of software to watch my screen" in under two minutes, without a single support ticket about privacy. Three things had to happen before the user was left alone with an empty dashboard:</p>
+
                         <div class="section-card">
-                            <h3 style="color: #60a5fa; margin-bottom: 6px; font-size: 16px;">1. The Blank Page Activation Barrier</h3>
-                            <p style="margin-bottom: 0;">The distance between "I need to write my methodology" and writing sentence one feels cavernous. Traditional project tools (Notion, Jira, Asana) compound the problem by demanding manual subtask taxonomy, due dates, tags, and administrative upkeep before a user types a single word of actual content.</p>
+                            <h3 style="color: #60a5fa; margin-bottom: 6px; font-size: 16px;">1. Prove the artifact before asking for anything</h3>
+                            <p style="margin-bottom: 0;">Telling someone "it's a progress bar for your brain" is abstract. Showing them the actual overlay component, live, on the first screen, is not.</p>
                         </div>
 
                         <div class="section-card">
-                            <h3 style="color: #60a5fa; margin-bottom: 6px; font-size: 16px;">2. The Context-Switching Tax</h3>
-                            <p style="margin-bottom: 0;">Traditional task lists live in separate browser tabs or desktop windows. Navigating back and forth to mark off checkboxes breaks flow state and exposes users to notifications, open tabs, and algorithmic distractions.</p>
+                            <h3 style="color: #60a5fa; margin-bottom: 6px; font-size: 16px;">2. Resolve the privacy objection at the exact moment it's raised</h3>
+                            <p style="margin-bottom: 0;">A screen-recording permission prompt is the single highest-anxiety moment in the whole flow. Burying the privacy pitch in a settings page later means the user has already made up their mind by then.</p>
                         </div>
 
                         <div class="section-card">
-                            <h3 style="color: #60a5fa; margin-bottom: 6px; font-size: 16px;">3. The Workplace Surveillance Anxiety</h3>
-                            <p style="margin-bottom: 0;">Modern automated tracking tools often resemble invasive surveillanceware. Users expressed vehement resistance to any software that records their full screen, saves screenshots to a server, or creates managerial dashboards.</p>
+                            <h3 style="color: #60a5fa; margin-bottom: 6px; font-size: 16px;">3. Make the first real task real, not a sandbox</h3>
+                            <p style="margin-bottom: 0;">A tutorial task that gets thrown away teaches nothing about daily use. The user's actual thesis chapter or actual feature needed to be the one being decomposed and tracked, on day one.</p>
                         </div>
                     </div>
                 </section>
@@ -123,38 +123,38 @@
                 <!-- 03 Process -->
                 <section id="process" class="case-section">
                     <div class="section-tag">03 Process</div>
-                    <h2 class="section-heading">The Three-Pillar Interaction Architecture</h2>
+                    <h2 class="section-heading">A 4-stage onboarding stepper: Welcome → Setup → First task → Done</h2>
                     <div class="section-body">
-                        <p>To solve task inertia without inducing cognitive burden, we architected Plover around three minimalist interaction stages:</p>
+                        <p>Every screen in the stepper either teaches vocabulary the product will use later (<code>observing</code>, the fill bar, the step list) or resolves a trust objection at the moment it's most salient — so by the time the user reaches the empty Home screen, they already know what the bar means and why it's safe.</p>
 
                         <div class="section-card">
-                            <h3 style="color: white; margin-bottom: 6px;">Pillar 1: One-Line Intent Capture & Cadence Selection</h3>
-                            <p>Rather than complex project trees, Plover asks a single prompt in an elegant, distraction-free modal: <em>"What are you working on?"</em> Users can toggle immediate frequency cadences (<strong>One-off</strong>, <strong>Daily</strong>, or <strong>Weekly</strong>) to establish scope in under 5 seconds.</p>
+                            <h3 style="color: white; margin-bottom: 6px;">Welcome — show the real artifact, not a mockup</h3>
+                            <p>The screen splits in two: left is the pitch in plain language ("The Progress Bar That Works") with a single <em>Get Started</em> CTA, right is a live-playing demo of the actual overlay in motion. The user sees the real thing they're being sold before they've done anything.</p>
                         </div>
 
                         <figure style="margin: 28px 0;">
-                            <img src="images/plover/step-1-modal.jpg" alt="Plover Task Setup Modal" class="case-img" style="margin: 0 0 10px 0;">
-                            <figcaption style="font-size: 13px; color: rgba(203, 209, 220, 0.6); text-align: center; font-style: italic;">Figure 1: Lightweight task initiation dialog with one-line prompt input and cadence selection.</figcaption>
+                            <img src="images/plover/step-1-modal.jpg" alt="Plover Welcome screen with live overlay preview" class="case-img" style="margin: 0 0 10px 0;">
+                            <figcaption style="font-size: 13px; color: rgba(203, 209, 220, 0.6); text-align: center; font-style: italic;">Figure 1: Split-screen welcome — plain-language pitch on the left, the real overlay component playing on the right.</figcaption>
                         </figure>
 
                         <div class="section-card" style="margin-top: 36px;">
-                            <h3 style="color: white; margin-bottom: 6px;">Pillar 2: Gemini-Powered Autonomous Step Decomposition</h3>
-                            <p>Clicking <em>"Break into steps →"</em> passes the objective to Gemini, which returns a curated sequence of 4–5 realistic, bite-sized milestones. Crucially, the UI preserves full human agency: every step can be renamed, reordered with drag handles, deleted, or expanded with <em>"+ Add a step"</em> before tracking starts.</p>
+                            <h3 style="color: white; margin-bottom: 6px;">Use case → Permission — a lightweight categorization step, then the trust pitch</h3>
+                            <p>"What tasks can Plover help you track?" — essays &amp; papers, reading &amp; research, problem sets, digital projects, daily study sessions — isn't friction for its own sake; it primes the AI decomposition step to feel tailored rather than generic. Then comes the screen we spent the most time on: "Now, let's turn it on," immediately paired with the guarantee that macOS's own permission dialog can't state on its own — Plover only reads the one window you pick, next.</p>
                         </div>
 
                         <figure style="margin: 28px 0;">
-                            <img src="images/plover/step-2-breakdown.jpg" alt="Plover Step Breakdown by Gemini" class="case-img" style="margin: 0 0 10px 0;">
-                            <figcaption style="font-size: 13px; color: rgba(203, 209, 220, 0.6); text-align: center; font-style: italic;">Figure 2: Gemini generates sequential action items with full inline user editability.</figcaption>
+                            <img src="images/plover/step-3-privacy.jpg" alt="Plover permission screen framing the screen-recording grant" class="case-img" style="margin: 0 0 10px 0;">
+                            <figcaption style="font-size: 13px; color: rgba(203, 209, 220, 0.6); text-align: center; font-style: italic;">Figure 2: The permission screen is placed before the OS prompt fires, not after — so the trust pitch lands while the user's guard is actually up.</figcaption>
                         </figure>
 
                         <div class="section-card" style="margin-top: 36px;">
-                            <h3 style="color: white; margin-bottom: 6px;">Pillar 3: The Privacy-Preserving Window Sandbox</h3>
-                            <p>To eliminate surveillance fear, Plover prompts the user to select the specific application window to observe (e.g. <em>Google Docs — Thesis draft</em>). Plover explicitly isolates its vision pipeline to that chosen frame: no background screen regions are visible, images are evaluated transiently in memory, and zero screenshots are ever persisted to disk.</p>
+                            <h3 style="color: white; margin-bottom: 6px;">First task — used for real, inside onboarding</h3>
+                            <p>"Now let's start your first task," framed explicitly as "This is exactly how you'll use Plover every day," not a sandboxed tutorial. The user types a real goal ("Finish the methods section of my thesis"), picks a cadence — one-off, daily, or weekly — and hits <em>Break into steps →</em>, which fires the actual AI decomposition feature. Every generated step stays fully editable: renamed, reordered, deleted, or supplemented before tracking starts. The next screen asks one more real question — "Which window should I watch?" — with the same privacy line repeated in the user's own next decision: "I only look at the one window you pick — never the rest of your screen."</p>
                         </div>
 
                         <figure style="margin: 28px 0;">
-                            <img src="images/plover/step-3-privacy.jpg" alt="Plover Window Selection & Privacy Guarantee" class="case-img" style="margin: 0 0 10px 0;">
-                            <figcaption style="font-size: 13px; color: rgba(203, 209, 220, 0.6); text-align: center; font-style: italic;">Figure 3: Transparent window anchoring with explicit single-window privacy guardrails.</figcaption>
+                            <img src="images/plover/step-2-breakdown.jpg" alt="Plover AI step breakdown with editable steps" class="case-img" style="margin: 0 0 10px 0;">
+                            <figcaption style="font-size: 13px; color: rgba(203, 209, 220, 0.6); text-align: center; font-style: italic;">Figure 3: AI-generated step breakdown for the user's real goal, fully editable before tracking starts.</figcaption>
                         </figure>
                     </div>
                 </section>
@@ -162,29 +162,33 @@
                 <!-- 04 Solution -->
                 <section id="solution" class="case-section">
                     <div class="section-tag">04 Solution</div>
-                    <h2 class="section-heading">The Ambient Floating "Island" Paradigm</h2>
+                    <h2 class="section-heading">The overlay, the Home dashboard, and the Fitbit theory made literal</h2>
                     <div class="section-body">
-                        <p>Once tracking begins, the modal collapses completely, morphing into a whisper-quiet, top-docked ambient pill widget designed to inhabit the user's peripheral vision.</p>
+                        <p>A Fitbit ring works because it closes the loop between an action you took and a number that moved, with almost no delay and almost no effort to report it. Plover is trying to build that same loop for tasks where the "sensor" isn't a heart-rate monitor but a permissioned read of the window you're actually working in.</p>
 
                         <div class="section-card">
-                            <h3 style="color: white; margin-bottom: 8px;">Passive Real-Time Progress Feedback</h3>
-                            <p>As the user types paragraphs, pastes citations, and solves problems, Plover periodically checks the active window for tangible progress signals against the confirmed steps. The ambient pill reflects forward momentum in real time (<code>• observing · Draft — methods 35%</code> → <code>74%</code>) with a sleek glowing bar.</p>
-                            <p style="margin-bottom: 0;">There are no intrusive notification popups, no distracting alerts, and no pressure. It acts as an ambient mirror of effort.</p>
+                            <h3 style="color: white; margin-bottom: 8px;">A persistent overlay borrowed from fitness-app visual grammar</h3>
+                            <p style="margin-bottom: 0;">The core object is a small, collapsible, always-on pill carrying a status word (<code>observing</code>), a task name, a percentage, and a fill bar with a rounded, softly-glowing leading edge — closer to a charging ring than a flat progress bar. Expanding it reveals the step checklist underneath: each completed step gets a checkmark and strikethrough, the current step is marked <code>now</code> — the same visual grammar as a workout app's set-by-set breakdown.</p>
                         </div>
 
                         <figure style="margin: 28px 0;">
-                            <img src="images/plover/step-4-tracking.jpg" alt="Plover Floating Ambient Pill in Action" class="case-img" style="margin: 0 0 10px 0;">
-                            <figcaption style="font-size: 13px; color: rgba(203, 209, 220, 0.6); text-align: center; font-style: italic;">Figure 4: Floating ambient status pill docked above the document, silently tracking real progress.</figcaption>
+                            <img src="images/plover/step-4-tracking.jpg" alt="Plover overlay expanded showing step checklist and live percentage" class="case-img" style="margin: 0 0 10px 0;">
+                            <figcaption style="font-size: 13px; color: rgba(203, 209, 220, 0.6); text-align: center; font-style: italic;">Figure 4: The overlay expanded — step checklist, current step marked "now," live percentage.</figcaption>
                         </figure>
 
                         <div class="section-card" style="margin-top: 36px;">
-                            <h3 style="color: white; margin-bottom: 8px;">Satisfying Closure & Single-Player Ethics</h3>
-                            <p>Upon completing the final task milestone, the pill softly expands into a clean <code>✓ Done 100%</code> indicator. Plover releases the window hook, closes the loop, and lets the user savor the completion milestone without nagging for post-session reviews or sharing metrics with anyone else.</p>
+                            <h3 style="color: white; margin-bottom: 8px;">Home extends the same idiom to every task at once</h3>
+                            <p style="margin-bottom: 0;">Tasks group by cadence — One-off, Daily, Weekly — each row a name, a fill bar, and a percentage, with the active task expanded inline to its step list. Daily and Weekly tasks reset their bar on cadence, mirroring a fitness app's ring resetting at midnight: progress is a living number tied to real cadence, not a static checklist you manually clear.</p>
+                        </div>
+
+                        <div class="section-card" style="margin-top: 36px;">
+                            <h3 style="color: white; margin-bottom: 8px;">Privacy shipped as architecture, not a policy page</h3>
+                            <p style="margin-bottom: 0;">All user data lives in local SQLite. The only outbound calls are AI decomposition requests, proxied through a backend so no API key is ever exposed to the local build. That's the same claim the onboarding permission screen makes — visible in the codebase, not just the copy.</p>
                         </div>
 
                         <figure style="margin: 28px 0;">
-                            <img src="images/plover/step-5-done.jpg" alt="Plover Task Complete State" class="case-img" style="margin: 0 0 10px 0;">
-                            <figcaption style="font-size: 13px; color: rgba(203, 209, 220, 0.6); text-align: center; font-style: italic;">Figure 5: Tactile completion state delivering a micro-reward upon task finalization.</figcaption>
+                            <img src="images/plover/step-5-done.jpg" alt="Plover completion state" class="case-img" style="margin: 0 0 10px 0;">
+                            <figcaption style="font-size: 13px; color: rgba(203, 209, 220, 0.6); text-align: center; font-style: italic;">Figure 5: A task closes out quietly — no report, no dashboard shared with anyone else.</figcaption>
                         </figure>
                     </div>
                 </section>
@@ -192,22 +196,21 @@
                 <!-- 05 Outcome -->
                 <section id="outcome" class="case-section">
                     <div class="section-tag">05 Outcome</div>
-                    <h2 class="section-heading">Impact, Validation & Design Takeaways</h2>
+                    <h2 class="section-heading">Built with architecture discipline, corrected by real usage</h2>
                     <div class="section-body">
-                        <p>User testing across university research groups and remote professionals confirmed the psychological power of visible, low-friction momentum:</p>
+                        <p>Plover was built from scratch around strict module boundaries: a pure Planner function (<code>goal + context → subtasks</code>), a typed store layer, and a Monitor/Inference/Nudge pipeline that's architected but deliberately not built yet — keeping the shipped phase scoped to capture → decompose → schedule → display.</p>
 
                         <div class="section-card">
-                            <p style="font-weight: 600; color: #fff; margin-bottom: 8px;">Quantified Pilot Results:</p>
-                            <p><strong>• 38% Faster Task Initiation:</strong> Reducing task onboarding to a single text prompt and AI-assisted step breakdown eliminated starting hesitation for 9 out of 10 test subjects.</p>
-                            <p><strong>• 0 In-Session Context Switches:</strong> Users stayed inside their core editing environment for the entirety of their writing blocks without tabbing out to mark to-do lists.</p>
-                            <p style="margin-bottom: 0;"><strong>• 92% Privacy Trust Rating:</strong> The combination of single-window binding, zero screenshot persistence, and zero employer telemetry was universally cited as the essential prerequisite for adopting desktop vision AI.</p>
+                            <p style="font-weight: 600; color: #fff; margin-bottom: 8px;">What real usage caught that a spec couldn't:</p>
+                            <p><strong>In-progress tasks were being graded as skipped.</strong> The inference layer originally treated any task not marked done as abandoned. Fixing that — shipped as its own PR — came directly from watching how people actually leave tasks half-finished rather than in a binary complete/incomplete state.</p>
+                            <p style="margin-bottom: 0;"><strong>The blended progress bar needed tuning after it shipped, not before.</strong> Folding the current step's own progress into the overall goal percentage, plus a toggleable "+X%" delta animation on completion, were designed, shipped, and then adjusted based on how the fill actually felt in daily use — the Fitbit-ring theory tested against a real, working build rather than staying a slide-deck idea.</p>
                         </div>
 
                         <div class="section-card" style="margin-top: 24px;">
-                            <p style="font-weight: 600; color: #fff; margin-bottom: 8px;">Key Design Principles Learned:</p>
-                            <p><strong>1. Periphery Over Prominence:</strong> A companion utility should live in peripheral awareness. When UI demands focal attention, it becomes the distraction it was created to solve.</p>
-                            <p><strong>2. Agency Over Full Automation:</strong> AI should suggest the trajectory, but the user must retain the ability to prune, rephrase, and override steps.</p>
-                            <p style="margin-bottom: 0;"><strong>3. Single-Player by Design:</strong> Feedback that reflects your own effort fosters intrinsic pride; surveillance dashboards that judge you trigger avoidance and anxiety.</p>
+                            <p style="font-weight: 600; color: #fff; margin-bottom: 8px;">Design principles that held up:</p>
+                            <p><strong>1. Teach the vocabulary before you need it.</strong> Every onboarding screen introduces a word or object the product will lean on later, so nothing in the empty-state Home screen is unfamiliar.</p>
+                            <p><strong>2. Resolve trust at the moment of friction, not before or after it.</strong> The privacy pitch works because it sits directly against the permission prompt — not in a settings page the user never opens.</p>
+                            <p style="margin-bottom: 0;"><strong>3. Single-player by design.</strong> No team dashboard, no manager view, nothing saved. Progress that reflects only your own effort is the whole premise — a surveillance layer would have undone the trust the onboarding spends its entire flow building.</p>
                         </div>
                     </div>
                 </section>
