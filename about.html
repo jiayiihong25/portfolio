@@ -155,6 +155,9 @@
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica, Arial, sans-serif;
             text-align: left;
             color: #e6edf3;
+            /* Don't inherit the link's hover glow or .about-text's pre-line wrapping */
+            text-shadow: none;
+            white-space: normal;
         }
 
         .github-preview svg {
@@ -163,7 +166,8 @@
             display: block;
         }
 
-        .github-trigger:hover .github-preview {
+        /* Only shown once real contribution data has been drawn into it */
+        .github-trigger.is-ready:hover .github-preview {
             opacity: 1;
             transform: translateX(-50%) translateY(0) scale(1) rotate(-2deg);
         }
@@ -300,209 +304,7 @@
                 <a href="mailto:jiayihong52@gmail.com" id="copy-email" class="about-btn">[jiayihong52@gmail.com]</a>
                 <a href="https://www.linkedin.com/in/jiayiihong/" target="_blank" class="about-btn">[Linkedin]</a>
                 <a href="https://x.com/jiayiihong" target="_blank" class="about-btn">[X]</a>
-                <a href="https://github.com/jiayiihong25" target="_blank" class="about-btn github-trigger">[GitHub]<span class="github-preview">
-                    <svg viewBox="0 0 320 144" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <text x="2" y="13" fill="#e6edf3" font-size="12" font-weight="600" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">661 contributions in 2026</text>
-                        <text x="318" y="13" fill="#7d8590" font-size="9" text-anchor="end" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">@jiayiihong25</text>
-                        
-                        <!-- Heatmap Container Box -->
-                        <rect x="1" y="22" width="318" height="96" rx="6" fill="#0d1117" stroke="#30363d" stroke-width="1"/>
-                        
-                        <!-- Month Labels -->
-                        <text x="40" y="35" fill="#7d8590" font-size="8.5" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">May</text>
-                        <text x="104" y="35" fill="#7d8590" font-size="8.5" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">Jun</text>
-                        <text x="168" y="35" fill="#7d8590" font-size="8.5" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">Jul</text>
-                        <text x="222" y="35" fill="#7d8590" font-size="8.5" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">Aug</text>
-                        <text x="274" y="35" fill="#7d8590" font-size="8.5" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">Sep</text>
-                        
-                        <!-- Day Labels -->
-                        <text x="10" y="59" fill="#7d8590" font-size="8" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">Mon</text>
-                        <text x="10" y="81" fill="#7d8590" font-size="8" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">Wed</text>
-                        <text x="10" y="103" fill="#7d8590" font-size="8" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">Fri</text>
-                        
-                        <!-- Heatmap Grid Squares (May -> Sep) -->
-                        <g transform="translate(38, 41)">
-                            <!-- Wk 1 (May) -->
-                            <rect x="0" y="0" width="9.5" height="9.5" rx="2" fill="#161b22"/>
-                            <rect x="0" y="11" width="9.5" height="9.5" rx="2" fill="#006d32"/>
-                            <rect x="0" y="22" width="9.5" height="9.5" rx="2" fill="#0e4429"/>
-                            <rect x="0" y="33" width="9.5" height="9.5" rx="2" fill="#161b22"/>
-                            <rect x="0" y="44" width="9.5" height="9.5" rx="2" fill="#161b22"/>
-                            <rect x="0" y="55" width="9.5" height="9.5" rx="2" fill="#161b22"/>
-                            <rect x="0" y="66" width="9.5" height="9.5" rx="2" fill="#161b22"/>
-                            <!-- Wk 2 -->
-                            <rect x="13" y="0" width="9.5" height="9.5" rx="2" fill="#161b22"/>
-                            <rect x="13" y="11" width="9.5" height="9.5" rx="2" fill="#0e4429"/>
-                            <rect x="13" y="22" width="9.5" height="9.5" rx="2" fill="#161b22"/>
-                            <rect x="13" y="33" width="9.5" height="9.5" rx="2" fill="#161b22"/>
-                            <rect x="13" y="44" width="9.5" height="9.5" rx="2" fill="#161b22"/>
-                            <rect x="13" y="55" width="9.5" height="9.5" rx="2" fill="#161b22"/>
-                            <rect x="13" y="66" width="9.5" height="9.5" rx="2" fill="#161b22"/>
-                            <!-- Wk 3 -->
-                            <rect x="26" y="0" width="9.5" height="9.5" rx="2" fill="#161b22"/>
-                            <rect x="26" y="11" width="9.5" height="9.5" rx="2" fill="#161b22"/>
-                            <rect x="26" y="22" width="9.5" height="9.5" rx="2" fill="#161b22"/>
-                            <rect x="26" y="33" width="9.5" height="9.5" rx="2" fill="#161b22"/>
-                            <rect x="26" y="44" width="9.5" height="9.5" rx="2" fill="#161b22"/>
-                            <rect x="26" y="55" width="9.5" height="9.5" rx="2" fill="#161b22"/>
-                            <rect x="26" y="66" width="9.5" height="9.5" rx="2" fill="#161b22"/>
-                            <!-- Wk 4 -->
-                            <rect x="39" y="0" width="9.5" height="9.5" rx="2" fill="#161b22"/>
-                            <rect x="39" y="11" width="9.5" height="9.5" rx="2" fill="#161b22"/>
-                            <rect x="39" y="22" width="9.5" height="9.5" rx="2" fill="#161b22"/>
-                            <rect x="39" y="33" width="9.5" height="9.5" rx="2" fill="#0e4429"/>
-                            <rect x="39" y="44" width="9.5" height="9.5" rx="2" fill="#161b22"/>
-                            <rect x="39" y="55" width="9.5" height="9.5" rx="2" fill="#161b22"/>
-                            <rect x="39" y="66" width="9.5" height="9.5" rx="2" fill="#161b22"/>
-                            <!-- Wk 5 -->
-                            <rect x="52" y="0" width="9.5" height="9.5" rx="2" fill="#161b22"/>
-                            <rect x="52" y="11" width="9.5" height="9.5" rx="2" fill="#161b22"/>
-                            <rect x="52" y="22" width="9.5" height="9.5" rx="2" fill="#161b22"/>
-                            <rect x="52" y="33" width="9.5" height="9.5" rx="2" fill="#161b22"/>
-                            <rect x="52" y="44" width="9.5" height="9.5" rx="2" fill="#161b22"/>
-                            <rect x="52" y="55" width="9.5" height="9.5" rx="2" fill="#161b22"/>
-                            <rect x="52" y="66" width="9.5" height="9.5" rx="2" fill="#0e4429"/>
-                            <!-- Wk 6 (Jun) -->
-                            <rect x="65" y="0" width="9.5" height="9.5" rx="2" fill="#161b22"/>
-                            <rect x="65" y="11" width="9.5" height="9.5" rx="2" fill="#26a641"/>
-                            <rect x="65" y="22" width="9.5" height="9.5" rx="2" fill="#0e4429"/>
-                            <rect x="65" y="33" width="9.5" height="9.5" rx="2" fill="#0e4429"/>
-                            <rect x="65" y="44" width="9.5" height="9.5" rx="2" fill="#0e4429"/>
-                            <rect x="65" y="55" width="9.5" height="9.5" rx="2" fill="#0e4429"/>
-                            <rect x="65" y="66" width="9.5" height="9.5" rx="2" fill="#0e4429"/>
-                            <!-- Wk 7 -->
-                            <rect x="78" y="0" width="9.5" height="9.5" rx="2" fill="#161b22"/>
-                            <rect x="78" y="11" width="9.5" height="9.5" rx="2" fill="#0e4429"/>
-                            <rect x="78" y="22" width="9.5" height="9.5" rx="2" fill="#0e4429"/>
-                            <rect x="78" y="33" width="9.5" height="9.5" rx="2" fill="#0e4429"/>
-                            <rect x="78" y="44" width="9.5" height="9.5" rx="2" fill="#0e4429"/>
-                            <rect x="78" y="55" width="9.5" height="9.5" rx="2" fill="#161b22"/>
-                            <rect x="78" y="66" width="9.5" height="9.5" rx="2" fill="#0e4429"/>
-                            <!-- Wk 8 -->
-                            <rect x="91" y="0" width="9.5" height="9.5" rx="2" fill="#161b22"/>
-                            <rect x="91" y="11" width="9.5" height="9.5" rx="2" fill="#0e4429"/>
-                            <rect x="91" y="22" width="9.5" height="9.5" rx="2" fill="#0e4429"/>
-                            <rect x="91" y="33" width="9.5" height="9.5" rx="2" fill="#0e4429"/>
-                            <rect x="91" y="44" width="9.5" height="9.5" rx="2" fill="#0e4429"/>
-                            <rect x="91" y="55" width="9.5" height="9.5" rx="2" fill="#161b22"/>
-                            <rect x="91" y="66" width="9.5" height="9.5" rx="2" fill="#161b22"/>
-                            <!-- Wk 9 -->
-                            <rect x="104" y="0" width="9.5" height="9.5" rx="2" fill="#161b22"/>
-                            <rect x="104" y="11" width="9.5" height="9.5" rx="2" fill="#0e4429"/>
-                            <rect x="104" y="22" width="9.5" height="9.5" rx="2" fill="#0e4429"/>
-                            <rect x="104" y="33" width="9.5" height="9.5" rx="2" fill="#0e4429"/>
-                            <rect x="104" y="44" width="9.5" height="9.5" rx="2" fill="#0e4429"/>
-                            <rect x="104" y="55" width="9.5" height="9.5" rx="2" fill="#0e4429"/>
-                            <rect x="104" y="66" width="9.5" height="9.5" rx="2" fill="#0e4429"/>
-                            <!-- Wk 10 (Jul) -->
-                            <rect x="117" y="0" width="9.5" height="9.5" rx="2" fill="#161b22"/>
-                            <rect x="117" y="11" width="9.5" height="9.5" rx="2" fill="#0e4429"/>
-                            <rect x="117" y="22" width="9.5" height="9.5" rx="2" fill="#161b22"/>
-                            <rect x="117" y="33" width="9.5" height="9.5" rx="2" fill="#161b22"/>
-                            <rect x="117" y="44" width="9.5" height="9.5" rx="2" fill="#006d32"/>
-                            <rect x="117" y="55" width="9.5" height="9.5" rx="2" fill="#26a641"/>
-                            <rect x="117" y="66" width="9.5" height="9.5" rx="2" fill="#26a641"/>
-                            <!-- Wk 11 -->
-                            <rect x="130" y="0" width="9.5" height="9.5" rx="2" fill="#161b22"/>
-                            <rect x="130" y="11" width="9.5" height="9.5" rx="2" fill="#161b22"/>
-                            <rect x="130" y="22" width="9.5" height="9.5" rx="2" fill="#006d32"/>
-                            <rect x="130" y="33" width="9.5" height="9.5" rx="2" fill="#006d32"/>
-                            <rect x="130" y="44" width="9.5" height="9.5" rx="2" fill="#26a641"/>
-                            <rect x="130" y="55" width="9.5" height="9.5" rx="2" fill="#161b22"/>
-                            <rect x="130" y="66" width="9.5" height="9.5" rx="2" fill="#161b22"/>
-                            <!-- Wk 12 -->
-                            <rect x="143" y="0" width="9.5" height="9.5" rx="2" fill="#161b22"/>
-                            <rect x="143" y="11" width="9.5" height="9.5" rx="2" fill="#26a641"/>
-                            <rect x="143" y="22" width="9.5" height="9.5" rx="2" fill="#006d32"/>
-                            <rect x="143" y="33" width="9.5" height="9.5" rx="2" fill="#0e4429"/>
-                            <rect x="143" y="44" width="9.5" height="9.5" rx="2" fill="#161b22"/>
-                            <rect x="143" y="55" width="9.5" height="9.5" rx="2" fill="#0e4429"/>
-                            <rect x="143" y="66" width="9.5" height="9.5" rx="2" fill="#0e4429"/>
-                            <!-- Wk 13 -->
-                            <rect x="156" y="0" width="9.5" height="9.5" rx="2" fill="#161b22"/>
-                            <rect x="156" y="11" width="9.5" height="9.5" rx="2" fill="#0e4429"/>
-                            <rect x="156" y="22" width="9.5" height="9.5" rx="2" fill="#0e4429"/>
-                            <rect x="156" y="33" width="9.5" height="9.5" rx="2" fill="#006d32"/>
-                            <rect x="156" y="44" width="9.5" height="9.5" rx="2" fill="#161b22"/>
-                            <rect x="156" y="55" width="9.5" height="9.5" rx="2" fill="#006d32"/>
-                            <rect x="156" y="66" width="9.5" height="9.5" rx="2" fill="#161b22"/>
-                            <!-- Wk 14 (Aug) -->
-                            <rect x="169" y="0" width="9.5" height="9.5" rx="2" fill="#161b22"/>
-                            <rect x="169" y="11" width="9.5" height="9.5" rx="2" fill="#0e4429"/>
-                            <rect x="169" y="22" width="9.5" height="9.5" rx="2" fill="#0e4429"/>
-                            <rect x="169" y="33" width="9.5" height="9.5" rx="2" fill="#161b22"/>
-                            <rect x="169" y="44" width="9.5" height="9.5" rx="2" fill="#161b22"/>
-                            <rect x="169" y="55" width="9.5" height="9.5" rx="2" fill="#161b22"/>
-                            <rect x="169" y="66" width="9.5" height="9.5" rx="2" fill="#0e4429"/>
-                            <!-- Wk 15 -->
-                            <rect x="182" y="0" width="9.5" height="9.5" rx="2" fill="#161b22"/>
-                            <rect x="182" y="11" width="9.5" height="9.5" rx="2" fill="#161b22"/>
-                            <rect x="182" y="22" width="9.5" height="9.5" rx="2" fill="#0e4429"/>
-                            <rect x="182" y="33" width="9.5" height="9.5" rx="2" fill="#0e4429"/>
-                            <rect x="182" y="44" width="9.5" height="9.5" rx="2" fill="#161b22"/>
-                            <rect x="182" y="55" width="9.5" height="9.5" rx="2" fill="#0e4429"/>
-                            <rect x="182" y="66" width="9.5" height="9.5" rx="2" fill="#0e4429"/>
-                            <!-- Wk 16 -->
-                            <rect x="195" y="0" width="9.5" height="9.5" rx="2" fill="#161b22"/>
-                            <rect x="195" y="11" width="9.5" height="9.5" rx="2" fill="#0e4429"/>
-                            <rect x="195" y="22" width="9.5" height="9.5" rx="2" fill="#161b22"/>
-                            <rect x="195" y="33" width="9.5" height="9.5" rx="2" fill="#006d32"/>
-                            <rect x="195" y="44" width="9.5" height="9.5" rx="2" fill="#161b22"/>
-                            <rect x="195" y="55" width="9.5" height="9.5" rx="2" fill="#161b22"/>
-                            <rect x="195" y="66" width="9.5" height="9.5" rx="2" fill="#0e4429"/>
-                            <!-- Wk 17 -->
-                            <rect x="208" y="0" width="9.5" height="9.5" rx="2" fill="#161b22"/>
-                            <rect x="208" y="11" width="9.5" height="9.5" rx="2" fill="#0e4429"/>
-                            <rect x="208" y="22" width="9.5" height="9.5" rx="2" fill="#0e4429"/>
-                            <rect x="208" y="33" width="9.5" height="9.5" rx="2" fill="#161b22"/>
-                            <rect x="208" y="44" width="9.5" height="9.5" rx="2" fill="#161b22"/>
-                            <rect x="208" y="55" width="9.5" height="9.5" rx="2" fill="#161b22"/>
-                            <rect x="208" y="66" width="9.5" height="9.5" rx="2" fill="#0e4429"/>
-                            <!-- Wk 18 -->
-                            <rect x="221" y="0" width="9.5" height="9.5" rx="2" fill="#161b22"/>
-                            <rect x="221" y="11" width="9.5" height="9.5" rx="2" fill="#161b22"/>
-                            <rect x="221" y="22" width="9.5" height="9.5" rx="2" fill="#0e4429"/>
-                            <rect x="221" y="33" width="9.5" height="9.5" rx="2" fill="#006d32"/>
-                            <rect x="221" y="44" width="9.5" height="9.5" rx="2" fill="#161b22"/>
-                            <rect x="221" y="55" width="9.5" height="9.5" rx="2" fill="#161b22"/>
-                            <rect x="221" y="66" width="9.5" height="9.5" rx="2" fill="#0e4429"/>
-                            <!-- Wk 19 (Sep) -->
-                            <rect x="234" y="0" width="9.5" height="9.5" rx="2" fill="#161b22"/>
-                            <rect x="234" y="11" width="9.5" height="9.5" rx="2" fill="#26a641"/>
-                            <rect x="234" y="22" width="9.5" height="9.5" rx="2" fill="#0e4429"/>
-                            <rect x="234" y="33" width="9.5" height="9.5" rx="2" fill="#006d32"/>
-                            <rect x="234" y="44" width="9.5" height="9.5" rx="2" fill="#006d32"/>
-                            <rect x="234" y="55" width="9.5" height="9.5" rx="2" fill="#39d353"/>
-                            <rect x="234" y="66" width="9.5" height="9.5" rx="2" fill="#0e4429"/>
-                            <!-- Wk 20 -->
-                            <rect x="247" y="0" width="9.5" height="9.5" rx="2" fill="#161b22"/>
-                            <rect x="247" y="11" width="9.5" height="9.5" rx="2" fill="#0e4429"/>
-                            <rect x="247" y="22" width="9.5" height="9.5" rx="2" fill="#26a641"/>
-                            <rect x="247" y="33" width="9.5" height="9.5" rx="2" fill="#006d32"/>
-                            <rect x="247" y="44" width="9.5" height="9.5" rx="2" fill="#161b22"/>
-                            <rect x="247" y="55" width="9.5" height="9.5" rx="2" fill="#006d32"/>
-                            <rect x="247" y="66" width="9.5" height="9.5" rx="2" fill="#161b22"/>
-                            <!-- Wk 21 -->
-                            <rect x="260" y="0" width="9.5" height="9.5" rx="2" fill="#161b22"/>
-                            <rect x="260" y="11" width="9.5" height="9.5" rx="2" fill="#0e4429"/>
-                            <rect x="260" y="22" width="9.5" height="9.5" rx="2" fill="#26a641"/>
-                            <rect x="260" y="33" width="9.5" height="9.5" rx="2" fill="#0e4429"/>
-                            <rect x="260" y="44" width="9.5" height="9.5" rx="2" fill="#006d32"/>
-                            <rect x="260" y="55" width="9.5" height="9.5" rx="2" fill="#0e4429"/>
-                            <rect x="260" y="66" width="9.5" height="9.5" rx="2" fill="#161b22"/>
-                        </g>
-
-                        <!-- Footer -->
-                        <text x="6" y="133" fill="#7d8590" font-size="8" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">Learn how we count contributions</text>
-                        <text x="238" y="133" fill="#7d8590" font-size="8" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">Less</text>
-                        <rect x="256" y="125" width="8" height="8" rx="1.5" fill="#161b22"/>
-                        <rect x="266" y="125" width="8" height="8" rx="1.5" fill="#0e4429"/>
-                        <rect x="276" y="125" width="8" height="8" rx="1.5" fill="#006d32"/>
-                        <rect x="286" y="125" width="8" height="8" rx="1.5" fill="#26a641"/>
-                        <rect x="296" y="125" width="8" height="8" rx="1.5" fill="#39d353"/>
-                        <text x="318" y="133" fill="#7d8590" font-size="8" text-anchor="end" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">More</text>
-                    </svg>
-                </span></a>
+                <a href="https://github.com/jiayiihong25" target="_blank" class="about-btn github-trigger">[GitHub]<span class="github-preview" aria-hidden="true"></span></a>
             </div>
             <br>
             <a href="index.html#work" class="back-link">[explore my work →]</a>
@@ -528,6 +330,82 @@
                     setTimeout(() => { emailBtn.innerText = originalText; }, 2000);
                 });
             };
+        }
+
+        // [GitHub] hover preview: a contribution heatmap drawn from the same data
+        // as the public GitHub profile (served by api/github-contributions.js).
+        function renderGithubHeatmap(data) {
+            const WEEKS = 21; // columns that fit the 330px card
+            const CELL = 9.5;
+            const STEP_X = 13;
+            const STEP_Y = 11;
+            const GRID_X = 38;
+            const GRID_Y = 42;
+            const LEVEL_COLORS = ['#161b22', '#0e4429', '#006d32', '#26a641', '#39d353'];
+            const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+            const FONT = `font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"`;
+            const MUTED = '#7d8590';
+
+            const levels = new Map(data.days.map(([date, level]) => [date, level]));
+            const lastDate = data.days[data.days.length - 1][0];
+            const year = lastDate.slice(0, 4);
+            const yearTotal = data.days.reduce((sum, [date, , count]) => (date.startsWith(year) ? sum + count : sum), 0);
+
+            // Columns are Sunday-start weeks (rows Sun..Sat, like GitHub); the last
+            // column is the current week, drawn only up to today.
+            const addDays = (date, n) => new Date(date.getTime() + n * 86400000);
+            const last = new Date(lastDate + 'T00:00:00Z');
+            const firstSunday = addDays(last, -last.getUTCDay() - 7 * (WEEKS - 1));
+
+            let cells = '';
+            const monthLabels = [];
+            for (let week = 0; week < WEEKS; week++) {
+                const sunday = addDays(firstSunday, 7 * week);
+                const previous = monthLabels[monthLabels.length - 1];
+                if (!previous || previous.month !== sunday.getUTCMonth()) {
+                    monthLabels.push({ week, month: sunday.getUTCMonth() });
+                }
+                for (let day = 0; day < 7; day++) {
+                    const date = addDays(sunday, day);
+                    if (date > last) break;
+                    const level = levels.get(date.toISOString().slice(0, 10)) || 0;
+                    cells += `<rect x="${GRID_X + week * STEP_X}" y="${GRID_Y + day * STEP_Y}" width="${CELL}" height="${CELL}" rx="2" fill="${LEVEL_COLORS[level]}"/>`;
+                }
+            }
+            // A partial first month too close to the next label would overlap it.
+            if (monthLabels.length > 1 && monthLabels[1].week - monthLabels[0].week < 3) monthLabels.shift();
+
+            const monthText = monthLabels.map(({ week, month }) =>
+                `<text x="${GRID_X + week * STEP_X}" y="36" fill="${MUTED}" font-size="8.5" ${FONT}>${MONTHS[month]}</text>`).join('');
+            const dayText = [[1, 'Mon'], [3, 'Wed'], [5, 'Fri']].map(([row, name]) =>
+                `<text x="10" y="${GRID_Y + row * STEP_Y + CELL / 2 + 3}" fill="${MUTED}" font-size="8" ${FONT}>${name}</text>`).join('');
+            const legend = LEVEL_COLORS.map((color, i) =>
+                `<rect x="${246 + i * 10}" y="130" width="8" height="8" rx="1.5" fill="${color}"/>`).join('');
+
+            return `<svg viewBox="0 0 320 146" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <text x="2" y="13" fill="#e6edf3" font-size="12" font-weight="600" ${FONT}>${yearTotal.toLocaleString('en-US')} contributions in ${year}</text>
+                <text x="318" y="13" fill="${MUTED}" font-size="9" text-anchor="end" ${FONT}>@jiayiihong25</text>
+                <rect x="1" y="22" width="318" height="100" rx="6" fill="#0d1117" stroke="#30363d" stroke-width="1"/>
+                ${monthText}${dayText}${cells}
+                <text x="6" y="138" fill="${MUTED}" font-size="8" ${FONT}>Learn how we count contributions</text>
+                <text x="242" y="138" fill="${MUTED}" font-size="8" text-anchor="end" ${FONT}>Less</text>
+                ${legend}
+                <text x="318" y="138" fill="${MUTED}" font-size="8" text-anchor="end" ${FONT}>More</text>
+            </svg>`;
+        }
+
+        const githubTrigger = document.querySelector('.github-trigger');
+        const githubPreview = githubTrigger && githubTrigger.querySelector('.github-preview');
+        if (githubPreview) {
+            fetch('/api/github-contributions')
+                .then(response => (response.ok ? response.json() : Promise.reject(response.status)))
+                .then(data => {
+                    githubPreview.innerHTML = renderGithubHeatmap(data);
+                    githubTrigger.classList.add('is-ready');
+                })
+                .catch(() => {
+                    // No data: the [GitHub] link still works, it just has no preview.
+                });
         }
     </script>
     <script src="script.js"></script>
