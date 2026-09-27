@@ -1,69 +1,10 @@
-// Responsive scaling helper
-function getResponsiveValues() {
-    const screenWidth = window.innerWidth;
-    const isMobile = screenWidth <= 768;
-
-    // Scale factor for desktop vs mobile
-    const baseScale = isMobile ? screenWidth / 375 : screenWidth / 1440;
-    const scale = Math.max(0.4, baseScale);
-    const isLargeScreen = screenWidth > 1500;
-
-    // Radius calculation for orbits
-    // On mobile, we want the orbits to be much tighter so they stay on screen
-    const orbitGap = isMobile ? 30 * scale : 60 * scale;
-
-    return {
-        offset1: orbitGap,
-        offset2: orbitGap * 1.8,
-        node1Radius: (isMobile ? 6 : (isLargeScreen ? 12 : 10)) * scale,
-        node2Radius: (isMobile ? 8 : 14) * scale,
-        node4Radius: (isMobile ? 15 : 24) * scale,
-        isMobile: isMobile
-    };
-}
-
-let responsiveVars = getResponsiveValues();
-
-// Global animation & star tracking state
-let trackedStar1 = null;
-let trackedStar2 = null;
-let showOrbitalPath = false;
-let orbitalPathProgress = 0;
-let isTransitioning = false;
-let isTabVisible = true;
-let lastTime = performance.now();
-
-// Interactive node properties
-const orbitalNode = {
-    angle: Math.PI * 1.5, // Start at top
-    radius: responsiveVars.node1Radius,
-    hoverRadius: responsiveVars.node1Radius * 1.2,
-    currentRadius: responsiveVars.node1Radius,
-    isHovered: false,
-    text: 'about me'
-};
-const orbitalNode2 = {
-    angle: Math.PI * 1.5,
-    radius: responsiveVars.node2Radius,
-    hoverRadius: responsiveVars.node2Radius * 1.2,
-    currentRadius: responsiveVars.node2Radius,
-    isHovered: false,
-    text: 'projects'
-};
-const orbitalNode4 = {
-    angle: Math.PI * 1.5,
-    radius: responsiveVars.node4Radius,
-    hoverRadius: responsiveVars.node4Radius * 1.2,
-    currentRadius: responsiveVars.node4Radius,
-    isHovered: false,
-    text: 'cases'
-};
-let mouseX = 0;
-let mouseY = 0;
-
 // Get canvas and context
 const canvas = document.getElementById('star-canvas');
 const ctx = canvas ? canvas.getContext('2d') : null;
+const mountain = document.getElementById('mountain');
+
+let isMobile = window.innerWidth <= 768;
+let lastTime = performance.now();
 
 // Pre-rendered glow sprite for star glow effect.
 // Using a cached sprite + drawImage is drastically cheaper than calling
@@ -83,51 +24,45 @@ glowSprite.height = GLOW_SPRITE_SIZE;
     glowCtx.fillRect(0, 0, GLOW_SPRITE_SIZE, GLOW_SPRITE_SIZE);
 })();
 
-// Set canvas size to match window
-function resizeCanvas() {
-    if (!canvas) return;
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+// Orbital center (middle of the mountain). The mountain is position: fixed,
+// so its rect only changes on resize or once the image loads — cache it
+// instead of forcing a getBoundingClientRect() every frame.
+let orbitalCenter = null;
 
-    // Update responsive variables
-    responsiveVars = getResponsiveValues();
-
-    // Update node base sizes if they are initialized
-    if (typeof orbitalNode !== 'undefined') {
-        orbitalNode.radius = responsiveVars.node1Radius;
-        orbitalNode.hoverRadius = responsiveVars.node1Radius * 1.2;
-
-        orbitalNode2.radius = responsiveVars.node2Radius;
-        orbitalNode2.hoverRadius = responsiveVars.node2Radius * 1.2;
-
-        orbitalNode4.radius = responsiveVars.node4Radius;
-        orbitalNode4.hoverRadius = responsiveVars.node4Radius * 1.2;
-    }
-}
-if (canvas) {
-    resizeCanvas(); // Initial call
-    window.addEventListener('resize', resizeCanvas);
+function invalidateOrbitalCenter() {
+    orbitalCenter = null;
 }
 
-// Calculate orbital center (middle of the mountain)
 function getOrbitalCenter() {
-    const mountain = document.getElementById('mountain');
+    if (orbitalCenter) return orbitalCenter;
     if (mountain) {
         const rect = mountain.getBoundingClientRect();
         // Shift center up significantly on mobile so orbits peek over the mountain top more
-        const mobileYShift = responsiveVars.isMobile ? rect.height * 0.4 : 0;
-        return {
+        const mobileYShift = isMobile ? rect.height * 0.4 : 0;
+        orbitalCenter = {
             x: rect.left + rect.width / 2,
             y: (rect.top + rect.height / 2) - mobileYShift
         };
+    } else {
+        // Fallback to center bottom if mountain not found (shifted up for mobile)
+        orbitalCenter = {
+            x: canvas.width / 2,
+            y: canvas.height * (isMobile ? 0.6 : 0.85)
+        };
     }
-    const width = canvas ? canvas.width : window.innerWidth;
-    const height = canvas ? canvas.height : window.innerHeight;
-    // Fallback to center bottom if mountain not found (shifted up for mobile)
-    return {
-        x: width / 2,
-        y: height * (responsiveVars.isMobile ? 0.6 : 0.85)
-    };
+    return orbitalCenter;
+}
+
+// Resizing a canvas clears it, so a paused sky needs one fresh frame.
+let needsRedraw = true;
+
+// Set canvas size to match window
+function resizeCanvas() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    isMobile = window.innerWidth <= 768;
+    invalidateOrbitalCenter();
+    needsRedraw = true;
 }
 
 // Star class
@@ -225,9 +160,6 @@ class Star {
         // Calculate new position based on orbital motion
         this.x = center.x + Math.cos(this.orbitalAngle) * this.orbitalRadius;
         this.y = center.y + Math.sin(this.orbitalAngle) * this.orbitalRadius;
-
-        // Keep stars within reasonable bounds - just let them continue orbiting naturally
-        // If they go off-screen, they'll naturally come back around
     }
 
     draw() {
@@ -279,7 +211,7 @@ class Meteor {
         this.fadeIn = true;
     }
 
-    update(deltaTime) {
+    update() {
         if (!this.active) return;
 
         // Move meteor
@@ -295,7 +227,9 @@ class Meteor {
             }
         }
 
-        if (this.x < -300 || this.y > canvas.height + 300) {
+        // Retire once the whole trail has left the screen (right or bottom
+        // edge), otherwise it keeps being drawn off-screen for ~10+ seconds.
+        if (this.x - this.length > canvas.width || this.y - this.length > canvas.height) {
             this.active = false;
         }
     }
@@ -345,17 +279,10 @@ const METEOR_DURATION = 5000; // 5 seconds shower
 // Create stars array
 const stars = [];
 const numStars = 250; // Adjust this number for more/fewer stars
-let starsInitialized = false;
 
-// Function to initialize stars after mountain image is loaded
 function initializeStars() {
-    if (starsInitialized) return; // Prevent double initialization
-    starsInitialized = true;
-
-    // Get the orbital center - wait a frame to ensure image is positioned
     const center = getOrbitalCenter();
 
-    // Initialize stars
     for (let i = 0; i < numStars; i++) {
         stars.push(new Star(center));
     }
@@ -367,668 +294,94 @@ function initializeStars() {
         smallStar.size = (Math.random() * 1.5 + 0.5) * 0.6; // Small stars (0.3-1.2px)
         stars.push(smallStar);
     }
-
-    // Determine a consistent radius for the first orbital line (orbital-line-1)
-    // We calculate the distance from the orbital center (mountain) to the screen center
-    // This ensures the orbit always passes through the middle of the screen
-    const screenCenterY = window.innerHeight / 2;
-    let targetRadius = Math.abs(center.y - screenCenterY);
-
-    // On mobile, cap the radius more strictly to ensure all 4 lines are fully visible
-    if (responsiveVars.isMobile) {
-        targetRadius = Math.min(targetRadius, window.innerWidth * 0.30);
-    }
-
-    // Create a specific star for the primary track to ensure consistent positioning
-    // This replaces the previous random search which caused layout shifts
-    trackedStar1 = new Star(center);
-    trackedStar1.orbitalRadius = targetRadius;
-    trackedStar1.orbitalAngle = Math.PI * 1.5; // Start at 12 o'clock
-    trackedStar1.size = 1.2; // Slightly larger for visibility
-    stars.push(trackedStar1);
-
-    // Find a second star that's further out for orbital-line-2
-    let secondClosestStar = null;
-    let secondClosestDistance = Infinity;
-    const secondTargetRadius = trackedStar1.orbitalRadius + responsiveVars.offset1; // Scaled offset
-
-    stars.forEach(star => {
-        // Find a star with orbital radius close to secondTargetRadius
-        const radiusDiff = Math.abs(star.orbitalRadius - secondTargetRadius);
-        // Relax check here slightly to find somewhat decent star
-        if (radiusDiff < 50 && star !== trackedStar1) {
-            if (radiusDiff < secondClosestDistance) {
-                secondClosestDistance = radiusDiff;
-                secondClosestStar = star;
-            }
-        }
-    });
-
-    // If no star found close to target, find the next closest one
-    if (!secondClosestStar) {
-        stars.forEach(star => {
-            if (star !== trackedStar1 && star.orbitalRadius > trackedStar1.orbitalRadius) {
-                const radiusDiff = star.orbitalRadius - trackedStar1.orbitalRadius;
-                if (radiusDiff < secondClosestDistance) {
-                    secondClosestDistance = radiusDiff;
-                    secondClosestStar = star;
-                }
-            }
-        });
-    }
-
-    trackedStar2 = secondClosestStar || trackedStar1; // Fallback to star1 if no second star found
-
-    resetOrbitalNodes();
 }
 
-// Function to reset orbital node positions to their starting points (based on red dots diagram)
-function resetOrbitalNodes() {
-    const mountain = document.getElementById('mountain');
-    if (mountain && trackedStar1) {
-        const rect = mountain.getBoundingClientRect();
-        const center = getOrbitalCenter();
-        const dy = rect.top - center.y;
-
-        // Base angle where line peeks out of left side of mountain
-        // Ensure dy / trackedStar1.orbitalRadius is within [-1, 1] for asin
-        const clampedRatio1 = Math.max(-1, Math.min(1, dy / trackedStar1.orbitalRadius));
-        const startAngle1 = Math.PI - Math.asin(clampedRatio1);
-
-        const line2Radius = trackedStar1.orbitalRadius + responsiveVars.offset1;
-        // Ensure dy / line2Radius is within [-1, 1] for asin
-        const clampedRatio2 = Math.max(-1, Math.min(1, dy / line2Radius));
-        const startAngle2 = Math.PI - Math.asin(clampedRatio2);
-
-        // Shifted an additional 100px counterclockwise (total 220px offset)
-        const totalShift = 220; // This shift might need scaling too if it represents arc length, but angle logic is complex. Leaving fixed for now.
-        // Move "about me" slightly clockwise (180px vs 220px)
-        orbitalNode.angle = (startAngle1 + 0.2);
-        orbitalNode2.angle = (startAngle2 + 0.6); // Simplified
-
-        // Ball 4 (cases) starts at 10:00 position (PI + PI/6)
-        orbitalNode4.angle = (7 / 6) * Math.PI;
-    }
-}
-
-// Wait for mountain image to load before initializing stars
-const mountain = document.getElementById('mountain');
-if (mountain && mountain.complete) {
-    // Image already loaded, initialize immediately (with a small delay to ensure positioning)
-    requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-            initializeStars();
-        });
-    });
-} else if (mountain) {
-    // Wait for image to load
-    mountain.addEventListener('load', () => {
-        // Wait a frame for positioning to settle
-        requestAnimationFrame(() => {
-            requestAnimationFrame(() => {
-                initializeStars();
-            });
-        });
-    });
-    // Fallback in case load event doesn't fire
-    setTimeout(() => {
-        if (!starsInitialized) {
-            initializeStars();
-        }
-    }, 100);
-} else {
-    // Mountain not found, initialize with fallback center
-    initializeStars();
-}
-
-// Handle tab visibility changes
-document.addEventListener('visibilitychange', () => {
-    if (document.hidden) {
-        isTabVisible = false;
-    } else {
-        isTabVisible = true;
-        // Reset lastTime when tab becomes visible to prevent huge deltaTime
-        lastTime = performance.now();
-    }
-});
-
-// Animation loop
-function animate(currentTime) {
-    if (!canvas || !ctx) return;
-    const deltaTime = currentTime - lastTime;
-
-    // Cap deltaTime to prevent huge jumps when tab becomes visible again
-    // This prevents stars from clumping when switching tabs
-    const maxDeltaTime = 100; // Cap at ~100ms (roughly 6 frames at 60fps)
-    const clampedDeltaTime = Math.min(deltaTime, maxDeltaTime);
-
-    lastTime = currentTime;
-
+function drawFrame(currentTime, deltaTime) {
     // Clear canvas with dark background
     ctx.fillStyle = '#0a0a0f';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    // Update and draw all stars (only if initialized)
-    if (stars.length > 0) {
-        const starCenter = getOrbitalCenter();
-        stars.forEach(star => {
-            star.update(clampedDeltaTime, starCenter);
-            star.draw();
-        });
+    // Update and draw all stars
+    const starCenter = getOrbitalCenter();
+    stars.forEach(star => {
+        star.update(deltaTime, starCenter);
+        star.draw();
+    });
 
-        // --- METEOR SHOWER LOGIC ---
-        // Check cycle
-        if (!meteorShowerActive && currentTime - meteorShowerStartTime > METEOR_CYCLE) {
-            meteorShowerActive = true;
-            meteorShowerStartTime = currentTime;
-        }
-
-        // End shower
-        if (meteorShowerActive && currentTime - meteorShowerStartTime > METEOR_DURATION) {
-            meteorShowerActive = false;
-        }
-
-        // Spawn meteors
-        if (meteorShowerActive) {
-            // Spawn interval 1000-1500ms (was 800-1200ms) — 20% lower spawn
-            // rate, since rate scales as 1/interval and 1/1.25 = 0.8.
-            if (currentTime - lastMeteorTime > Math.random() * 500 + 1000) {
-                meteors.push(new Meteor());
-                lastMeteorTime = currentTime;
-            }
-        }
-
-        // Update and draw meteors
-        for (let i = meteors.length - 1; i >= 0; i--) {
-            const m = meteors[i];
-            m.update(clampedDeltaTime);
-            m.draw();
-            if (!m.active) {
-                meteors.splice(i, 1);
-            }
-        }
-        // ---------------------------
-
-        // Draw orbital-line-1: path for the first tracked star
-        if (trackedStar1 && trackedStar1.orbitalRadius && trackedStar1.orbitalRadius > 0 && orbitalPathProgress > 0) {
-            const center = getOrbitalCenter();
-            const startAngle = Math.PI / 2; // 6 o'clock
-            const endAngle = startAngle + Math.PI * 2 * orbitalPathProgress;
-
-            // Draw the partial circular orbit path
-            ctx.save();
-
-            // Draw blurred background glow
-            ctx.filter = 'blur(2px)';
-            ctx.beginPath();
-            ctx.arc(center.x, center.y, trackedStar1.orbitalRadius, startAngle, endAngle);
-            ctx.strokeStyle = `rgba(255, 255, 255, ${Math.min(1, orbitalPathProgress * 2) * 0.5})`;
-            ctx.lineWidth = 1.5;
-            ctx.stroke();
-
-            // Draw main line
-            ctx.filter = 'none';
-            ctx.beginPath();
-            ctx.arc(center.x, center.y, trackedStar1.orbitalRadius, startAngle, endAngle);
-            ctx.strokeStyle = `rgba(255, 255, 255, ${Math.min(1, orbitalPathProgress * 2)})`; // Fade in while drawing
-            ctx.lineWidth = 0.5;
-            ctx.stroke();
-
-            ctx.restore();
-        }
-
+    // --- METEOR SHOWER LOGIC ---
+    // Check cycle
+    if (!meteorShowerActive && currentTime - meteorShowerStartTime > METEOR_CYCLE) {
+        meteorShowerActive = true;
+        meteorShowerStartTime = currentTime;
     }
 
-    // --- DRAW BALLS ---
-    if (trackedStar1 && trackedStar1.orbitalRadius && trackedStar1.orbitalRadius > 0 && orbitalPathProgress > 0.05) {
-        const center = getOrbitalCenter();
-        const nodes = [
-            { node: orbitalNode, radius: trackedStar1.clusterRadius || trackedStar1.orbitalRadius },
-            { node: orbitalNode2, radius: (trackedStar1.clusterRadius || trackedStar1.orbitalRadius) + responsiveVars.offset1 },
-            { node: orbitalNode4, radius: (trackedStar1.clusterRadius || trackedStar1.orbitalRadius) + responsiveVars.offset2 }
-        ];
+    // End shower
+    if (meteorShowerActive && currentTime - meteorShowerStartTime > METEOR_DURATION) {
+        meteorShowerActive = false;
+    }
 
-        let anyHovered = false;
-
-        nodes.forEach(({ node, radius }) => {
-            // Normalize angle to [0, 2PI)
-            let normalizedAngle = node.angle % (Math.PI * 2);
-            if (normalizedAngle < 0) normalizedAngle += Math.PI * 2;
-
-
-
-            // Calculate current position first to determine speed
-            const currentX = center.x + Math.cos(node.angle) * radius;
-            const currentY = center.y + Math.sin(node.angle) * radius;
-
-            // Default base speed requested "Above mountain"
-            let targetSpeed = 0.00010;
-            if (node === orbitalNode) targetSpeed = 0.00007; // "about me"
-            else if (node === orbitalNode2) targetSpeed = 0.00008; // "projects"
-
-            // Check against mountain position
-            const mountain = document.getElementById('mountain');
-            let isBelowMountain = false;
-
-            if (mountain) {
-                const mountainRect = mountain.getBoundingClientRect();
-                if (currentY > mountainRect.top + 30) {
-                    isBelowMountain = true;
-                }
-            }
-
-            // Handle Below Mountain State & Timing
-            if (isBelowMountain) {
-                if (!node.wasBelowMountain) {
-                    node.belowMountainStartTime = currentTime;
-                    node.wasBelowMountain = true;
-                }
-
-                // Ramp logic
-                const elapsed = currentTime - node.belowMountainStartTime;
-                if (elapsed < 200) {
-                    targetSpeed = 0.001; // First 200ms
-                } else {
-                    targetSpeed = 0.0015; // After 200ms
-                }
-            } else {
-                node.wasBelowMountain = false;
-                node.belowMountainStartTime = 0;
-            }
-
-            // Apply Speed Smoothing (Lerp)
-            if (typeof node.currentSpeed === 'undefined') node.currentSpeed = targetSpeed;
-            node.currentSpeed += (targetSpeed - node.currentSpeed) * 0.1;
-
-            // Update angle with the determined speed
-            node.angle += node.currentSpeed * clampedDeltaTime;
-
-            // Update position for drawing
-            const nodeX = center.x + Math.cos(node.angle) * radius;
-            const nodeY = center.y + Math.sin(node.angle) * radius;
-
-            // Hit testing
-            if (!isTransitioning) {
-                const dx = mouseX - nodeX;
-                const dy = mouseY - nodeY;
-                const dist = Math.sqrt(dx * dx + dy * dy);
-                node.isHovered = dist < Math.max(25, node.currentRadius);
-                if (node.isHovered) anyHovered = true;
-            } else {
-                node.isHovered = false;
-            }
-
-            // Smooth size transition
-            const targetSize = node.isHovered ? node.hoverRadius : node.radius;
-            node.currentRadius += (targetSize - node.currentRadius) * 0.1;
-
-            // Calculate node specific opacity based on the drawing progress
-            // Get normalized angle relative to 6 o'clock (0 to 1)
-            let relativeAngle = (node.angle - Math.PI / 2) % (Math.PI * 2);
-            if (relativeAngle < 0) relativeAngle += Math.PI * 2;
-            const threshold = relativeAngle / (Math.PI * 2);
-
-            // Fade in over a short range after the line crosses the threshold
-            const nodeOpacity = Math.max(0, Math.min(1, (orbitalPathProgress - threshold) * 10));
-
-            // Draw blurred copy underneath
-            ctx.save();
-            ctx.beginPath();
-            ctx.arc(nodeX, nodeY, node.currentRadius, 0, Math.PI * 2);
-            ctx.fillStyle = `rgba(255, 255, 255, ${nodeOpacity})`;
-            ctx.filter = 'blur(4px)';
-            ctx.fill();
-            ctx.restore();
-
-            // Draw main circle
-            ctx.beginPath();
-            ctx.arc(nodeX, nodeY, node.currentRadius, 0, Math.PI * 2);
-            ctx.fillStyle = `rgba(255, 255, 255, ${nodeOpacity})`;
-            ctx.fill();
-
-            // Draw text on hover
-            if (node.isHovered && nodeOpacity > 0.9) {
-                ctx.save();
-                ctx.font = `500 ${responsiveVars.isMobile ? '10px' : '12px'} "Manrope", sans-serif`;
-                ctx.textAlign = 'left';
-                ctx.textBaseline = 'middle';
-                const textX = nodeX + node.currentRadius + 12;
-
-                ctx.shadowColor = `rgba(255, 255, 255, ${nodeOpacity})`;
-                ctx.shadowBlur = 4;
-                ctx.filter = 'blur(2px)';
-                ctx.fillStyle = `rgba(255, 255, 255, ${nodeOpacity * 0.8})`;
-                ctx.fillText(node.text, textX, nodeY);
-
-                ctx.filter = 'none';
-                ctx.shadowBlur = 0;
-                ctx.fillStyle = `rgba(255, 255, 255, ${nodeOpacity})`;
-                ctx.fillText(node.text, textX, nodeY);
-                ctx.restore();
-            }
-        });
-
-        // Handle cursor
-        if (!isTransitioning && anyHovered) {
-            canvas.style.cursor = 'pointer';
-        } else if (canvas.style.cursor === 'pointer' || isTransitioning) {
-            canvas.style.cursor = 'default';
+    // Spawn meteors
+    if (meteorShowerActive) {
+        // Spawn interval 1000-1500ms (was 800-1200ms) — 20% lower spawn
+        // rate, since rate scales as 1/interval and 1/1.25 = 0.8.
+        if (currentTime - lastMeteorTime > Math.random() * 500 + 1000) {
+            meteors.push(new Meteor());
+            lastMeteorTime = currentTime;
         }
     }
 
-    // Draw orbital-line-2
-    if (trackedStar1 && trackedStar1.orbitalRadius && trackedStar1.orbitalRadius > 0 && orbitalPathProgress > 0) {
-        const center = getOrbitalCenter();
-        const line2Radius = trackedStar1.orbitalRadius + responsiveVars.offset1;
-        const startAngle = Math.PI / 2;
-        const endAngle = startAngle + Math.PI * 2 * orbitalPathProgress;
+    // Update and draw meteors
+    for (let i = meteors.length - 1; i >= 0; i--) {
+        const m = meteors[i];
+        m.update();
+        m.draw();
+        if (!m.active) {
+            meteors.splice(i, 1);
+        }
+    }
+}
 
-        ctx.save();
-        ctx.filter = 'blur(2px)';
-        ctx.beginPath();
-        ctx.arc(center.x, center.y, line2Radius, startAngle, endAngle);
-        ctx.strokeStyle = `rgba(255, 255, 255, ${Math.min(1, orbitalPathProgress * 2) * 0.5})`;
-        ctx.lineWidth = 1.5;
-        ctx.stroke();
+// How long to keep animating after the homepage sky is blurred out, so the
+// stars don't visibly freeze while the 0.6s blur transition is still running.
+const SKY_BLUR_SETTLE_MS = 700;
+let skyHiddenSince = null;
 
-        ctx.filter = 'none';
-        ctx.beginPath();
-        ctx.arc(center.x, center.y, line2Radius, startAngle, endAngle);
-        ctx.strokeStyle = `rgba(255, 255, 255, ${Math.min(1, orbitalPathProgress * 2)})`;
-        ctx.lineWidth = 0.5;
-        ctx.stroke();
+// Animation loop
+function animate(currentTime) {
+    // Cap deltaTime to prevent huge jumps when tab becomes visible again
+    // This prevents stars from clumping when switching tabs
+    const deltaTime = Math.min(currentTime - lastTime, 100);
+    lastTime = currentTime;
 
-        ctx.restore();
+    // Once the homepage work section is showing, the whole sky sits under a
+    // blur(10px) + brightness filter; redrawing it every frame just makes the
+    // browser re-filter a full-screen layer for no visible change.
+    if (document.body.classList.contains('work-unlocked')) {
+        if (skyHiddenSince === null) skyHiddenSince = currentTime;
+    } else {
+        skyHiddenSince = null;
     }
 
-    // Draw orbital-line-3
-    if (trackedStar1 && trackedStar1.orbitalRadius && trackedStar1.orbitalRadius > 0 && orbitalPathProgress > 0) {
-        const center = getOrbitalCenter();
-        const line3Radius = trackedStar1.orbitalRadius + responsiveVars.offset2;
-        const startAngle = Math.PI / 2; // 6 o'clock
-        const endAngle = startAngle + Math.PI * 2 * orbitalPathProgress;
-
-        ctx.save();
-        ctx.filter = 'blur(2px)';
-        ctx.beginPath();
-        ctx.arc(center.x, center.y, line3Radius, startAngle, endAngle);
-        ctx.strokeStyle = `rgba(255, 255, 255, ${Math.min(1, orbitalPathProgress * 2) * 0.5})`;
-        ctx.lineWidth = 1.5;
-        ctx.stroke();
-
-        ctx.filter = 'none';
-        ctx.beginPath();
-        ctx.arc(center.x, center.y, line3Radius, startAngle, endAngle);
-        ctx.strokeStyle = `rgba(255, 255, 255, ${Math.min(1, orbitalPathProgress * 2)})`;
-        ctx.lineWidth = 0.5;
-        ctx.stroke();
-
-        ctx.restore();
+    if (skyHiddenSince === null || currentTime - skyHiddenSince < SKY_BLUR_SETTLE_MS || needsRedraw) {
+        drawFrame(currentTime, deltaTime);
+        needsRedraw = false;
     }
 
     requestAnimationFrame(animate);
 }
 
-// Track mouse/touch position for interaction
-window.addEventListener('mousemove', (e) => {
-    mouseX = e.clientX;
-    mouseY = e.clientY;
-});
-
-// Accurate tracking for mobile touch
-window.addEventListener('touchstart', (e) => {
-    if (e.touches.length > 0) {
-        mouseX = e.touches[0].clientX;
-        mouseY = e.touches[0].clientY;
+if (canvas && ctx) {
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+    if (mountain) {
+        // The rect is only final once the image has loaded (height: auto) and
+        // after any breakpoint transform transition finishes.
+        mountain.addEventListener('load', invalidateOrbitalCenter);
+        mountain.addEventListener('transitionend', invalidateOrbitalCenter);
     }
-}, { passive: true });
-
-window.addEventListener('touchmove', (e) => {
-    if (e.touches.length > 0) {
-        mouseX = e.touches[0].clientX;
-        mouseY = e.touches[0].clientY;
-    }
-}, { passive: true });
-
-// Shared function to ensure transition overlay exists
-function ensureTransitionOverlay() {
-    let overlay = document.getElementById('transition-overlay');
-
-    // Reset pointer events on containers if they exist (fixes re-opening bug)
-    const contentDiv = document.getElementById('transition-content');
-    const photoContainer = document.getElementById('photo-container');
-    if (contentDiv) contentDiv.style.pointerEvents = 'auto';
-    if (photoContainer) photoContainer.style.pointerEvents = 'none';
-
-    if (!overlay) {
-        overlay = document.createElement('div');
-        overlay.id = 'transition-overlay';
-        overlay.style.position = 'fixed';
-        overlay.style.top = '0';
-        overlay.style.left = '0';
-        overlay.style.width = '100vw';
-        overlay.style.height = '100vh';
-        overlay.style.zIndex = '100000';
-        overlay.style.opacity = '0';
-        overlay.style.pointerEvents = 'none';
-        overlay.style.transition = 'opacity 0.4s ease-in-out';
-
-        // Add the background SVG
-        const bgImg = document.createElement('img');
-        bgImg.src = 'images/Rectangle 9.svg';
-        bgImg.style.width = '100%';
-        bgImg.style.height = '100%';
-        bgImg.style.objectFit = 'cover';
-        bgImg.style.position = 'absolute';
-        bgImg.style.top = '0';
-        bgImg.style.left = '0';
-        overlay.appendChild(bgImg);
-
-        // Add the content container
-        const contentDiv = document.createElement('div');
-        contentDiv.id = 'transition-content';
-        contentDiv.style.position = 'absolute';
-        contentDiv.style.top = '0';
-        contentDiv.style.left = '0';
-        contentDiv.style.width = '100%';
-        contentDiv.style.height = '100%';
-        contentDiv.style.zIndex = '100001';
-        contentDiv.style.pointerEvents = 'auto'; // Content should be clickable
-        overlay.appendChild(contentDiv);
-
-        document.body.appendChild(overlay);
-    }
-    return overlay;
+    initializeStars();
+    requestAnimationFrame(animate);
 }
-
-// Hamburger menu logic
-const hamburgerButton = document.getElementById('hamburger-button');
-const dropdownMenu = document.getElementById('dropdown-menu');
-const exploreButton = document.getElementById('explore-button');
-const backButton = document.getElementById('back-button');
-const textContainer = document.getElementById('text');
-
-if (hamburgerButton && dropdownMenu) {
-    hamburgerButton.addEventListener('click', (e) => {
-        e.stopPropagation();
-        const isActive = hamburgerButton.classList.toggle('active');
-        if (isActive) {
-            dropdownMenu.classList.remove('dropdown-hidden');
-            dropdownMenu.classList.add('dropdown-visible');
-        } else {
-            dropdownMenu.classList.remove('dropdown-visible');
-            dropdownMenu.classList.add('dropdown-hidden');
-        }
-    });
-
-    document.addEventListener('click', (e) => {
-        if (!hamburgerButton.contains(e.target) && !dropdownMenu.contains(e.target)) {
-            hamburgerButton.classList.remove('active');
-            dropdownMenu.classList.remove('dropdown-visible');
-            dropdownMenu.classList.add('dropdown-hidden');
-        }
-    });
-}
-
-// Smooth transition logic for index <-> explore
-function fadeAndNavigate(targetUrl) {
-    if (isTransitioning) return;
-    isTransitioning = true;
-    
-    // Create a black overlay that fades in
-    let fadeOverlay = document.getElementById('page-fade-overlay');
-    if (!fadeOverlay) {
-        fadeOverlay = document.createElement('div');
-        fadeOverlay.id = 'page-fade-overlay';
-        fadeOverlay.style.position = 'fixed';
-        fadeOverlay.style.top = '0';
-        fadeOverlay.style.left = '0';
-        fadeOverlay.style.width = '100vw';
-        fadeOverlay.style.height = '100vh';
-        fadeOverlay.style.backgroundColor = '#0a0a0f';
-        fadeOverlay.style.zIndex = '999999';
-        fadeOverlay.style.opacity = '0';
-        fadeOverlay.style.pointerEvents = 'auto'; // Block other clicks
-        fadeOverlay.style.transition = 'opacity 0.3s ease-in-out';
-        document.body.appendChild(fadeOverlay);
-    }
-    
-    // Trigger fade in
-    requestAnimationFrame(() => {
-        fadeOverlay.style.opacity = '1';
-        setTimeout(() => {
-            window.location.href = targetUrl;
-        }, 300);
-    });
-}
-
-
-
-
-// Back button logic
-// Back button logic
-if (backButton) {
-    backButton.addEventListener('click', (e) => {
-        e.preventDefault();
-
-        // 1. Keep text hidden initially
-        // if (textContainer) { textContainer.style.opacity = '0'; } // It should already be 0
-
-        // 2. Show explore button
-        if (exploreButton) {
-            exploreButton.style.display = ''; // Revert to CSS default
-        }
-
-        // 3. Hide back button
-        backButton.style.display = 'none';
-
-        // 4. Reverse animation (undraw lines)
-        showOrbitalPath = false;
-        const undrawDuration = 1000; // Faster undraw
-        const startTime = performance.now();
-        const startProgress = orbitalPathProgress;
-
-        function animateReversePath(time) {
-            if (showOrbitalPath) return; // Stop if interrupted
-
-            const elapsed = time - startTime;
-            const progress = 1 - (elapsed / undrawDuration);
-            orbitalPathProgress = Math.max(0, startProgress * progress);
-
-            if (orbitalPathProgress > 0) {
-                requestAnimationFrame(animateReversePath);
-            } else {
-                // Animation complete, NOW fade in text
-                if (textContainer) {
-                    textContainer.style.opacity = '1';
-                }
-            }
-        }
-        requestAnimationFrame(animateReversePath);
-    });
-}
-
-// Transition logic
-function triggerTransition(targetUrl) {
-    if (isTransitioning) return;
-    isTransitioning = true;
-
-    // Create/get overlay
-    const overlay = ensureTransitionOverlay();
-
-    // Force browser repaint to ensure transition plays
-    requestAnimationFrame(() => {
-        overlay.style.opacity = '1';
-        overlay.style.pointerEvents = 'auto'; // Block other clicks
-
-        // Wait for fade out
-        setTimeout(() => {
-            window.location.href = targetUrl;
-        }, 400);
-    });
-}
-
-// Add click handlers for orbital balls with immediate hit-testing
-canvas.addEventListener('click', (e) => {
-    // Only allow clicking if not transitioning and path is drawn
-    if (isTransitioning || orbitalPathProgress < 1) return;
-
-    const center = getOrbitalCenter();
-    const nodes = [
-        { node: orbitalNode4, radius: (trackedStar1.clusterRadius || trackedStar1.orbitalRadius) + responsiveVars.offset2, url: 'cases.html' },
-        { node: orbitalNode2, radius: (trackedStar1.clusterRadius || trackedStar1.orbitalRadius) + responsiveVars.offset1, url: 'projects.html' },
-        { node: orbitalNode, radius: trackedStar1.clusterRadius || trackedStar1.orbitalRadius, url: 'about.html' }
-    ];
-
-    // Check hit against each ball (outer to inner for better layering selection)
-    for (const item of nodes) {
-        const nodeX = center.x + Math.cos(item.node.angle) * item.radius;
-        const nodeY = center.y + Math.sin(item.node.angle) * item.radius;
-
-        const dx = mouseX - nodeX;
-        const dy = mouseY - nodeY;
-        const dist = Math.sqrt(dx * dx + dy * dy);
-
-        if (dist < Math.max(25, item.node.currentRadius)) {
-            triggerTransition(item.url);
-            return; // Only trigger one transition
-        }
-    }
-});
-
-// Start animation loop
-requestAnimationFrame(animate);
-
-// Safe cross-browser goBack function for case studies
-function goBack() {
-    if (window.history.length > 1 && document.referrer.includes(window.location.host)) {
-        window.history.back();
-    } else {
-        window.location.href = 'index.html#work';
-    }
-}
-
-// Fix BFCache issue where transition overlay stays active when navigating back
-window.addEventListener('pageshow', (event) => {
-    // Always reset transition state on page show to ensure responsiveness
-    isTransitioning = false;
-    const overlay = document.getElementById('transition-overlay');
-    if (overlay) {
-        overlay.style.opacity = '0';
-        overlay.style.pointerEvents = 'none';
-        const contentDiv = document.getElementById('transition-content');
-        if (contentDiv) {
-            contentDiv.style.pointerEvents = 'none';
-        }
-    }
-    
-    // Also reset fade overlay if it exists
-    const fadeOverlay = document.getElementById('page-fade-overlay');
-    if (fadeOverlay) {
-        fadeOverlay.style.opacity = '0';
-        fadeOverlay.style.pointerEvents = 'none';
-    }
-});
 
 // Master Case Study TOC ScrollSpy System & Reading Progress Bar
 function initCaseStudyScrollSpy() {
@@ -1138,8 +491,19 @@ function initCaseStudyScrollSpy() {
         }
     }
 
-    window.addEventListener('scroll', updateActive, { passive: true });
-    window.addEventListener('resize', updateActive, { passive: true });
+    // Scroll events can fire several times per frame; measure at most once per frame.
+    let updateQueued = false;
+    function queueUpdate() {
+        if (updateQueued) return;
+        updateQueued = true;
+        requestAnimationFrame(() => {
+            updateQueued = false;
+            updateActive();
+        });
+    }
+
+    window.addEventListener('scroll', queueUpdate, { passive: true });
+    window.addEventListener('resize', queueUpdate, { passive: true });
     // Initial calculation on load
     updateActive();
 }
@@ -1186,19 +550,22 @@ function initCustomCursor() {
     let cursorY = -100;
     let isInitialized = false;
     let isExpanded = false;
-    let isHoveringLink = false;
     let rafId = null;
 
     function render() {
-        if (isInitialized) {
-            // Smooth lerp interpolation
-            const ease = isExpanded ? 0.22 : 0.28;
-            cursorX += (mouseX - cursorX) * ease;
-            cursorY += (mouseY - cursorY) * ease;
+        // Smooth lerp interpolation
+        const ease = isExpanded ? 0.22 : 0.28;
+        cursorX += (mouseX - cursorX) * ease;
+        cursorY += (mouseY - cursorY) * ease;
 
-            follower.style.transform = `translate3d(${cursorX}px, ${cursorY}px, 0) translate(-50%, -50%)`;
+        follower.style.transform = `translate3d(${cursorX}px, ${cursorY}px, 0) translate(-50%, -50%)`;
+
+        // Stop looping once the follower has caught up; the next mousemove restarts it.
+        if (Math.abs(mouseX - cursorX) > 0.1 || Math.abs(mouseY - cursorY) > 0.1) {
+            rafId = requestAnimationFrame(render);
+        } else {
+            rafId = null;
         }
-        rafId = requestAnimationFrame(render);
     }
 
     window.addEventListener('mousemove', (e) => {
@@ -1213,6 +580,8 @@ function initCustomCursor() {
             follower.style.transform = `translate3d(${cursorX}px, ${cursorY}px, 0) translate(-50%, -50%)`;
         }
         follower.classList.remove('is-hidden');
+
+        if (rafId === null) rafId = requestAnimationFrame(render);
     }, { passive: true });
 
     document.addEventListener('mouseleave', () => {
@@ -1226,6 +595,7 @@ function initCustomCursor() {
     });
 
     const workSelector = '.featured-card:not(.is-locked), [data-cursor-work]';
+    const linkSelector = 'a, button, .jiayi-text';
 
     document.addEventListener('pointerover', (e) => {
         const workTarget = e.target.closest(workSelector);
@@ -1238,9 +608,8 @@ function initCustomCursor() {
             return;
         }
 
-        const linkTarget = e.target.closest('a, button, .case-text, .jiayi-text');
+        const linkTarget = e.target.closest(linkSelector);
         if (linkTarget && !isExpanded) {
-            isHoveringLink = true;
             follower.classList.add('is-hovering-link');
         }
     });
@@ -1259,38 +628,72 @@ function initCustomCursor() {
             }
         }
 
-        const linkTarget = e.target.closest('a, button, .case-text, .jiayi-text');
+        const linkTarget = e.target.closest(linkSelector);
         if (linkTarget) {
-            const nextLinkTarget = e.relatedTarget ? e.relatedTarget.closest('a, button, .case-text, .jiayi-text') : null;
+            const nextLinkTarget = e.relatedTarget ? e.relatedTarget.closest(linkSelector) : null;
             if (!nextLinkTarget) {
-                isHoveringLink = false;
                 follower.classList.remove('is-hovering-link');
             }
         }
     });
-
-    rafId = requestAnimationFrame(render);
 }
 
+// Homepage cover videos are preload="none" (no autoplay attribute), so none of
+// them download until they are about to scroll into view. Offscreen ones are
+// paused so only visible videos spend time decoding.
 function initCoverVideos() {
     const videos = document.querySelectorAll('.featured-card-img-wrapper video');
-    videos.forEach(video => {
-        video.muted = true;
+    if (!videos.length) return;
+
+    const visible = new Set();
+    const gestures = ['pointerdown', 'keydown', 'touchstart'];
+    let retryArmed = false;
+
+    function tryPlay(video) {
         const playPromise = video.play();
         if (playPromise !== undefined) {
-            playPromise.catch(() => {
-                const triggerPlay = () => {
-                    video.play();
-                    window.removeEventListener('touchstart', triggerPlay);
-                    window.removeEventListener('click', triggerPlay);
-                    window.removeEventListener('scroll', triggerPlay);
-                };
-                window.addEventListener('touchstart', triggerPlay, { passive: true });
-                window.addEventListener('click', triggerPlay, { passive: true });
-                window.addEventListener('scroll', triggerPlay, { passive: true });
-            });
+            playPromise.catch(armRetry);
         }
-    });
+    }
+
+    // Autoplay can be refused (e.g. iOS Low Power Mode). Scrolling doesn't
+    // count as a user gesture, so wait for a real tap/click/key, and re-arm
+    // if that attempt is refused too.
+    function armRetry() {
+        if (retryArmed) return;
+        retryArmed = true;
+        gestures.forEach(type => window.addEventListener(type, retryPlay, { passive: true }));
+    }
+
+    function retryPlay() {
+        retryArmed = false;
+        gestures.forEach(type => window.removeEventListener(type, retryPlay));
+        visible.forEach(tryPlay);
+    }
+
+    videos.forEach(video => { video.muted = true; });
+
+    if (!('IntersectionObserver' in window)) {
+        videos.forEach(video => {
+            visible.add(video);
+            tryPlay(video);
+        });
+        return;
+    }
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(({ target, isIntersecting }) => {
+            if (isIntersecting) {
+                visible.add(target);
+                tryPlay(target);
+            } else {
+                visible.delete(target);
+                target.pause();
+            }
+        });
+    }, { rootMargin: '200px 0px' });
+
+    videos.forEach(video => observer.observe(video));
 }
 
 if (document.readyState === 'loading') {
